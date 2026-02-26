@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETA — Ethical Technology Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════════════════ */
+:root {
+  --forest:    #1e4d2b;
+  --forest-md: #2a6338;
+  --forest-lt: #4a7c59;
+  --forest-bg: #eaf3ec;
+  --forest-rim:#d0e8d6;
+  --sage:      #5a7f5e;
+  --sage-lt:   #c8deca;
+  /* Software accent — deep blue */
+  --sw-dark:   #1a3a5c;
+  --sw-md:     #1e4f80;
+  --sw-lt:     #2e6da8;
+  --sw-bg:     #e8f0f8;
+  --sw-rim:    #b8d0e8;
+  /* Dataset accent — warm soil */
+  --ds-dark:   #5c2c0e;
+  --ds-md:     #8a4520;
+  --ds-lt:     #b06030;
+  --ds-bg:     #f8ede0;
+  --ds-rim:    #e8c8a8;
+  --soil:      #6b4226;
+  --soil-md:   #8a5a35;
+  --soil-lt:   #e8d5c0;
+  --amber:     #c47a2e;
+  --amber-bg:  #fff8ec;
+  --ink:       #1a1a14;
+  --cream:     #f7f3ec;
+  --cream-dk:  #ede8df;
+  --line:      #ddd8ce;
+  --line-dk:   #b8b2a6;
+  --dim:       #6b6760;
+  --faint:     #9e9a93;
+  --good:      #1e6b3a;
+  --good-bg:   #d4edda;
+  --good-bdr:  #a3d4af;
+  --warn:      #8a5d00;
+  --warn-bg:   #fef3c7;
+  --warn-bdr:  #f5d97e;
+  --info:      #1a4f7a;
+  --info-bg:   #dbeafe;
+  --info-bdr:  #93c5fd;
+  --bad:       #8b1a1a;
+  --bad-bg:    #fee2e2;
+  --bad-bdr:   #fca5a5;
+  --white:     #ffffff;
+  --r:         8px;
+  --r-lg:      14px;
+  --shadow:    0 4px 24px rgba(30,77,43,.10), 0 1px 4px rgba(30,77,43,.06);
+  --shadow-lg: 0 8px 48px rgba(30,77,43,.13), 0 2px 8px rgba(30,77,43,.07);
+
+  /* Mode-specific — overridden per page */
+  --mode-dark:  var(--forest);
+  --mode-md:    var(--forest-md);
+  --mode-lt:    var(--forest-lt);
+  --mode-bg:    var(--forest-bg);
+  --mode-rim:   var(--forest-rim);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOPBAR
+═══════════════════════════════════════════════════════════ */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--forest);
+  border-bottom: 2px solid #16381f;
+  box-shadow: 0 2px 16px rgba(0,0,0,.22);
+  transition: background .3s, border-color .3s;
+}
+.topbar.mode-sw { background: var(--sw-dark); border-bottom-color: #122840; }
+.topbar.mode-ds { background: var(--ds-dark); border-bottom-color: #3e1a08; }
+.topbar-inner {
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+}
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px 0; text-decoration: none; flex-shrink: 0;
+}
+.brand-icon {
+  width: 30px; height: 30px; flex: 0 0 30px;
+  background: rgba(255,255,255,.12); border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+}
+.brand-icon svg { width: 17px; height: 17px; }
+.brand-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #fff;
+}
+.brand-sep { width: 1px; height: 20px; background: rgba(255,255,255,.2); margin: 0 6px; }
+.brand-sub { font-size: 11.5px; color: rgba(255,255,255,.5); font-weight: 400; }
+.topbar-nav { display: flex; gap: 0; }
+.topbar-nav a {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(255,255,255,.5); text-decoration: none;
+  padding: 0 14px; height: 56px;
+  display: flex; align-items: center; gap: 6px;
+  border-left: 1px solid rgba(255,255,255,.1);
+  transition: color .12s, background .12s;
+  cursor: pointer; position: relative;
+}
+.topbar-nav a:hover { color: rgba(255,255,255,.9); background: rgba(255,255,255,.08); }
+.topbar-nav a.active { color: #fff; background: rgba(255,255,255,.12); }
+.topbar-nav a.active::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px; background: rgba(255,255,255,.6);
+}
+.nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .7; }
+
+/* ═══════════════════════════════════════════════════════════
+   PAGE WRAPPER & MODE PAGES
+═══════════════════════════════════════════════════════════ */
+.page-outer { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+.mode-page { display: none; }
+.mode-page.active { display: block; }
+
+/* ═══════════════════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════════════ */
+.hero {
+  border-radius: var(--r-lg);
+  padding: 38px 44px;
+  margin-bottom: 28px;
+  position: relative; overflow: hidden; color: #fff;
+}
+.hero-hw { background: linear-gradient(135deg, var(--forest) 0%, var(--forest-md) 60%, var(--forest-lt) 100%); }
+.hero-sw { background: linear-gradient(135deg, var(--sw-dark) 0%, var(--sw-md) 60%, var(--sw-lt) 100%); }
+.hero-ds { background: linear-gradient(135deg, var(--ds-dark) 0%, var(--ds-md) 60%, var(--ds-lt) 100%); }
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 80% 20%, rgba(255,255,255,.07) 0%, transparent 55%);
+  pointer-events: none;
+}
+.hero-kicker {
+  font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 600;
+  letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.55);
+  margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+}
+.hero-kicker::before { content:''; display:inline-block; width:22px; height:2px; background:rgba(255,255,255,.4); }
+.hero h1 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(24px, 3.6vw, 38px); font-weight: 400; line-height: 1.15;
+  margin-bottom: 10px;
+}
+.hero h1 em { font-style: italic; color: rgba(255,255,255,.68); }
+.hero-desc { font-size: 14.5px; color: rgba(255,255,255,.7); max-width: 600px; line-height: 1.6; margin-bottom: 20px; }
+.hero-type-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.type-pill {
+  font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 600;
+  letter-spacing: .07em; text-transform: uppercase;
+  padding: 5px 12px; border-radius: 20px;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18);
+  color: rgba(255,255,255,.7); cursor: pointer; transition: all .15s; text-decoration: none;
+}
+.type-pill.current { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.4); color: #fff; }
+.type-pill:hover { background: rgba(255,255,255,.18); color: #fff; }
+
+/* ═══════════════════════════════════════════════════════════
+   STEP RAIL
+═══════════════════════════════════════════════════════════ */
+.step-rail {
+  display: flex; background: var(--white);
+  border: 1px solid var(--line); border-radius: var(--r-lg);
+  overflow: hidden; margin-bottom: 24px; box-shadow: var(--shadow);
+}
+.step-item {
+  flex: 1; padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 2px;
+  border-right: 1px solid var(--line);
+  cursor: pointer; transition: background .15s; position: relative;
+}
+.step-item:last-child { border-right: none; }
+.step-item:hover { background: var(--cream); }
+.step-item.active { background: var(--mode-bg, var(--forest-bg)); }
+.step-item.active::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px; background: var(--mode-dark, var(--forest));
+}
+.step-num {
+  width: 20px; height: 20px; background: var(--cream-dk); color: var(--dim);
+  border-radius: 50%; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; margin-bottom: 3px;
+  transition: background .15s, color .15s;
+}
+.step-item.active .step-num { background: var(--mode-dark, var(--forest)); color: #fff; }
+.step-item.done .step-num { background: var(--good); color: #fff; }
+.step-label {
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--dim);
+}
+.step-item.active .step-label { color: var(--mode-dark, var(--forest)); }
+.step-sub { font-size: 10.5px; color: var(--faint); }
+
+/* ═══════════════════════════════════════════════════════════
+   PROGRESS BAR
+═══════════════════════════════════════════════════════════ */
+.progress-bar-outer { height: 3px; background: var(--cream-dk); border-radius: 2px; overflow: hidden; margin-bottom: 22px; }
+.progress-bar-fill { height: 100%; background: var(--mode-dark, var(--forest)); border-radius: 2px; transition: width .4s ease; width: 0%; }
+
+/* ═══════════════════════════════════════════════════════════
+   MAIN GRID
+═══════════════════════════════════════════════════════════ */
+.main-grid {
+  display: grid; grid-template-columns: 1fr 308px; gap: 22px; align-items: start;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FORM PANELS
+═══════════════════════════════════════════════════════════ */
+.form-panel {
+  background: var(--white); border: 1px solid var(--line);
+  border-radius: var(--r-lg); box-shadow: var(--shadow); overflow: hidden;
+}
+.form-panel-head {
+  padding: 16px 22px; border-bottom: 1px solid var(--line);
+  background: linear-gradient(to right, var(--mode-bg, var(--forest-bg)), var(--white) 65%);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.form-panel-title {
+  font-family: 'DM Serif Display', serif; font-size: 17px; font-weight: 400;
+  color: var(--mode-dark, var(--forest));
+}
+.form-panel-meta { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .06em; color: var(--faint); }
+.section-block { padding: 22px; border-bottom: 1px solid var(--cream-dk); }
+.section-block:last-child { border-bottom: none; }
+.section-kicker {
+  font-family: 'DM Mono', monospace; font-size: 9.5px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--faint);
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.kicker-badge {
+  padding: 2px 7px; background: var(--mode-bg, var(--forest-bg));
+  color: var(--mode-dark, var(--forest));
+  border: 1px solid var(--mode-rim, var(--forest-rim));
+  border-radius: 4px; font-size: 9px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FORM FIELDS
+═══════════════════════════════════════════════════════════ */
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin-bottom: 13px; }
+.field-row.single { grid-template-columns: 1fr; }
+.field-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+.field-group { display: flex; flex-direction: column; gap: 4px; }
+.field-label {
+  font-family: 'DM Mono', monospace; font-size: 9.5px; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--dim);
+}
+.field-input, .field-select, .field-textarea {
+  font-family: 'DM Sans', sans-serif; font-size: 13.5px; color: var(--ink);
+  background: var(--cream); border: 1px solid var(--line); border-radius: 6px;
+  padding: 8px 11px; transition: border-color .15s, background .15s; width: 100%; outline: none;
+}
+.field-input:focus, .field-select:focus, .field-textarea:focus {
+  border-color: var(--mode-dark, var(--forest)); background: #fff;
+  box-shadow: 0 0 0 3px var(--mode-bg, var(--forest-bg));
+}
+.field-textarea { resize: vertical; min-height: 68px; }
+.field-hint { font-size: 11px; color: var(--faint); }
+
+/* ═══════════════════════════════════════════════════════════
+   GATE QUESTIONS
+═══════════════════════════════════════════════════════════ */
+.gate-q {
+  background: var(--cream); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 14px 16px; margin-bottom: 10px; transition: border-color .15s, background .15s;
+}
+.gate-q.answered { border-color: var(--good-bdr); background: var(--good-bg); }
+.gate-q.failed { border-color: var(--bad-bdr); background: var(--bad-bg); }
+.gate-q-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+.gate-num {
+  font-family: 'DM Mono', monospace; font-size: 9.5px; font-weight: 700; letter-spacing: .08em;
+  color: var(--mode-dark, var(--forest)); background: var(--mode-rim, var(--forest-rim));
+  padding: 2px 7px; border-radius: 4px; white-space: nowrap; flex: 0 0 auto; margin-top: 2px;
+}
+.gate-q.failed .gate-num { color: var(--bad); background: var(--bad-bg); border: 1px solid var(--bad-bdr); }
+.gate-q-text { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.4; }
+.gate-guidance {
+  font-size: 11.5px; color: var(--dim); line-height: 1.5; margin-bottom: 10px;
+  padding: 7px 11px; background: rgba(255,255,255,.6); border-radius: 5px;
+  border-left: 2px solid var(--line-dk);
+}
+.gate-radios { display: flex; gap: 7px; flex-wrap: wrap; }
+.gate-radio-label {
+  display: flex; align-items: center; gap: 6px; padding: 6px 13px;
+  border: 1.5px solid var(--line); border-radius: 24px;
+  cursor: pointer; font-size: 13px; font-weight: 500; color: var(--dim);
+  background: #fff; transition: all .15s; user-select: none;
+}
+.gate-radio-label input { position: absolute; opacity: 0; pointer-events: none; }
+.gate-radio-label:hover { border-color: var(--mode-dark, var(--forest)); color: var(--mode-dark, var(--forest)); }
+.gate-radio-label.selected-pass { border-color: var(--good); color: var(--good); background: var(--good-bg); }
+.gate-radio-label.selected-fail { border-color: var(--bad); color: var(--bad); background: var(--bad-bg); }
+.gate-radio-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .5; }
+
+/* ═══════════════════════════════════════════════════════════
+   SCORED QUESTIONS
+═══════════════════════════════════════════════════════════ */
+.scored-q { margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--cream-dk); }
+.scored-q:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.scored-q-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.q-num {
+  font-family: 'DM Mono', monospace; font-size: 9.5px; font-weight: 700; letter-spacing: .08em;
+  color: var(--mode-dark, var(--forest)); background: var(--mode-bg, var(--forest-bg));
+  border: 1px solid var(--mode-rim, var(--forest-rim)); padding: 2px 7px; border-radius: 4px;
+}
+.dim-label {
+  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .06em;
+  color: var(--faint); text-transform: uppercase;
+}
+.scored-q-text { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.4; margin-bottom: 5px; }
+.scored-q-guidance { font-size: 11.5px; color: var(--dim); line-height: 1.5; margin-bottom: 10px; }
+.slider-wrap { position: relative; margin-bottom: 4px; }
+input[type=range] {
+  -webkit-appearance: none; width: 100%; height: 6px;
+  background: var(--line); border-radius: 3px; outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 19px; height: 19px;
+  background: var(--mode-dark, var(--forest)); border: 3px solid #fff;
+  border-radius: 50%; box-shadow: 0 1px 5px rgba(0,0,0,.2);
+  cursor: pointer; transition: transform .12s;
+}
+input[type=range]:hover::-webkit-slider-thumb { transform: scale(1.15); }
+input[type=range]::-moz-range-thumb {
+  width: 19px; height: 19px; background: var(--mode-dark, var(--forest));
+  border: 3px solid #fff; border-radius: 50; cursor: pointer;
+}
+.slider-row { display: flex; align-items: center; justify-content: space-between; margin-top: 3px; }
+.slider-labels { display: flex; justify-content: space-between; width: 100%; }
+.slider-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--faint); }
+.slider-value {
+  font-family: 'DM Mono', monospace; font-size: 15px; font-weight: 700;
+  color: var(--mode-dark, var(--forest)); min-width: 26px; text-align: right;
+}
+.evidence-field { margin-top: 8px; }
+.evidence-toggle {
+  display: flex; align-items: center; gap: 5px; font-size: 11.5px;
+  color: var(--mode-dark, var(--forest)); cursor: pointer; user-select: none;
+  background: none; border: none; padding: 0; font-family: inherit;
+}
+.evidence-toggle svg { width: 11px; height: 11px; transition: transform .2s; }
+.evidence-toggle.open svg { transform: rotate(90deg); }
+.evidence-area { display: none; }
+.evidence-area.open { display: block; }
+
+/* ═══════════════════════════════════════════════════════════
+   SIDEBAR SCORE CARD
+═══════════════════════════════════════════════════════════ */
+.score-card {
+  background: var(--white); border: 1px solid var(--line);
+  border-radius: var(--r-lg); box-shadow: var(--shadow); overflow: hidden;
+  position: sticky; top: 72px;
+}
+.score-card-head {
+  background: var(--mode-dark, var(--forest)); padding: 15px 18px 13px; color: #fff;
+}
+.score-card-kicker {
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 8px;
+}
+.score-display { display: flex; align-items: center; justify-content: space-between; }
+.score-big-num { font-family: 'DM Serif Display', serif; font-size: 58px; line-height: 1; color: #fff; }
+.score-ring-wrap { position: relative; width: 76px; height: 76px; }
+.score-ring-wrap svg { width: 76px; height: 76px; }
+.score-ring-label {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; font-size: 17px; font-weight: 700; color: #fff;
+}
+.score-meta-row { margin-top: 8px; }
+.conf-badge {
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase; padding: 3px 8px;
+  border: 1px solid rgba(255,255,255,.28); border-radius: 20px;
+  color: rgba(255,255,255,.8); background: rgba(255,255,255,.1);
+}
+.conf-badge.provisional { border-style: dashed; }
+.conf-badge.reviewed { border-color: rgba(255,255,255,.5); background: rgba(255,255,255,.18); }
+.score-card-body { padding: 14px 18px; }
+.score-bar-section { margin-bottom: 14px; }
+.sbar-label {
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--dim); margin-bottom: 7px;
+}
+.sbar-row { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+.sbar-name { font-size: 11.5px; color: var(--ink); font-weight: 500; flex: 0 0 86px; }
+.sbar-track { flex: 1; height: 5px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.sbar-fill {
+  height: 100%; background: var(--mode-dark, var(--forest));
+  border-radius: 3px; transition: width .5s cubic-bezier(.4,0,.2,1); width: 0%;
+}
+.sbar-val {
+  font-family: 'DM Mono', monospace; font-size: 10.5px; font-weight: 600;
+  color: var(--mode-dark, var(--forest)); flex: 0 0 26px; text-align: right;
+}
+.sc-divider { height: 1px; background: var(--cream-dk); margin: 10px 0; }
+.gates-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 12px; }
+.gate-pill {
+  display: flex; align-items: center; gap: 5px; padding: 6px 8px;
+  border-radius: 5px; border: 1px solid; font-size: 10.5px; transition: all .2s;
+}
+.gate-pill.unknown { border-color: var(--line); background: var(--cream); color: var(--dim); }
+.gate-pill.pass { border-color: var(--good-bdr); background: var(--good-bg); color: var(--good); }
+.gate-pill.fail { border-color: var(--bad-bdr); background: var(--bad-bg); color: var(--bad); }
+.gate-dot { width: 6px; height: 6px; border-radius: 50%; flex: 0 0 6px; background: currentColor; opacity: .7; }
+.gate-pill-label { font-family: 'DM Mono', monospace; font-size: 8.5px; font-weight: 700; letter-spacing: .04em; }
+.flags-area { display: flex; flex-direction: column; gap: 4px; }
+.flag-item {
+  display: flex; align-items: flex-start; gap: 6px; padding: 5px 8px;
+  font-size: 10.5px; line-height: 1.4; border-radius: 5px; border: 1px dashed;
+}
+.flag-item.warn { border-color: var(--warn-bdr); background: var(--warn-bg); color: var(--warn); }
+.flag-item.info { border-color: var(--info-bdr); background: var(--info-bg); color: var(--info); }
+.flag-item svg { width: 10px; height: 10px; flex: 0 0 10px; margin-top: 1px; }
+
+/* ═══════════════════════════════════════════════════════════
+   ACTION ROW & BUTTONS
+═══════════════════════════════════════════════════════════ */
+.action-row {
+  display: flex; gap: 9px; flex-wrap: wrap; padding: 18px 22px;
+  border-top: 1px solid var(--cream-dk); background: var(--cream);
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px;
+  border-radius: var(--r); font-family: 'DM Mono', monospace;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  cursor: pointer; border: 2px solid; transition: all .15s;
+}
+.btn-primary { background: var(--mode-dark, var(--forest)); color: #fff; border-color: var(--mode-dark, var(--forest)); }
+.btn-primary:hover { filter: brightness(1.12); }
+.btn-secondary { background: #fff; color: var(--mode-dark, var(--forest)); border-color: var(--mode-rim, var(--forest-rim)); }
+.btn-secondary:hover { border-color: var(--mode-dark, var(--forest)); background: var(--mode-bg, var(--forest-bg)); }
+.btn svg { width: 13px; height: 13px; }
+
+/* ═══════════════════════════════════════════════════════════
+   RESULT CARD
+═══════════════════════════════════════════════════════════ */
+.result-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow-lg); overflow: hidden; }
+.result-header {
+  padding: 26px 30px; color: #fff;
+  display: flex; align-items: flex-start; gap: 22px;
+}
+.rh-hw { background: linear-gradient(135deg, var(--forest) 0%, var(--forest-md) 100%); }
+.rh-sw { background: linear-gradient(135deg, var(--sw-dark) 0%, var(--sw-md) 100%); }
+.rh-ds { background: linear-gradient(135deg, var(--ds-dark) 0%, var(--ds-md) 100%); }
+.result-score-block { flex: 0 0 auto; text-align: center; }
+.result-score-num { font-family: 'DM Serif Display', serif; font-size: 68px; line-height: 1; color: #fff; }
+.result-score-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-top: 3px; }
+.result-title-block { flex: 1; }
+.result-kicker { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 5px; }
+.result-tool-name { font-family: 'DM Serif Display', serif; font-size: 26px; font-weight: 400; color: #fff; margin-bottom: 5px; }
+.result-tool-desc { font-size: 13.5px; color: rgba(255,255,255,.68); margin-bottom: 14px; }
+.result-badges { display: flex; flex-wrap: wrap; gap: 5px; }
+.result-badge {
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px;
+  border-radius: 20px; border: 1px solid; font-family: 'DM Mono', monospace;
+  font-size: 9px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+}
+.result-badge.good { background: var(--good-bg); color: var(--good); border-color: var(--good-bdr); }
+.result-badge.warn { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-bdr); }
+.result-badge.info { background: var(--info-bg); color: var(--info); border-color: var(--info-bdr); }
+.result-badge svg { width: 8px; height: 8px; }
+.result-body { padding: 26px 30px; }
+.result-section { margin-bottom: 24px; }
+.result-section-label {
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--faint); margin-bottom: 10px;
+}
+.result-gates { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
+.result-gate { display: flex; align-items: flex-start; gap: 9px; padding: 11px 12px; border-radius: var(--r); border: 1px solid; }
+.result-gate.pass { border-color: var(--good-bdr); background: var(--good-bg); }
+.result-gate.fail { border-color: var(--bad-bdr); background: var(--bad-bg); }
+.result-gate-mark { width: 20px; height: 20px; flex: 0 0 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; }
+.result-gate.pass .result-gate-mark { background: var(--good); color: #fff; }
+.result-gate.fail .result-gate-mark { background: var(--bad); color: #fff; }
+.result-gate-name { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 2px; }
+.result-gate.pass .result-gate-name { color: var(--good); }
+.result-gate.fail .result-gate-name { color: var(--bad); }
+.result-gate-desc { font-size: 11.5px; color: var(--dim); line-height: 1.3; }
+.result-bars { display: flex; flex-direction: column; gap: 11px; }
+.result-bar-row { display: grid; grid-template-columns: 130px 1fr 38px; gap: 9px; align-items: center; }
+.result-bar-label { font-size: 12.5px; font-weight: 500; color: var(--ink); }
+.result-bar-track { height: 7px; background: var(--cream-dk); border-radius: 4px; overflow: hidden; }
+.result-bar-fill { height: 100%; border-radius: 4px; transition: width .7s cubic-bezier(.4,0,.2,1); }
+.result-bar-fill.hi { background: var(--mode-dark, var(--forest)); }
+.result-bar-fill.mid { background: var(--amber); }
+.result-bar-fill.lo { background: var(--warn); }
+.result-bar-val { font-family: 'DM Mono', monospace; font-size: 12.5px; font-weight: 700; color: var(--mode-dark, var(--forest)); text-align: right; }
+.result-confidence {
+  background: var(--cream); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 14px 18px; display: flex; align-items: center; gap: 14px;
+}
+.conf-tier-display { font-family: 'DM Serif Display', serif; font-size: 40px; color: var(--mode-dark, var(--forest)); flex: 0 0 auto; line-height: 1; }
+.conf-tier-info { flex: 1; }
+.conf-tier-name { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--mode-dark, var(--forest)); margin-bottom: 2px; }
+.conf-tier-desc { font-size: 12px; color: var(--dim); line-height: 1.4; }
+.conf-tier-decay { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--faint); margin-top: 3px; }
+.review-thread { background: var(--cream); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.review-thread-head {
+  padding: 9px 14px; background: var(--ink); color: #fff;
+  font-family: 'DM Mono', monospace; font-size: 9.5px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; display: flex; align-items: center; gap: 7px;
+}
+.rt-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--good-bg); }
+.review-entry { display: flex; gap: 9px; align-items: flex-start; padding: 11px 14px; border-bottom: 1px solid var(--line); font-size: 12px; }
+.review-entry:last-child { border-bottom: none; }
+.re-avatar { width: 26px; height: 26px; flex: 0 0 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700; color: #fff; font-family: 'DM Mono', monospace; }
+.re-av-1 { background: var(--soil); } .re-av-2 { background: var(--info); } .re-av-3 { background: var(--good); }
+.re-body { flex: 1; }
+.re-meta { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--faint); margin-bottom: 2px; }
+.re-meta strong { color: var(--dim); }
+.re-text { color: var(--ink); line-height: 1.4; }
+.re-badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 8.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 1px 5px; border-radius: 3px; margin-left: 5px; }
+.re-badge.self { background: var(--cream-dk); color: var(--dim); }
+.re-badge.peer { background: var(--info-bg); color: var(--info); }
+.result-evidence-section { background: var(--cream); border-radius: var(--r); border: 1px solid var(--line); overflow: hidden; }
+.evidence-row { display: flex; align-items: flex-start; gap: 11px; padding: 11px 14px; border-bottom: 1px solid var(--line-dk); font-size: 12px; }
+.evidence-row:last-child { border-bottom: none; }
+.ev-q { color: var(--dim); flex: 0 0 34px; font-family: 'DM Mono', monospace; font-size: 9.5px; font-weight: 600; }
+.ev-text { flex: 1; color: var(--ink); line-height: 1.4; }
+.ev-note { font-size: 10.5px; color: var(--faint); margin-top: 2px; }
+.ev-status { flex: 0 0 auto; font-family: 'DM Mono', monospace; font-size: 8.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; }
+.ev-status.confirmed { background: var(--good-bg); color: var(--good); }
+
+/* ═══════════════════════════════════════════════════════════
+   DTAP DIMENSION BADGE (dataset-specific)
+═══════════════════════════════════════════════════════════ */
+.dim-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 4px; margin-bottom: 12px;
+  background: var(--ds-bg); color: var(--ds-md); border: 1px solid var(--ds-rim);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DEPLOYMENT STACK SECTION (collapsible)
+═══════════════════════════════════════════════════════════ */
+.stack-section { margin-top: 38px; }
+.stack-toggle-btn {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  background: var(--white); border: 1px solid var(--line); border-radius: var(--r-lg);
+  padding: 18px 24px; cursor: pointer;
+  box-shadow: var(--shadow); transition: background .15s;
+  font-family: inherit; text-align: left;
+}
+.stack-toggle-btn:hover { background: var(--cream); }
+.stack-toggle-btn.open { border-radius: var(--r-lg) var(--r-lg) 0 0; border-bottom-color: transparent; }
+.stack-toggle-left { display: flex; flex-direction: column; gap: 3px; }
+.stack-toggle-kicker {
+  font-family: 'DM Mono', monospace; font-size: 9.5px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--soil-md);
+  display: flex; align-items: center; gap: 7px;
+}
+.stack-toggle-kicker::before { content: ''; display: block; width: 18px; height: 2px; background: var(--soil); }
+.stack-toggle-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); }
+.stack-toggle-right { display: flex; align-items: center; gap: 10px; }
+.stack-toggle-hint { font-size: 12px; color: var(--faint); }
+.stack-chevron {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--cream-dk);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: transform .3s, background .15s;
+}
+.stack-toggle-btn:hover .stack-chevron { background: var(--line); }
+.stack-toggle-btn.open .stack-chevron { transform: rotate(180deg); background: var(--forest-bg); }
+.stack-toggle-btn.open .stack-chevron svg { stroke: var(--forest); }
+.stack-chevron svg { width: 14px; height: 14px; stroke: var(--dim); stroke-width: 2; fill: none; }
+
+.stack-body {
+  display: none; padding: 24px;
+  background: var(--white); border: 1px solid var(--line);
+  border-top: none; border-radius: 0 0 var(--r-lg) var(--r-lg);
+  box-shadow: var(--shadow);
+}
+.stack-body.open { display: block; }
+
+.stack-subhead { font-size: 13.5px; color: var(--dim); max-width: 640px; margin-bottom: 22px; line-height: 1.5; }
+.stack-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.stack-card {
+  background: var(--cream); border: 1px solid var(--line);
+  border-radius: var(--r-lg); overflow: hidden; display: flex; flex-direction: column;
+}
+.stack-card-head { padding: 18px 22px 14px; border-bottom: 2px solid; }
+.stack-card:first-child .stack-card-head { background: linear-gradient(135deg, #1e3a5f 0%, #1a4f7a 100%); border-bottom-color: #153050; }
+.stack-card:last-child .stack-card-head { background: linear-gradient(135deg, var(--forest) 0%, var(--forest-md) 100%); border-bottom-color: #16381f; }
+.stack-approach { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.45); margin-bottom: 5px; }
+.stack-title { font-family: 'DM Serif Display', serif; font-size: 18px; font-weight: 400; color: #fff; margin-bottom: 5px; }
+.stack-tagline { font-size: 12px; color: rgba(255,255,255,.62); line-height: 1.5; }
+.stack-card-body { padding: 18px 22px; flex: 1; }
+.stack-layer { display: flex; gap: 11px; align-items: flex-start; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.stack-layer:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.stack-layer-icon { width: 30px; height: 30px; flex: 0 0 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.stack-layer-label { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin-bottom: 1px; }
+.stack-layer-name { font-size: 12.5px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.stack-layer-desc { font-size: 11.5px; color: var(--dim); line-height: 1.4; }
+.stack-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+.stack-tag { font-family: 'DM Mono', monospace; font-size: 8.5px; font-weight: 600; letter-spacing: .04em; padding: 2px 6px; border-radius: 4px; background: var(--cream-dk); color: var(--dim); }
+.stack-footer { border-top: 1px solid var(--line); padding: 12px 22px; background: var(--white); display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+.stack-footer-label { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); flex: 0 0 auto; }
+.tradeoff-chip { font-size: 10.5px; padding: 3px 8px; border-radius: 20px; border: 1px solid; }
+.tc-pro { border-color: var(--good-bdr); color: var(--good); background: var(--good-bg); }
+.tc-con { border-color: var(--warn-bdr); color: var(--warn); background: var(--warn-bg); }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════════════ */
+@media (max-width: 800px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .score-card { position: static; }
+  .field-row { grid-template-columns: 1fr; }
+  .field-row.triple { grid-template-columns: 1fr 1fr; }
+  .result-header { flex-direction: column; gap: 14px; }
+  .result-gates { grid-template-columns: 1fr; }
+  .result-bar-row { grid-template-columns: 96px 1fr 34px; }
+  .stack-grid { grid-template-columns: 1fr; }
+  .hero { padding: 26px 22px; }
+  .gates-grid { grid-template-columns: 1fr; }
+  .topbar-nav a { padding: 0 10px; font-size: 9.5px; }
+  .brand-sub { display: none; }
+}
+@media (max-width: 520px) {
+  .step-rail { flex-wrap: wrap; }
+  .step-item { flex: 0 0 50%; border-bottom: 1px solid var(--line); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════════════════════ */
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+.form-panel { animation: fadeUp .25s ease both; }
+.result-card { animation: fadeUp .35s ease both; }
+
+/* ═══════════════════════════════════════════════════════════
+   MODE OVERRIDES — applied via JS on <body> or .mode-page
+═══════════════════════════════════════════════════════════ */
+.mode-sw-active { --mode-dark: var(--sw-dark); --mode-md: var(--sw-md); --mode-lt: var(--sw-lt); --mode-bg: var(--sw-bg); --mode-rim: var(--sw-rim); }
+.mode-ds-active { --mode-dark: var(--ds-dark); --mode-md: var(--ds-md); --mode-lt: var(--ds-lt); --mode-bg: var(--ds-bg); --mode-rim: var(--ds-rim); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     TOPBAR
+═══════════════════════════════════════════════════════ -->
+<div class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#" onclick="switchMode('hw');return false;">
+      <div class="brand-icon">
+        <svg viewBox="0 0 18 18" fill="none">
+          <circle cx="9" cy="4" r="2.1" fill="rgba(255,255,255,.9)"/>
+          <circle cx="4" cy="13" r="2.1" fill="rgba(255,255,255,.9)"/>
+          <circle cx="14" cy="13" r="2.1" fill="rgba(255,255,255,.9)"/>
+          <line x1="9" y1="6" x2="4.5" y2="11" stroke="rgba(255,255,255,.45)" stroke-width="1.2"/>
+          <line x1="9" y1="6" x2="13.5" y2="11" stroke="rgba(255,255,255,.45)" stroke-width="1.2"/>
+          <line x1="4" y1="13" x2="14" y2="13" stroke="rgba(255,255,255,.45)" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <span class="brand-name">ETA</span>
+      <div class="brand-sep"></div>
+      <span class="brand-sub">Ethical Technology Assessment</span>
+    </a>
+    <nav class="topbar-nav">
+      <a id="nav-hw" class="active" onclick="switchMode('hw');return false;" href="#">
+        <span class="nav-dot"></span>Hardware
+      </a>
+      <a id="nav-sw" onclick="switchMode('sw');return false;" href="#">
+        <span class="nav-dot"></span>Software
+      </a>
+      <a id="nav-ds" onclick="switchMode('ds');return false;" href="#">
+        <span class="nav-dot"></span>Datasets
+      </a>
+      <a id="nav-registry" onclick="alert('Registry coming soon — this will link to the published card index.');return false;" href="#">Registry</a>
+    </nav>
+  </div>
+</div>
+
+<div class="page-outer">
+
+<!-- ═══════════════════════════════════════════════════════
+     HARDWARE PAGE
+═══════════════════════════════════════════════════════ -->
+<div class="mode-page active" id="page-hw">
+  <div class="hero hero-hw">
+    <div class="hero-kicker">ETA Framework v1.0 · OpenTEAM · Ag Knowledge Concordance</div>
+    <h1>Hardware Tool Assessment<br><em>Ethical Technology Assessment</em></h1>
+    <div class="hero-desc">18 questions across 4 entry gates and 4 scored categories. Generates a live score, confidence tier, and publishable card grounded in the ETA framework.</div>
+    <div class="hero-type-pills">
+      <span class="type-pill current">🔩 Hardware</span>
+      <a class="type-pill" href="#" onclick="switchMode('sw');return false;">💻 Software</a>
+      <a class="type-pill" href="#" onclick="switchMode('ds');return false;">📊 Datasets</a>
+    </div>
+  </div>
+
+  <!-- Step rail -->
+  <div class="step-rail" id="hw-step-rail">
+    <div class="step-item active" data-step="0" onclick="goStep('hw',0)">
+      <div class="step-num">1</div><div class="step-label">Tool Info</div><div class="step-sub">Name &amp; context</div>
+    </div>
+    <div class="step-item" data-step="1" onclick="goStep('hw',1)">
+      <div class="step-num">2</div><div class="step-label">Entry Gates</div><div class="step-sub">G1–G4 binary</div>
+    </div>
+    <div class="step-item" data-step="2" onclick="goStep('hw',2)">
+      <div class="step-num">3</div><div class="step-label">Resource &amp; Social</div><div class="step-sub">Q7–Q12</div>
+    </div>
+    <div class="step-item" data-step="3" onclick="goStep('hw',3)">
+      <div class="step-num">4</div><div class="step-label">Commons &amp; Resilience</div><div class="step-sub">Q13–Q18</div>
+    </div>
+    <div class="step-item" data-step="4" onclick="goStep('hw',4)">
+      <div class="step-num">5</div><div class="step-label">Result</div><div class="step-sub">Final card</div>
+    </div>
+  </div>
+  <div class="progress-bar-outer"><div class="progress-bar-fill" id="hw-progress"></div></div>
+
+  <div class="main-grid">
+    <div id="hw-form-area">
+      <!-- Step 0 -->
+      <div class="form-panel" id="hw-step0">
+        <div class="form-panel-head"><div class="form-panel-title">About the Tool</div><div class="form-panel-meta">Step 1 of 5</div></div>
+        <div class="section-block">
+          <div class="section-kicker">Basic Information</div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">Tool Name</label><input class="field-input" id="hw-name" type="text" placeholder="e.g. Hoop Chicken Trailer" oninput="updateLive('hw')"></div>
+            <div class="field-group"><label class="field-label">Tool Type</label><select class="field-select" id="hw-type" onchange="updateLive('hw')"><option value="">Select…</option><option>Poultry</option><option>Irrigation</option><option>Soil &amp; composting</option><option>Post-harvest</option><option>Transport &amp; mobility</option><option>Sensing &amp; monitoring</option><option>Other</option></select></div>
+          </div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">Steward / Author</label><input class="field-input" id="hw-steward" type="text" placeholder="Your name or org" oninput="updateLive('hw')"></div>
+            <div class="field-group"><label class="field-label">Source URL</label><input class="field-input" id="hw-url" type="url" placeholder="https://farmhack.org/tools/…"></div>
+          </div>
+          <div class="field-row single"><div class="field-group"><label class="field-label">Short Description</label><textarea class="field-textarea" id="hw-desc" placeholder="What this tool does and who it's for…" oninput="updateLive('hw')"></textarea></div></div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">License</label><select class="field-select" id="hw-license"><option value="">Select…</option><option>CERN OHL</option><option>TAPR OHL</option><option>CC BY</option><option>CC BY-SA</option><option>CC BY-NC</option><option>GPL</option><option>Proprietary</option><option>None stated</option></select></div>
+            <div class="field-group"><label class="field-label">Reviewer Role</label><select class="field-select" id="hw-role" onchange="updateLive('hw')"><option value="steward">Steward (self-assessment)</option><option value="peer">Certified peer reviewer</option><option value="auditor">Ecosystem steward / auditor</option></select><span class="field-hint">Sets your confidence tier</span></div>
+          </div>
+        </div>
+        <div class="action-row"><button class="btn btn-primary" onclick="goStep('hw',1)"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h8M8 4l3 3-3 3"/></svg>Continue to Entry Gates</button></div>
+      </div>
+      <!-- Step 1: Gates -->
+      <div class="form-panel" id="hw-step1" style="display:none">
+        <div class="form-panel-head"><div class="form-panel-title">Entry Gates — G1 to G4</div><div class="form-panel-meta">40 points · binary pass/fail</div></div>
+        <div class="section-block"><div class="section-kicker">G1 — Transparency <span class="kicker-badge">10 pts</span></div><div id="hw-g1"></div></div>
+        <div class="section-block"><div class="section-kicker">G2 — Rights &amp; Control <span class="kicker-badge">10 pts</span></div><div id="hw-g2"></div></div>
+        <div class="section-block"><div class="section-kicker">G3 — No Abuse <span class="kicker-badge">10 pts</span></div><div id="hw-g3"></div></div>
+        <div class="section-block"><div class="section-kicker">G4 — Safety &amp; Stewardship <span class="kicker-badge">10 pts</span></div><div id="hw-g4"></div></div>
+        <div class="action-row"><button class="btn btn-secondary" onclick="goStep('hw',0)">← Back</button><button class="btn btn-primary" onclick="goStep('hw',2)">Continue →</button></div>
+      </div>
+      <!-- Step 2 -->
+      <div class="form-panel" id="hw-step2" style="display:none">
+        <div class="form-panel-head"><div class="form-panel-title">Resource Ethics &amp; Social Ethics</div><div class="form-panel-meta">30 points · Q7–Q12</div></div>
+        <div class="section-block"><div class="section-kicker">Resource Ethics <span class="kicker-badge">15 pts max</span></div><div id="hw-resource"></div></div>
+        <div class="section-block"><div class="section-kicker">Social Ethics <span class="kicker-badge">15 pts max</span></div><div id="hw-social"></div></div>
+        <div class="action-row"><button class="btn btn-secondary" onclick="goStep('hw',1)">← Back</button><button class="btn btn-primary" onclick="goStep('hw',3)">Continue →</button></div>
+      </div>
+      <!-- Step 3 -->
+      <div class="form-panel" id="hw-step3" style="display:none">
+        <div class="form-panel-head"><div class="form-panel-title">Commons Fit &amp; Resilience</div><div class="form-panel-meta">30 points · Q13–Q18</div></div>
+        <div class="section-block"><div class="section-kicker">Commons Fit <span class="kicker-badge">15 pts max</span></div><div id="hw-commons"></div></div>
+        <div class="section-block"><div class="section-kicker">Resilience <span class="kicker-badge">15 pts max</span></div><div id="hw-resilience"></div></div>
+        <div class="action-row"><button class="btn btn-secondary" onclick="goStep('hw',2)">← Back</button><button class="btn btn-primary" onclick="generateResult('hw')"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 1v6M7 7l-3 3M7 7l3 3"/><path d="M2 11h10"/></svg>Generate Assessment Card</button></div>
+      </div>
+      <!-- Step 4: Result -->
+      <div id="hw-step4" style="display:none"><div id="hw-result"></div></div>
+    </div>
+    <!-- Sidebar -->
+    <div class="score-card">
+      <div class="score-card-head">
+        <div class="score-card-kicker">Live Score · Hardware ETA</div>
+        <div class="score-display">
+          <div><div class="score-big-num" id="hw-big">—</div><div class="score-meta-row"><span class="conf-badge provisional" id="hw-conf">Self-assessed · 1/3</span></div></div>
+          <div class="score-ring-wrap"><svg viewBox="0 0 76 76"><circle cx="38" cy="38" r="30" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="6"/><circle id="hw-ring" cx="38" cy="38" r="30" fill="none" stroke="rgba(255,255,255,.88)" stroke-width="6" stroke-dasharray="0 188" stroke-dashoffset="47" transform="rotate(-90 38 38)" stroke-linecap="round"/></svg><div class="score-ring-label" id="hw-ring-label">0</div></div>
+        </div>
+      </div>
+      <div class="score-card-body">
+        <div class="score-bar-section"><div class="sbar-label">Categories</div>
+          <div class="sbar-row"><div class="sbar-name">Resource Ethics</div><div class="sbar-track"><div class="sbar-fill" id="hw-b0"></div></div><div class="sbar-val" id="hw-bv0">—</div></div>
+          <div class="sbar-row"><div class="sbar-name">Social Ethics</div><div class="sbar-track"><div class="sbar-fill" id="hw-b1"></div></div><div class="sbar-val" id="hw-bv1">—</div></div>
+          <div class="sbar-row"><div class="sbar-name">Commons Fit</div><div class="sbar-track"><div class="sbar-fill" id="hw-b2"></div></div><div class="sbar-val" id="hw-bv2">—</div></div>
+          <div class="sbar-row"><div class="sbar-name">Resilience</div><div class="sbar-track"><div class="sbar-fill" id="hw-b3"></div></div><div class="sbar-val" id="hw-bv3">—</div></div>
+        </div>
+        <div class="sc-divider"></div>
+        <div class="sbar-label" style="margin-bottom:7px">Entry Gates</div>
+        <div class="gates-grid">
+          <div class="gate-pill unknown" id="hw-gp0"><span class="gate-dot"></span><span class="gate-pill-label">G1 Transparency</span></div>
+          <div class="gate-pill unknown" id="hw-gp1"><span class="gate-dot"></span><span class="gate-pill-label">G2 Rights</span></div>
+          <div class="gate-pill unknown" id="hw-gp2"><span class="gate-dot"></span><span class="gate-pill-label">G3 No Abuse</span></div>
+          <div class="gate-pill unknown" id="hw-gp3"><span class="gate-dot"></span><span class="gate-pill-label">G4 Safety</span></div>
+        </div>
+        <div class="sc-divider"></div>
+        <div class="sbar-label" style="margin-bottom:5px">Flags</div>
+        <div class="flags-area" id="hw-flags"><div class="flag-item info"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="4.5"/><path d="M6 4v3"/></svg>Complete assessment to generate flags</div></div>
+      </div>
+    </div>
+  </div>
+  <!-- Stack section -->
+  <div class="stack-section" id="hw-stack"></div>
+</div><!-- /page-hw -->
+
+<!-- ═══════════════════════════════════════════════════════
+     SOFTWARE PAGE
+═══════════════════════════════════════════════════════ -->
+<div class="mode-page" id="page-sw">
+  <div class="hero hero-sw">
+    <div class="hero-kicker">ETA Framework v1.0 · OpenTEAM · Ag Knowledge Concordance</div>
+    <h1>Software Tool Assessment<br><em>Ethical Technology Assessment</em></h1>
+    <div class="hero-desc">18 questions across 4 entry gates and 4 scored categories — focused on data sovereignty, interoperability, commons fit, and accessibility.</div>
+    <div class="hero-type-pills">
+      <a class="type-pill" href="#" onclick="switchMode('hw');return false;">🔩 Hardware</a>
+      <span class="type-pill current">💻 Software</span>
+      <a class="type-pill" href="#" onclick="switchMode('ds');return false;">📊 Datasets</a>
+    </div>
+  </div>
+  <div class="step-rail" id="sw-step-rail">
+    <div class="step-item active" data-step="0" onclick="goStep('sw',0)"><div class="step-num">1</div><div class="step-label">Tool Info</div><div class="step-sub">Name &amp; context</div></div>
+    <div class="step-item" data-step="1" onclick="goStep('sw',1)"><div class="step-num">2</div><div class="step-label">Entry Gates</div><div class="step-sub">G1–G4 binary</div></div>
+    <div class="step-item" data-step="2" onclick="goStep('sw',2)"><div class="step-num">3</div><div class="step-label">Data Ethics &amp; Interop</div><div class="step-sub">Q9–Q14</div></div>
+    <div class="step-item" data-step="3" onclick="goStep('sw',3)"><div class="step-num">4</div><div class="step-label">Commons &amp; Access</div><div class="step-sub">Q15–Q18</div></div>
+    <div class="step-item" data-step="4" onclick="goStep('sw',4)"><div class="step-num">5</div><div class="step-label">Result</div><div class="step-sub">Final card</div></div>
+  </div>
+  <div class="progress-bar-outer"><div class="progress-bar-fill" id="sw-progress" style="background:var(--sw-dark)"></div></div>
+  <div class="main-grid mode-sw-active">
+    <div id="sw-form-area">
+      <div class="form-panel mode-sw-active" id="sw-step0">
+        <div class="form-panel-head" style="background:linear-gradient(to right,var(--sw-bg),white 65%)"><div class="form-panel-title" style="color:var(--sw-dark)">About the Software</div><div class="form-panel-meta">Step 1 of 5</div></div>
+        <div class="section-block">
+          <div class="section-kicker">Basic Information</div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">Tool Name</label><input class="field-input" id="sw-name" type="text" placeholder="e.g. farmOS" oninput="updateLive('sw')"></div>
+            <div class="field-group"><label class="field-label">Tool Type</label><select class="field-select" id="sw-type"><option value="">Select…</option><option>Farm management platform</option><option>Data collection</option><option>Financial tracking</option><option>Soil &amp; lab data</option><option>Marketplace</option><option>Weather &amp; climate</option><option>Supply chain</option><option>Other</option></select></div>
+          </div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">Steward / Developer</label><input class="field-input" id="sw-steward" type="text" placeholder="Your name or org" oninput="updateLive('sw')"></div>
+            <div class="field-group"><label class="field-label">Source URL</label><input class="field-input" id="sw-url" type="url" placeholder="https://farmos.org"></div>
+          </div>
+          <div class="field-row single"><div class="field-group"><label class="field-label">Short Description</label><textarea class="field-textarea" id="sw-desc" placeholder="What this software does and who it's for…" oninput="updateLive('sw')"></textarea></div></div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">License</label><select class="field-select" id="sw-license"><option value="">Select…</option><option>GPL v2</option><option>GPL v3</option><option>AGPL</option><option>Apache 2.0</option><option>MIT</option><option>Source-available</option><option>Proprietary SaaS</option><option>None stated</option></select></div>
+            <div class="field-group"><label class="field-label">Reviewer Role</label><select class="field-select" id="sw-role" onchange="updateLive('sw')"><option value="steward">Steward (self-assessment)</option><option value="peer">Certified peer reviewer</option><option value="auditor">Ecosystem steward / auditor</option></select></div>
+          </div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">Hosting Model</label><select class="field-select" id="sw-hosting"><option value="">Select…</option><option>Self-hostable (open source)</option><option>SaaS only</option><option>Both SaaS + self-host</option><option>Hybrid</option></select></div>
+            <div class="field-group"><label class="field-label">API Available?</label><select class="field-select" id="sw-api"><option value="">Select…</option><option>Yes — public, documented</option><option>Yes — registration required</option><option>Partial / underdocumented</option><option>No API</option></select></div>
+          </div>
+        </div>
+        <div class="action-row"><button class="btn btn-primary" style="background:var(--sw-dark);border-color:var(--sw-dark)" onclick="goStep('sw',1)"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h8M8 4l3 3-3 3"/></svg>Continue to Entry Gates</button></div>
+      </div>
+      <div class="form-panel mode-sw-active" id="sw-step1" style="display:none">
+        <div class="form-panel-head" style="background:linear-gradient(to right,var(--sw-bg),white 65%)"><div class="form-panel-title" style="color:var(--sw-dark)">Entry Gates — G1 to G4</div><div class="form-panel-meta">40 points · binary pass/fail</div></div>
+        <div class="section-block"><div class="section-kicker" style="color:var(--faint)">G1 — Transparency <span class="kicker-badge" style="background:var(--sw-bg);color:var(--sw-dark);border-color:var(--sw-rim)">10 pts</span></div><div id="sw-g1"></div></div>
+        <div class="section-block"><div class="section-kicker" style="color:var(--faint)">G2 — Rights &amp; Control <span class="kicker-badge" style="background:var(--sw-bg);color:var(--sw-dark);border-color:var(--sw-rim)">10 pts</span></div><div id="sw-g2"></div></div>
+        <div class="section-block"><div class="section-kicker" style="color:var(--faint)">G3 — No Abuse <span class="kicker-badge" style="background:var(--sw-bg);color:var(--sw-dark);border-color:var(--sw-rim)">10 pts</span></div><div id="sw-g3"></div></div>
+        <div class="section-block"><div class="section-kicker" style="color:var(--faint)">G4 — Safety &amp; Stewardship <span class="kicker-badge" style="background:var(--sw-bg);color:var(--sw-dark);border-color:var(--sw-rim)">10 pts</span></div><div id="sw-g4"></div></div>
+        <div class="action-row"><button class="btn btn-secondary" style="color:var(--sw-dark);border-color:var(--sw-rim)" onclick="goStep('sw',0)">← Back</button><button class="btn btn-primary" style="background:var(--sw-dark);border-color:var(--sw-dark)" onclick="goStep('sw',2)">Continue →</button></div>
+      </div>
+      <div class="form-panel mode-sw-active" id="sw-step2" style="display:none">
+        <div class="form-panel-head" style="background:linear-gradient(to right,var(--sw-bg),white 65%)"><div class="form-panel-title" style="color:var(--sw-dark)">Data Ethics &amp; Interoperability</div><div class="form-panel-meta">30 points · Q9–Q14</div></div>
+        <div class="section-block"><div class="section-kicker" style="color:var(--faint)">Data Ethics <span class="kicker-badge" style="background:var(--sw-bg);color:var(--sw-dark);border-color:var(--sw-rim)">15 pts max</span></div><div id="sw-dataethics"></div></div>
+        <div class="section-block"><div class="section-kicker" style="color:var(--faint)">Interoperability <span class="kicker-badge" style="background:var(--sw-bg);color:var(--sw-dark);border-color:var(--sw-rim)">15 pts max</span></div><div id="sw-interop"></div></div>
+        <div class="action-row"><button class="btn btn-secondary" style="color:var(--sw-dark);border-color:var(--sw-rim)" onclick="goStep('sw',1)">← Back</button><button class="btn btn-primary" style="background:var(--sw-dark);border-color:var(--sw-dark)" onclick="goStep('sw',3)">Continue →</button></div>
+      </div>
+      <div class="form-panel mode-sw-active" id="sw-step3" style="display:none">
+        <div class="form-panel-head" style="background:linear-gradient(to right,var(--sw-bg),white 65%)"><div class="form-panel-title" style="color:var(--sw-dark)">Commons Fit &amp; Accessibility</div><div class="form-panel-meta">30 points · Q15–Q18</div></div>
+        <div class="section-block"><div class="section-kicker" style="color:var(--faint)">Commons Fit <span class="kicker-badge" style="background:var(--sw-bg);color:var(--sw-dark);border-color:var(--sw-rim)">15 pts max</span></div><div id="sw-commons"></div></div>
+        <div class="section-block"><div class="section-kicker" style="color:var(--faint)">Accessibility <span class="kicker-badge" style="background:var(--sw-bg);color:var(--sw-dark);border-color:var(--sw-rim)">15 pts max</span></div><div id="sw-access"></div></div>
+        <div class="action-row"><button class="btn btn-secondary" style="color:var(--sw-dark);border-color:var(--sw-rim)" onclick="goStep('sw',2)">← Back</button><button class="btn btn-primary" style="background:var(--sw-dark);border-color:var(--sw-dark)" onclick="generateResult('sw')"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 1v6M7 7l-3 3M7 7l3 3"/><path d="M2 11h10"/></svg>Generate Assessment Card</button></div>
+      </div>
+      <div id="sw-step4" style="display:none"><div id="sw-result"></div></div>
+    </div>
+    <!-- Sidebar SW -->
+    <div class="score-card" style="--mode-dark:var(--sw-dark)">
+      <div class="score-card-head" style="background:var(--sw-dark)">
+        <div class="score-card-kicker">Live Score · Software ETA</div>
+        <div class="score-display">
+          <div><div class="score-big-num" id="sw-big">—</div><div class="score-meta-row"><span class="conf-badge provisional" id="sw-conf">Self-assessed · 1/3</span></div></div>
+          <div class="score-ring-wrap"><svg viewBox="0 0 76 76"><circle cx="38" cy="38" r="30" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="6"/><circle id="sw-ring" cx="38" cy="38" r="30" fill="none" stroke="rgba(255,255,255,.88)" stroke-width="6" stroke-dasharray="0 188" stroke-dashoffset="47" transform="rotate(-90 38 38)" stroke-linecap="round"/></svg><div class="score-ring-label" id="sw-ring-label">0</div></div>
+        </div>
+      </div>
+      <div class="score-card-body">
+        <div class="score-bar-section"><div class="sbar-label">Categories</div>
+          <div class="sbar-row"><div class="sbar-name">Data Ethics</div><div class="sbar-track"><div class="sbar-fill" id="sw-b0" style="background:var(--sw-dark)"></div></div><div class="sbar-val" id="sw-bv0" style="color:var(--sw-dark)">—</div></div>
+          <div class="sbar-row"><div class="sbar-name">Interoperability</div><div class="sbar-track"><div class="sbar-fill" id="sw-b1" style="background:var(--sw-dark)"></div></div><div class="sbar-val" id="sw-bv1" style="color:var(--sw-dark)">—</div></div>
+          <div class="sbar-row"><div class="sbar-name">Commons Fit</div><div class="sbar-track"><div class="sbar-fill" id="sw-b2" style="background:var(--sw-dark)"></div></div><div class="sbar-val" id="sw-bv2" style="color:var(--sw-dark)">—</div></div>
+          <div class="sbar-row"><div class="sbar-name">Accessibility</div><div class="sbar-track"><div class="sbar-fill" id="sw-b3" style="background:var(--sw-dark)"></div></div><div class="sbar-val" id="sw-bv3" style="color:var(--sw-dark)">—</div></div>
+        </div>
+        <div class="sc-divider"></div>
+        <div class="sbar-label" style="margin-bottom:7px">Entry Gates</div>
+        <div class="gates-grid">
+          <div class="gate-pill unknown" id="sw-gp0"><span class="gate-dot"></span><span class="gate-pill-label">G1 Transparency</span></div>
+          <div class="gate-pill unknown" id="sw-gp1"><span class="gate-dot"></span><span class="gate-pill-label">G2 Rights</span></div>
+          <div class="gate-pill unknown" id="sw-gp2"><span class="gate-dot"></span><span class="gate-pill-label">G3 No Abuse</span></div>
+          <div class="gate-pill unknown" id="sw-gp3"><span class="gate-dot"></span><span class="gate-pill-label">G4 Stewardship</span></div>
+        </div>
+        <div class="sc-divider"></div>
+        <div class="sbar-label" style="margin-bottom:5px">Flags</div>
+        <div class="flags-area" id="sw-flags"><div class="flag-item info"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="4.5"/><path d="M6 4v3"/></svg>Complete assessment to generate flags</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="stack-section" id="sw-stack"></div>
+</div><!-- /page-sw -->
+
+<!-- ═══════════════════════════════════════════════════════
+     DATASET PAGE
+═══════════════════════════════════════════════════════ -->
+<div class="mode-page" id="page-ds">
+  <div class="hero hero-ds">
+    <div class="hero-kicker">DTAP Framework v1.0 · Ag Knowledge Concordance · OpenTEAM</div>
+    <h1>Data Trust Assessment<br><em>DTAP — Data Trust Assessment Protocol</em></h1>
+    <div class="hero-desc">12 questions across 6 trust dimensions — consent, provenance, access, machine-readability, longitudinal integrity, and governance. Generates a Data Trust Score (0–100).</div>
+    <div class="hero-type-pills">
+      <a class="type-pill" href="#" onclick="switchMode('hw');return false;">🔩 Hardware</a>
+      <a class="type-pill" href="#" onclick="switchMode('sw');return false;">💻 Software</a>
+      <span class="type-pill current">📊 Datasets</span>
+    </div>
+  </div>
+  <div class="step-rail" id="ds-step-rail">
+    <div class="step-item active" data-step="0" onclick="goStep('ds',0)"><div class="step-num">1</div><div class="step-label">Dataset Info</div><div class="step-sub">Name &amp; context</div></div>
+    <div class="step-item" data-step="1" onclick="goStep('ds',1)"><div class="step-num">2</div><div class="step-label">Consent &amp; Provenance</div><div class="step-sub">D1–D2</div></div>
+    <div class="step-item" data-step="2" onclick="goStep('ds',2)"><div class="step-num">3</div><div class="step-label">Access &amp; Machine-Read</div><div class="step-sub">D3–D4</div></div>
+    <div class="step-item" data-step="3" onclick="goStep('ds',3)"><div class="step-num">4</div><div class="step-label">Longitudinal &amp; Governance</div><div class="step-sub">D5–D6</div></div>
+    <div class="step-item" data-step="4" onclick="goStep('ds',4)"><div class="step-num">5</div><div class="step-label">Result</div><div class="step-sub">Final card</div></div>
+  </div>
+  <div class="progress-bar-outer"><div class="progress-bar-fill" id="ds-progress" style="background:var(--ds-dark)"></div></div>
+  <div class="main-grid mode-ds-active">
+    <div id="ds-form-area">
+      <div class="form-panel mode-ds-active" id="ds-step0">
+        <div class="form-panel-head" style="background:linear-gradient(to right,var(--ds-bg),white 65%)"><div class="form-panel-title" style="color:var(--ds-dark)">About the Dataset</div><div class="form-panel-meta">Step 1 of 5</div></div>
+        <div class="section-block">
+          <div class="section-kicker">Basic Information</div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">Dataset Name</label><input class="field-input" id="ds-name" type="text" placeholder="e.g. 1000 Farms Initiative" oninput="updateLive('ds')"></div>
+            <div class="field-group"><label class="field-label">Data Domain</label><select class="field-select" id="ds-type"><option value="">Select…</option><option>Soil health</option><option>Biodiversity</option><option>Farm economics</option><option>Climate &amp; weather</option><option>Crop performance</option><option>Farmer knowledge</option><option>Supply chain</option><option>Other</option></select></div>
+          </div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">Steward Organization</label><input class="field-input" id="ds-steward" type="text" placeholder="e.g. Ecdysis Foundation" oninput="updateLive('ds')"></div>
+            <div class="field-group"><label class="field-label">Dataset URL</label><input class="field-input" id="ds-url" type="url" placeholder="https://ecdysis.bio/…"></div>
+          </div>
+          <div class="field-row single"><div class="field-group"><label class="field-label">Short Description</label><textarea class="field-textarea" id="ds-desc" placeholder="What data is collected, from whom, and for what purpose…" oninput="updateLive('ds')"></textarea></div></div>
+          <div class="field-row triple">
+            <div class="field-group"><label class="field-label">Sample Size</label><input class="field-input" id="ds-size" type="text" placeholder="e.g. 1,000 farms"></div>
+            <div class="field-group"><label class="field-label">Years Active</label><input class="field-input" id="ds-years" type="text" placeholder="e.g. 2022–present"></div>
+            <div class="field-group"><label class="field-label">Reviewer Role</label><select class="field-select" id="ds-role" onchange="updateLive('ds')"><option value="steward">Steward</option><option value="peer">Peer reviewer</option><option value="auditor">Auditor</option></select></div>
+          </div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">Primary Format</label><select class="field-select" id="ds-format"><option value="">Select…</option><option>CSV / TSV</option><option>JSON / GeoJSON</option><option>PDF only</option><option>NetCDF / Parquet</option><option>Multiple formats</option><option>Proprietary</option></select></div>
+            <div class="field-group"><label class="field-label">Access Model</label><select class="field-select" id="ds-access"><option value="">Select…</option><option>Fully open / direct download</option><option>Open with registration</option><option>Tiered (aggregate open / individual gated)</option><option>Partners only</option><option>Upon request</option></select></div>
+          </div>
+        </div>
+        <div class="action-row"><button class="btn btn-primary" style="background:var(--ds-dark);border-color:var(--ds-dark)" onclick="goStep('ds',1)"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h8M8 4l3 3-3 3"/></svg>Continue to Consent &amp; Provenance</button></div>
+      </div>
+      <div class="form-panel mode-ds-active" id="ds-step1" style="display:none">
+        <div class="form-panel-head" style="background:linear-gradient(to right,var(--ds-bg),white 65%)"><div class="form-panel-title" style="color:var(--ds-dark)">D1 — Consent &amp; D2 — Provenance</div><div class="form-panel-meta">20 pts max · Q1–Q4</div></div>
+        <div class="section-block"><div class="section-kicker" style="color:var(--faint)">D1 — Consent Dimension <span class="kicker-badge" style="background:var(--ds-bg);color:var(--ds-dark);border-color:var(--ds-rim)">10 pts max</span></div><div id="ds-d1"></div></div>
+        <div class="section-block"><div class="section-kicker" style="color:var(--faint)">D2 — Provenance Dimension <span class="kicker-badge" style="background:var(--ds-bg);color:var(--ds-dark);border-color:var(--ds-rim)">10 pts max</span></div><div id="ds-d2"></div></div>
+        <div class="action-row"><button class="btn btn-secondary" style="color:var(--ds-dark);border-color:var(--ds-rim)" onclick="goStep('ds',0)">← Back</button><button class="btn btn-primary" style="background:var(--ds-dark);border-color:var(--ds-dark)" onclick="goStep('ds',2)">Continue →</button></div>
+      </div>
+      <div class="form-panel mode-ds-active" id="ds-step2" style="display:none">
+        <div class="form-panel-head" style="background:linear-gradient(to right,var(--ds-bg),white 65%)"><div class="form-panel-title" style="color:var(--ds-dark)">D3 — Access &amp; D4 — Machine-Readability</div><div class="form-panel-meta">20 pts max · Q5–Q8</div></div>
+        <div class="section-block"><div class="section-kicker" style="color:var(--faint)">D3 — Access Dimension <span class="kicker-badge" style="background:var(--ds-bg);color:var(--ds-dark);border-color:var(--ds-rim)">10 pts max</span></div><div id="ds-d3"></div></div>
+        <div class="section-block"><div class="section-kicker" style="color:var(--faint)">D4 — Machine-Readability <span class="kicker-badge" style="background:var(--ds-bg);color:var(--ds-dark);border-color:var(--ds-rim)">10 pts max</span></div><div id="ds-d4"></div></div>
+        <div class="action-row"><button class="btn btn-secondary" style="color:var(--ds-dark);border-color:var(--ds-rim)" onclick="goStep('ds',1)">← Back</button><button class="btn btn-primary" style="background:var(--ds-dark);border-color:var(--ds-dark)" onclick="goStep('ds',3)">Continue →</button></div>
+      </div>
+      <div class="form-panel mode-ds-active" id="ds-step3" style="display:none">
+        <div class="form-panel-head" style="background:linear-gradient(to right,var(--ds-bg),white 65%)"><div class="form-panel-title" style="color:var(--ds-dark)">D5 — Longitudinal Integrity &amp; D6 — Governance</div><div class="form-panel-meta">20 pts max · Q9–Q12</div></div>
+        <div class="section-block"><div class="section-kicker" style="color:var(--faint)">D5 — Longitudinal Integrity <span class="kicker-badge" style="background:var(--ds-bg);color:var(--ds-dark);border-color:var(--ds-rim)">10 pts max</span></div><div id="ds-d5"></div></div>
+        <div class="section-block"><div class="section-kicker" style="color:var(--faint)">D6 — Governance <span class="kicker-badge" style="background:var(--ds-bg);color:var(--ds-dark);border-color:var(--ds-rim)">10 pts max</span></div><div id="ds-d6"></div></div>
+        <div class="action-row"><button class="btn btn-secondary" style="color:var(--ds-dark);border-color:var(--ds-rim)" onclick="goStep('ds',2)">← Back</button><button class="btn btn-primary" style="background:var(--ds-dark);border-color:var(--ds-dark)" onclick="generateResult('ds')"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 1v6M7 7l-3 3M7 7l3 3"/><path d="M2 11h10"/></svg>Generate Assessment Card</button></div>
+      </div>
+      <div id="ds-step4" style="display:none"><div id="ds-result"></div></div>
+    </div>
+    <!-- Sidebar DS -->
+    <div class="score-card" style="--mode-dark:var(--ds-dark)">
+      <div class="score-card-head" style="background:var(--ds-dark)">
+        <div class="score-card-kicker">Live Score · DTAP</div>
+        <div class="score-display">
+          <div><div class="score-big-num" id="ds-big">—</div><div class="score-meta-row"><span class="conf-badge provisional" id="ds-conf">Self-assessed · 1/3</span></div></div>
+          <div class="score-ring-wrap"><svg viewBox="0 0 76 76"><circle cx="38" cy="38" r="30" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="6"/><circle id="ds-ring" cx="38" cy="38" r="30" fill="none" stroke="rgba(255,255,255,.88)" stroke-width="6" stroke-dasharray="0 188" stroke-dashoffset="47" transform="rotate(-90 38 38)" stroke-linecap="round"/></svg><div class="score-ring-label" id="ds-ring-label">0</div></div>
+        </div>
+      </div>
+      <div class="score-card-body">
+        <div class="score-bar-section"><div class="sbar-label">Trust Dimensions</div>
+          <div class="sbar-row"><div class="sbar-name">D1 Consent</div><div class="sbar-track"><div class="sbar-fill" id="ds-b0" style="background:var(--ds-dark)"></div></div><div class="sbar-val" id="ds-bv0" style="color:var(--ds-dark)">—</div></div>
+          <div class="sbar-row"><div class="sbar-name">D2 Provenance</div><div class="sbar-track"><div class="sbar-fill" id="ds-b1" style="background:var(--ds-dark)"></div></div><div class="sbar-val" id="ds-bv1" style="color:var(--ds-dark)">—</div></div>
+          <div class="sbar-row"><div class="sbar-name">D3 Access</div><div class="sbar-track"><div class="sbar-fill" id="ds-b2" style="background:var(--ds-dark)"></div></div><div class="sbar-val" id="ds-bv2" style="color:var(--ds-dark)">—</div></div>
+          <div class="sbar-row"><div class="sbar-name">D4 Machine-Read</div><div class="sbar-track"><div class="sbar-fill" id="ds-b3" style="background:var(--ds-dark)"></div></div><div class="sbar-val" id="ds-bv3" style="color:var(--ds-dark)">—</div></div>
+          <div class="sbar-row"><div class="sbar-name">D5 Longitudinal</div><div class="sbar-track"><div class="sbar-fill" id="ds-b4" style="background:var(--ds-dark)"></div></div><div class="sbar-val" id="ds-bv4" style="color:var(--ds-dark)">—</div></div>
+          <div class="sbar-row"><div class="sbar-name">D6 Governance</div><div class="sbar-track"><div class="sbar-fill" id="ds-b5" style="background:var(--ds-dark)"></div></div><div class="sbar-val" id="ds-bv5" style="color:var(--ds-dark)">—</div></div>
+        </div>
+        <div class="sc-divider"></div>
+        <div class="sbar-label" style="margin-bottom:5px">Flags</div>
+        <div class="flags-area" id="ds-flags"><div class="flag-item info"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="4.5"/><path d="M6 4v3"/></svg>Complete assessment to generate flags</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="stack-section" id="ds-stack"></div>
+</div><!-- /page-ds -->
+
+</div><!-- /page-outer -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// QUESTION DATA
+// ═══════════════════════════════════════════════════════════════
+
+const HW_GATES = [
+  { id:'hwg1a', gate:'G1', q:'Is the tool\'s purpose, intended use, and known limitations clearly documented in publicly accessible form?', guidance:'Look for a wiki page, README, or tool page describing what the tool does, what it\'s not suited for, and any safety/performance limits. A page that exists but is incomplete or inaccurate should fail.' },
+  { id:'hwg1b', gate:'G1', q:'Are all design files (plans, BOM, assembly instructions) version-controlled and publicly accessible?', guidance:'A tool requiring emailing the designer for plans, or docs behind a paywall, fails this gate. Preferred: GitLab/GitHub, Wikifactory, or equivalent.' },
+  { id:'hwg2a', gate:'G2', q:'Is the tool licensed under an open hardware or open content license that explicitly permits reproduction, modification, and redistribution?', guidance:'Acceptable: CERN OHL, TAPR OHL, CC BY, CC BY-SA. "Free to use" without a formal license fails. Proprietary with permission-on-request fails.' },
+  { id:'hwg2b', gate:'G2', q:'If the tool collects or transmits any data (IoT sensors, GPS), does the farmer retain full ownership and can fully export or delete that data?', guidance:'Pure mechanical tools without data components pass by default.' },
+  { id:'hwg3a', gate:'G3', q:'Does the tool avoid surveillance, tracking, coercive lock-in, or vendor-dependency features that could compromise farmer autonomy?', guidance:'Examples of failure: a tractor requiring proprietary software to unlock repair functions. Pure mechanical tools pass by default.' },
+  { id:'hwg4a', gate:'G4', q:'Is there documented safety guidance (hazards, PPE, operating limits) and a maintenance protocol appropriate to the tool\'s complexity and risk level?', guidance:'A simple hand tool requires minimal documentation. A motorized or high-voltage tool without safety notes fails this gate regardless of design quality.' },
+];
+
+const HW_SCORED = [
+  { id:'hwq7', cat:'resource', num:'Q7', q:'What is the environmental footprint of the materials in the bill of materials?', guidance:'Score 5: all materials recycled, reclaimed, or low-impact (wood, repurposed steel).\nScore 3: standard hardware-store materials with no unusual burden.\nScore 1: high-impact materials (virgin plastics, rare-earth) without justification.' },
+  { id:'hwq8', cat:'resource', num:'Q8', q:'Are the specified materials available from regional or local suppliers, or is material substitution documented?', guidance:'Score 5: explicit regional substitution docs with tested alternatives.\nScore 3: standard North American/European hardware components.\nScore 1: requires imported/specialty-order with no substitution guidance.' },
+  { id:'hwq9', cat:'resource', num:'Q9', q:'How energy-efficient is the tool in normal operation relative to the task it performs?', guidance:'Score 5: dramatically lower energy (human-powered vs. engine-powered).\nScore 3: comparable efficiency.\nScore 1: higher energy use without functional justification.' },
+  { id:'hwq10', cat:'social', num:'Q10', q:'Is the tool economically accessible to small and beginning farmers, or does documentation include a low-cost build path?', guidance:'Score 5: total build cost under $500 with common tools; low-cost variant documented.\nScore 3: moderate cost ($500–$2,000), no explicit accessibility notes.\nScore 1: cost or tooling requirements exclude most small farms.' },
+  { id:'hwq11', cat:'social', num:'Q11', q:'Has the tool been tested by or with farmers from diverse regions, backgrounds, or scales, with feedback incorporated?', guidance:'Score 5: documented field testing with multiple farm types; adaptation guidance included.\nScore 3: community-contributed variants or comments present.\nScore 1: single-source documentation with no community input.' },
+  { id:'hwq12', cat:'social', num:'Q12', q:'Does the project demonstrate fair attribution and credit for community contributions to the design?', guidance:'Score 5: contributor list maintained, version history credits individuals.\nScore 3: contributions acknowledged informally.\nScore 1: single named author, no community attribution.' },
+  { id:'hwq13', cat:'commons', num:'Q13', q:'How complete and well-organized is the documentation for someone building without access to the original creator?', guidance:'Score 5: step-by-step illustrated build guide, troubleshooting section, video walkthrough.\nScore 3: adequate plans with some gaps.\nScore 1: sketch-level plans requiring significant interpretation.' },
+  { id:'hwq14', cat:'commons', num:'Q14', q:'How actively is the project maintained, and does it respond to community contributions or bug reports?', guidance:'Score 5: active maintainer, documented contribution process, recent updates.\nScore 3: maintained but slow; last update within 2 years.\nScore 1: appears abandoned; no response to issues.' },
+  { id:'hwq15', cat:'commons', num:'Q15', q:'Is the tool designed to enable future adaptation, modular improvement, or remixing by others?', guidance:'Score 5: modular design, documented extension points, explicitly invites forks and variants.\nScore 3: adaptable in practice but not explicitly designed for it.\nScore 1: monolithic design, no modification guidance.' },
+  { id:'hwq16', cat:'resilience', num:'Q16', q:'How repairable is the tool in the field using common farm tools and skills?', guidance:'Score 5: all components serviceable with standard farm tools; repair sections in documentation.\nScore 3: most repairs feasible; some specialty tools needed.\nScore 1: requires specialist equipment for basic maintenance.' },
+  { id:'hwq17', cat:'resilience', num:'Q17', q:'How available and affordable are replacement parts over a 10-year horizon?', guidance:'Score 5: standard commodity parts (bolts, lumber, tubing) with documented alternatives.\nScore 3: mostly standard with one or two specialty parts.\nScore 1: depends on proprietary or discontinued parts.' },
+  { id:'hwq18', cat:'resilience', num:'Q18', q:'How well does the tool hold up to outdoor farm conditions, with long-term durability documented?', guidance:'Score 5: weather-resistant construction documented; expected lifespan and maintenance schedule given.\nScore 3: adequate durability with some weatherproofing guidance.\nScore 1: no durability information; appears to require frequent replacement.' },
+];
+
+const SW_GATES = [
+  { id:'swg1a', gate:'G1', q:'Is the tool\'s purpose, data practices, and known limitations documented publicly in plain language?', guidance:'Privacy policies written in legal language alone do not satisfy this gate. There must be a plain-language description of what data is collected, why, and what happens to it.' },
+  { id:'swg1b', gate:'G1', q:'Is the source code publicly accessible in a recognized version-controlled repository?', guidance:'Fully open source: pass. Source-available (readable but not freely licensable): conditional pass — note with flag. Closed source: fail.' },
+  { id:'swg2a', gate:'G2', q:'Can a user export all of their data in a standard, non-proprietary format (CSV, JSON, GeoJSON, etc.) without cost or friction?', guidance:'Pass if export is clearly documented and freely available. Fail if export requires contacting support, paying a fee, or is limited to partial data.' },
+  { id:'swg2b', gate:'G2', q:'Does the license explicitly permit self-hosting, forking, or running a private instance without vendor approval or ongoing royalty?', guidance:'GPL v2/v3, AGPL, Apache 2.0, MIT: pass. Proprietary with self-hosting permitted: conditional pass with flag. SaaS-only with no self-hosting: borderline.' },
+  { id:'swg3a', gate:'G3', q:'Does the tool avoid selling, licensing, or using farmer data for purposes beyond the stated service without explicit opt-in consent?', guidance:'Check: terms of service, privacy policy, any known data-sharing agreements. Any sale of identifiable farm data without consent: fail.' },
+  { id:'swg3b', gate:'G3', q:'Are there any features designed to create artificial switching costs, habit loops, or dependency on proprietary formats that would make it costly to leave?', guidance:'Fail: proprietary data format with no export, network effects that trap community members, aggressive contract terms. Reasonable SaaS pricing is not a lock-in pattern.' },
+  { id:'swg4a', gate:'G4', q:'Is there a documented process for security vulnerability reporting and a track record of timely responses?', guidance:'A responsible disclosure policy, bug bounty, or documented security review process: pass. No documented security process for a tool handling farm financial or location data: fail.' },
+  { id:'swg4b', gate:'G4', q:'Is there a clear long-term stewardship commitment — open-source community, nonprofit, or documented succession plan — that reduces the risk of sudden abandonment?', guidance:'Pass: established open-source community governance (e.g. farmOS/Drupal Association structure) or active company with public roadmap and succession documentation.' },
+];
+
+const SW_SCORED = [
+  { id:'swq9',  cat:'dataethics', num:'Q9',  q:'To what degree does the farmer retain meaningful, practical control over their own data — including the ability to understand, correct, delete, and share it selectively?', guidance:'Score 5: farmer dashboard showing all stored data; granular consent controls; documented data deletion.\nScore 3: data export available; privacy settings exist but not granular.\nScore 1: no visibility into stored data; deletion requires contacting support.' },
+  { id:'swq10', cat:'dataethics', num:'Q10', q:'How well does the tool minimize data collection to only what is necessary for the stated function?', guidance:'Score 5: minimal collection, documented rationale for each data type, no behavioral tracking beyond core function.\nScore 3: collects some non-essential data but disclosed.\nScore 1: collects extensive behavioral, financial, or location data beyond stated purpose.' },
+  { id:'swq11', cat:'dataethics', num:'Q11', q:'If the tool uses AI, ML, or algorithmic recommendations, are the logic and training data disclosed at a level that allows farmers to understand and contest decisions?', guidance:'Pure rule-based tools pass by default.\nScore 5: explainable outputs, disclosed training data sources.\nScore 1: black-box recommendations with no transparency.' },
+  { id:'swq12', cat:'interop', num:'Q12', q:'Does the tool implement or support recognized agricultural data standards (Modus, OADA, ISOBUS, eBird, FAIR principles, or equivalent)?', guidance:'Score 5: multiple standards implemented with documentation.\nScore 3: one standard or informal compatibility with common tools.\nScore 1: proprietary format only; no documented pathway to interoperability.' },
+  { id:'swq13', cat:'interop', num:'Q13', q:'Does the tool provide a documented, stable, and publicly accessible API that allows third-party integration without special permission?', guidance:'Score 5: public REST/GraphQL/JSON:API with versioning and changelog.\nScore 3: API exists but underdocumented or requires registration.\nScore 1: no API; integration possible only through data export.' },
+  { id:'swq14', cat:'interop', num:'Q14', q:'How well does the tool function across platforms, bandwidth conditions, and device types relevant to farming contexts?', guidance:'Score 5: works on low-bandwidth rural connections; offline mode; functional on older Android devices.\nScore 3: web-based with reasonable mobile support.\nScore 1: requires high-speed internet and modern desktop; no mobile support.' },
+  { id:'swq15', cat:'commons', num:'Q15', q:'Is there an active, welcoming community governance structure that allows non-developers to meaningfully participate in the tool\'s direction?', guidance:'Score 5: documented community governance, public roadmap, non-developer forums, regular community calls.\nScore 3: GitHub issues open to public; user feedback collected.\nScore 1: vendor-only roadmap; no public community input.' },
+  { id:'swq16', cat:'commons', num:'Q16', q:'How actively is the codebase maintained, and how quickly are security and functional issues addressed?', guidance:'Score 5: weekly activity, issues closed within days.\nScore 3: monthly activity, issues addressed.\nScore 1: last commit over a year ago; issues open without response.' },
+  { id:'swq17', cat:'access', num:'Q17', q:'How easy is it for a non-technical farmer to set up and use the tool without developer assistance?', guidance:'Score 5: hosted option with onboarding wizard, no technical knowledge required.\nScore 3: self-hostable with clear instructions; some technical familiarity needed.\nScore 1: requires command-line setup; no hosted option.' },
+  { id:'swq18', cat:'access', num:'Q18', q:'Is the tool available in languages relevant to its farming community, or is there a documented localization process?', guidance:'Score 5: multiple language support with active localization community.\nScore 3: English primary with documented localization framework.\nScore 1: English only with no localization pathway.' },
+];
+
+const DS_SCORED = [
+  { id:'dsq1', dim:'D1', dimLabel:'Consent', num:'Q1', q:'Was explicit, informed, and documented consent obtained from all data subjects before data was collected?', guidance:'Score 5: written consent with plain-language explanation; consent documented and stored.\nScore 3: verbal or implicit consent (participation in a voluntary program); documented at program level.\nScore 1: data collected without individual consent or under broad terms subjects may not have understood.' },
+  { id:'dsq2', dim:'D1', dimLabel:'Consent', num:'Q2', q:'Are data subjects able to review their own data, request corrections, and withdraw consent with deletion of their records from the aggregate?', guidance:'Score 5: self-service data portal; deletion request fulfilled within 30 days.\nScore 3: manual request process; honored but slow.\nScore 1: no documented withdrawal process; deletion not possible once aggregated.' },
+  { id:'dsq3', dim:'D2', dimLabel:'Provenance', num:'Q3', q:'Is the data collection methodology, sampling protocol, and quality control process publicly documented to allow independent replication?', guidance:'Score 5: peer-reviewed protocol; field manual publicly available; inter-rater reliability documented.\nScore 3: methodology described in general terms in publications.\nScore 1: "we collected data from farms" with no methodology description.' },
+  { id:'dsq4', dim:'D2', dimLabel:'Provenance', num:'Q4', q:'Is the stewardship organization clearly identified, with documented roles and responsibilities for data quality and access?', guidance:'Score 5: named steward, governance board, contact for data questions.\nScore 3: organization identified; governance informal.\nScore 1: unclear who is responsible for the dataset.' },
+  { id:'dsq5', dim:'D3', dimLabel:'Access', num:'Q5', q:'Is the aggregate dataset (or a meaningful public version) freely and openly accessible without registration or payment?', guidance:'Score 5: direct download in open format; no registration required.\nScore 3: free but requires registration or application.\nScore 1: access restricted to partner organizations; no public version.' },
+  { id:'dsq6', dim:'D3', dimLabel:'Access', num:'Q6', q:'Is there a documented access tier system that balances open access with appropriate protections for sensitive farm-level data?', guidance:'Score 5: clear tiered access (public aggregate / request-based individual / restricted sensitive) with documented criteria.\nScore 3: some tiering but criteria informal.\nScore 1: binary all-or-nothing access with no intermediate options.' },
+  { id:'dsq7', dim:'D4', dimLabel:'Machine-Readable', num:'Q7', q:'Is the dataset available in at least one non-proprietary, machine-readable format (CSV, JSON, GeoJSON, Parquet, NetCDF, or equivalent)?', guidance:'Score 5: multiple formats with documented schema and data dictionary.\nScore 3: one open format, schema described.\nScore 1: PDF or proprietary format only; structured data not available.' },
+  { id:'dsq8', dim:'D4', dimLabel:'Machine-Readable', num:'Q8', q:'Is there a documented API or data feed that allows programmatic, up-to-date access without downloading the full corpus?', guidance:'Score 5: REST or GraphQL API with versioning, authentication options, and rate-limit documentation.\nScore 3: API exists but limited or underdocumented.\nScore 1: no API; download-only.' },
+  { id:'dsq9', dim:'D5', dimLabel:'Longitudinal', num:'Q9', q:'Does the dataset include multiple time points that enable trend analysis, and is a resurvey schedule documented and funded?', guidance:'Score 5: annual resurveys documented; 3+ year baseline established; protocol consistent.\nScore 3: some longitudinal data; resurvey intended but not formally committed.\nScore 1: single-point-in-time data with no resurvey plan.' },
+  { id:'dsq10', dim:'D5', dimLabel:'Longitudinal', num:'Q10', q:'Is there a documented versioning system so analyses can be reproduced against a specific stable version?', guidance:'Score 5: semantic versioning, DOI per version, changelog.\nScore 3: versions exist but informally managed.\nScore 1: no versioning; the dataset changes without notice or record.' },
+  { id:'dsq11', dim:'D6', dimLabel:'Governance', num:'Q11', q:'Is the dataset governed by a formal or semi-formal structure that includes representation from the data subjects (farmers or communities who provided the data)?', guidance:'Score 5: formal governance board with farmer representation; governance documents public.\nScore 3: farmer advisory input exists but no formal governance structure.\nScore 1: governed solely by the collecting organization with no data-subject representation.' },
+  { id:'dsq12', dim:'D6', dimLabel:'Governance', num:'Q12', q:'Is there a documented long-term archival and sustainability plan ensuring the dataset remains accessible if the primary steward changes or closes?', guidance:'Score 5: deposited in a recognized archive (Zenodo, USDA data portal, institutional repository); migration plan documented.\nScore 3: backup exists; no formal archival.\nScore 1: single-copy on organizational servers with no continuity plan.' },
+];
+
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+const S = {
+  hw: { gates:{}, scored:{}, evidence:{}, step:0 },
+  sw: { gates:{}, scored:{}, evidence:{}, step:0 },
+  ds: { scored:{}, evidence:{}, step:0 },
+};
+
+// ═══════════════════════════════════════════════════════════════
+// UI BUILDERS
+// ═══════════════════════════════════════════════════════════════
+function buildGateQ(mode, q) {
+  const s = S[mode];
+  const val = s.gates[q.id];
+  const cls = val === 'pass' ? ' answered' : val === 'fail' ? ' failed' : '';
+  const div = document.createElement('div');
+  div.className = 'gate-q' + cls; div.id = 'gq_'+q.id;
+  const evNote = s.evidence[q.id] || '';
+  div.innerHTML = `
+    <div class="gate-q-header">
+      <span class="gate-num">${q.gate}</span>
+      <div class="gate-q-text">${q.q}</div>
+    </div>
+    <div class="gate-guidance">${q.guidance}</div>
+    <div class="gate-radios">
+      <label class="gate-radio-label ${val==='pass'?'selected-pass':''}">
+        <input type="radio" name="${q.id}" value="pass" ${val==='pass'?'checked':''} onchange="setGate('${mode}','${q.id}','pass')">
+        <span class="gate-radio-dot"></span> Pass
+      </label>
+      <label class="gate-radio-label ${val==='fail'?'selected-fail':''}">
+        <input type="radio" name="${q.id}" value="fail" ${val==='fail'?'checked':''} onchange="setGate('${mode}','${q.id}','fail')">
+        <span class="gate-radio-dot"></span> Fail
+      </label>
+    </div>
+    <div class="evidence-field">
+      <button class="evidence-toggle ${evNote?'open':''}" onclick="toggleEvidence(this)" type="button">
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2l4 4-4 4"/></svg>
+        Add evidence note
+      </button>
+      <div class="evidence-area ${evNote?'open':''}">
+        <textarea class="field-textarea" style="margin-top:5px;font-size:12px" placeholder="URL, doc reference, or observation…"
+          oninput="S.${mode}.evidence['${q.id}']=this.value">${evNote}</textarea>
+      </div>
+    </div>`;
+  return div;
+}
+
+function buildScoredQ(mode, q) {
+  const s = S[mode];
+  const val = s.scored[q.id] ?? 0;
+  const evNote = s.evidence[q.id] || '';
+  const div = document.createElement('div');
+  div.className = 'scored-q'; div.id = 'sq_'+q.id;
+  const guidanceLines = q.guidance.split('\n').map(l=>`<div>${l}</div>`).join('');
+  const dimBadge = q.dim ? `<span class="dim-label">${q.dim} — ${q.dimLabel}</span>` : '';
+  div.innerHTML = `
+    <div class="scored-q-meta">
+      <span class="q-num">${q.num}</span>${dimBadge}
+    </div>
+    <div class="scored-q-text">${q.q}</div>
+    <div class="scored-q-guidance">${guidanceLines}</div>
+    <div class="slider-wrap">
+      <input type="range" min="0" max="5" step="0.5" value="${val}"
+        oninput="setScore('${mode}','${q.id}',parseFloat(this.value),this)" id="sl_${q.id}">
+      <div class="slider-row">
+        <div class="slider-labels">
+          <span class="slider-label">0 — Not present</span>
+          <span class="slider-label">5 — Exemplary</span>
+        </div>
+        <div class="slider-value" id="sv_${q.id}">${val.toFixed(1)}</div>
+      </div>
+    </div>
+    <div class="evidence-field">
+      <button class="evidence-toggle ${evNote?'open':''}" onclick="toggleEvidence(this)" type="button">
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2l4 4-4 4"/></svg>
+        Add evidence note
+      </button>
+      <div class="evidence-area ${evNote?'open':''}">
+        <textarea class="field-textarea" style="margin-top:5px;font-size:12px" placeholder="URL, doc reference, or observation…"
+          oninput="S.${mode}.evidence['${q.id}']=this.value">${evNote}</textarea>
+      </div>
+    </div>`;
+  return div;
+}
+
+function initMode(mode, gatesData, scoredData, containerMap) {
+  Object.entries(containerMap).forEach(([containerId, filter]) => {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    if (gatesData) {
+      gatesData.filter(filter).forEach(q => el.appendChild(buildGateQ(mode, q)));
+    } else {
+      scoredData.filter(filter).forEach(q => el.appendChild(buildScoredQ(mode, q)));
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INTERACTIONS
+// ═══════════════════════════════════════════════════════════════
+function setGate(mode, id, val) {
+  S[mode].gates[id] = val;
+  const el = document.getElementById('gq_'+id);
+  el.className = 'gate-q ' + (val==='pass'?'answered':'failed');
+  el.querySelectorAll('.gate-radio-label').forEach(lbl => {
+    const v = lbl.querySelector('input').value;
+    lbl.className = 'gate-radio-label' + (v===val ? (val==='pass'?' selected-pass':' selected-fail') : '');
+  });
+  updateLive(mode);
+}
+
+function setScore(mode, id, val, slider) {
+  S[mode].scored[id] = val;
+  document.getElementById('sv_'+id).textContent = val.toFixed(1);
+  const pct = (val/5)*100;
+  const colors = { hw:'var(--forest)', sw:'var(--sw-dark)', ds:'var(--ds-dark)' };
+  slider.style.background = `linear-gradient(to right, ${colors[mode]} ${pct}%, var(--line) ${pct}%)`;
+  updateLive(mode);
+}
+
+function toggleEvidence(btn) {
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+}
+
+function goStep(mode, n) {
+  [0,1,2,3,4].forEach(i => {
+    const p = document.getElementById(`${mode}-step${i}`);
+    if (p) p.style.display = i===n ? '' : 'none';
+  });
+  const rail = document.getElementById(`${mode}-step-rail`);
+  if (rail) rail.querySelectorAll('.step-item').forEach(el => {
+    const s = parseInt(el.dataset.step);
+    el.classList.toggle('active', s===n);
+    el.classList.toggle('done', s<n);
+  });
+  S[mode].step = n;
+  const pct = (n/4)*100;
+  document.getElementById(`${mode}-progress`).style.width = pct+'%';
+  window.scrollTo({ top: 0, behavior:'smooth' });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SCORING ENGINES
+// ═══════════════════════════════════════════════════════════════
+function calcHW() {
+  const gateMap = { G1:['hwg1a','hwg1b'], G2:['hwg2a','hwg2b'], G3:['hwg3a'], G4:['hwg4a'] };
+  const gatePass = {}; let gatePts=0, gateFailCount=0;
+  Object.entries(gateMap).forEach(([gate,ids]) => {
+    const allPass = ids.every(id => S.hw.gates[id]==='pass');
+    const anyFail = ids.some(id => S.hw.gates[id]==='fail');
+    gatePass[gate] = anyFail ? false : (allPass ? true : null);
+    if (gatePass[gate]===true) gatePts+=10;
+    if (gatePass[gate]===false) gateFailCount++;
+  });
+  const cats = { resource:['hwq7','hwq8','hwq9'], social:['hwq10','hwq11','hwq12'], commons:['hwq13','hwq14','hwq15'], resilience:['hwq16','hwq17','hwq18'] };
+  const catScores = {}; let catPts=0;
+  Object.entries(cats).forEach(([cat,ids]) => {
+    const avg = ids.reduce((s,id) => s+(S.hw.scored[id]??0),0)/ids.length;
+    catScores[cat]=avg; catPts+=avg*3;
+  });
+  let raw = gatePts+catPts;
+  if (gateFailCount>0) raw=Math.min(raw,79);
+  const role = document.getElementById('hw-role')?.value||'steward';
+  const mod = role==='auditor'?1.04:role==='peer'?1.0:0.92;
+  return { displayScore:Math.min(100,Math.round(raw*mod)), rawScore:raw, gatePts, catPts, gatePass, catScores, gateFailCount, modifier:mod, role };
+}
+
+function calcSW() {
+  const gateMap = { G1:['swg1a','swg1b'], G2:['swg2a','swg2b'], G3:['swg3a','swg3b'], G4:['swg4a','swg4b'] };
+  const gatePass = {}; let gatePts=0, gateFailCount=0;
+  Object.entries(gateMap).forEach(([gate,ids]) => {
+    const allPass = ids.every(id => S.sw.gates[id]==='pass');
+    const anyFail = ids.some(id => S.sw.gates[id]==='fail');
+    gatePass[gate] = anyFail ? false : (allPass ? true : null);
+    if (gatePass[gate]===true) gatePts+=10;
+    if (gatePass[gate]===false) gateFailCount++;
+  });
+  const cats = { dataethics:['swq9','swq10','swq11'], interop:['swq12','swq13','swq14'], commons:['swq15','swq16'], access:['swq17','swq18'] };
+  const catScores = {}; let catPts=0;
+  Object.entries(cats).forEach(([cat,ids]) => {
+    const avg = ids.reduce((s,id) => s+(S.sw.scored[id]??0),0)/ids.length;
+    catScores[cat]=avg; catPts+=avg*3;
+  });
+  let raw = gatePts+catPts;
+  if (gateFailCount>0) raw=Math.min(raw,79);
+  const role = document.getElementById('sw-role')?.value||'steward';
+  const mod = role==='auditor'?1.04:role==='peer'?1.0:0.92;
+  return { displayScore:Math.min(100,Math.round(raw*mod)), rawScore:raw, gatePts, catPts, gatePass, catScores, gateFailCount, modifier:mod, role };
+}
+
+function calcDS() {
+  // DTAP: 6 dimensions × 0-5 score; each dim uses avg of its 2 Qs × (50/6) pts max
+  // Total = sum of dim scores, normalized to 100
+  const dims = {
+    D1:['dsq1','dsq2'], D2:['dsq3','dsq4'], D3:['dsq5','dsq6'],
+    D4:['dsq7','dsq8'], D5:['dsq9','dsq10'], D6:['dsq11','dsq12']
+  };
+  const dimScores = {}; let totalPts=0;
+  Object.entries(dims).forEach(([dim,ids]) => {
+    const avg = ids.reduce((s,id)=>s+(S.ds.scored[id]??0),0)/ids.length;
+    dimScores[dim]=avg; totalPts+=avg;
+  });
+  // Max pts = 6×5=30, scale to 100 → ×(100/30)
+  let raw = totalPts * (100/30);
+  const role = document.getElementById('ds-role')?.value||'steward';
+  const mod = role==='auditor'?1.04:role==='peer'?1.0:0.92;
+  return { displayScore:Math.min(100,Math.round(raw*mod)), rawScore:raw, dimScores, modifier:mod, role };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LIVE UPDATE
+// ═══════════════════════════════════════════════════════════════
+function updateLive(mode) {
+  if (mode==='hw') updateHWLive();
+  else if (mode==='sw') updateSWLive();
+  else updateDSLive();
+}
+
+function setRing(ringId, labelId, score) {
+  const circ = 2*Math.PI*30; // r=30
+  const filled = (score/100)*circ;
+  document.getElementById(ringId).setAttribute('stroke-dasharray', `${filled} ${circ}`);
+  document.getElementById(labelId).textContent = score||'0';
+}
+
+function updateHWLive() {
+  const s = calcHW();
+  document.getElementById('hw-big').textContent = s.displayScore||'—';
+  setRing('hw-ring','hw-ring-label',s.displayScore);
+  const cb=document.getElementById('hw-conf');
+  cb.textContent=s.role==='auditor'?'Audited · 3/3':s.role==='peer'?'Peer-reviewed · 2/3':'Self-assessed · 1/3';
+  cb.className='conf-badge '+(s.role==='steward'?'provisional':'reviewed');
+  [['resource',0],['social',1],['commons',2],['resilience',3]].forEach(([cat,i])=>{
+    const v=s.catScores[cat]??0;
+    document.getElementById(`hw-b${i}`).style.width=(v/5*100)+'%';
+    document.getElementById(`hw-bv${i}`).textContent=v.toFixed(1);
+  });
+  ['G1','G2','G3','G4'].forEach((g,i)=>{
+    const v=s.gatePass[g]; const p=document.getElementById(`hw-gp${i}`);
+    p.className='gate-pill '+(v===true?'pass':v===false?'fail':'unknown');
+  });
+  renderFlags('hw-flags', genHWFlags(s));
+}
+
+function updateSWLive() {
+  const s = calcSW();
+  document.getElementById('sw-big').textContent=s.displayScore||'—';
+  setRing('sw-ring','sw-ring-label',s.displayScore);
+  const cb=document.getElementById('sw-conf');
+  cb.textContent=s.role==='auditor'?'Audited · 3/3':s.role==='peer'?'Peer-reviewed · 2/3':'Self-assessed · 1/3';
+  cb.className='conf-badge '+(s.role==='steward'?'provisional':'reviewed');
+  [['dataethics',0],['interop',1],['commons',2],['access',3]].forEach(([cat,i])=>{
+    const v=s.catScores[cat]??0;
+    document.getElementById(`sw-b${i}`).style.width=(v/5*100)+'%';
+    document.getElementById(`sw-bv${i}`).textContent=v.toFixed(1);
+  });
+  ['G1','G2','G3','G4'].forEach((g,i)=>{
+    const v=s.gatePass[g]; const p=document.getElementById(`sw-gp${i}`);
+    p.className='gate-pill '+(v===true?'pass':v===false?'fail':'unknown');
+  });
+  renderFlags('sw-flags', genSWFlags(s));
+}
+
+function updateDSLive() {
+  const s = calcDS();
+  document.getElementById('ds-big').textContent=s.displayScore||'—';
+  setRing('ds-ring','ds-ring-label',s.displayScore);
+  const cb=document.getElementById('ds-conf');
+  cb.textContent=s.role==='auditor'?'Audited · 3/3':s.role==='peer'?'Peer-reviewed · 2/3':'Self-assessed · 1/3';
+  cb.className='conf-badge '+(s.role==='steward'?'provisional':'reviewed');
+  ['D1','D2','D3','D4','D5','D6'].forEach((d,i)=>{
+    const v=s.dimScores[d]??0;
+    document.getElementById(`ds-b${i}`).style.width=(v/5*100)+'%';
+    document.getElementById(`ds-bv${i}`).textContent=v.toFixed(1);
+  });
+  renderFlags('ds-flags', genDSFlags(s));
+}
+
+function renderFlags(containerId, flags) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (!flags.length) { el.innerHTML='<div style="font-size:11px;color:var(--faint);padding:3px 0">No flags generated yet</div>'; return; }
+  el.innerHTML=flags.map(f=>`<div class="flag-item ${f.type}"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">${f.type==='warn'?'<path d="M6 2v5M6 9v1"/>':'<circle cx="6" cy="6" r="4.5"/><path d="M6 4v3"/>'}</svg>${f.text}</div>`).join('');
+}
+
+function genHWFlags(s) {
+  const fl=[];
+  if (s.gateFailCount>0) fl.push({type:'warn',text:`${s.gateFailCount} gate${s.gateFailCount>1?'s':''} failed — score capped at 79`});
+  if (s.role==='steward') fl.push({type:'info',text:'Provisional — confidence advances with peer review'});
+  if (s.catScores.resilience<2.5) fl.push({type:'warn',text:'Low resilience — repairability concern'});
+  if (s.catScores.resource<2.5) fl.push({type:'warn',text:'Resource ethics below threshold'});
+  if (s.displayScore>=80&&s.gateFailCount===0) fl.push({type:'info',text:'Commons-ready threshold reached'});
+  return fl;
+}
+function genSWFlags(s) {
+  const fl=[];
+  if (s.gateFailCount>0) fl.push({type:'warn',text:`${s.gateFailCount} gate${s.gateFailCount>1?'s':''} failed — score capped at 79`});
+  if (s.role==='steward') fl.push({type:'info',text:'Provisional — confidence advances with peer review'});
+  if (s.catScores.dataethics<2.5) fl.push({type:'warn',text:'Low data ethics score — sovereignty concern'});
+  if (s.catScores.interop<2.5) fl.push({type:'warn',text:'Low interoperability — integration risk'});
+  if (s.catScores.access<2.5) fl.push({type:'warn',text:'Accessibility concern — setup barriers likely'});
+  if (s.displayScore>=80&&s.gateFailCount===0) fl.push({type:'info',text:'Data-sovereign threshold reached'});
+  return fl;
+}
+function genDSFlags(s) {
+  const fl=[];
+  if (s.role==='steward') fl.push({type:'info',text:'Provisional — confidence advances with peer review'});
+  if (s.dimScores.D1<2.5) fl.push({type:'warn',text:'Weak consent documentation — critical concern'});
+  if (s.dimScores.D3<2.5) fl.push({type:'warn',text:'Access restrictions may limit utility'});
+  if (s.dimScores.D4<2.5) fl.push({type:'warn',text:'Poor machine-readability — reuse barrier'});
+  if (s.dimScores.D6<2.5) fl.push({type:'warn',text:'Governance gap — farmer representation missing'});
+  if (s.displayScore>=80) fl.push({type:'info',text:'FAIR-aligned threshold reached'});
+  return fl;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RESULT CARD GENERATORS
+// ═══════════════════════════════════════════════════════════════
+function confInfo(role) {
+  return {
+    label: role==='auditor'?'Audited · Tier 3/3':role==='peer'?'Peer-reviewed · Tier 2/3':'Self-assessed · Tier 1/3',
+    desc: role==='auditor'?'An ecosystem steward has completed a structured full audit. This score is authoritative.':role==='peer'?'At least one certified peer reviewer has verified these claims. Discrepancies resolved or flagged.':'The steward completed the questionnaire. No independent review yet. Score is provisional.',
+    decay: role==='auditor'?'Next review due in 18 months.':role==='peer'?'Review expires in 18 months; confidence will decay to Tier 1 without re-review.':'Advance to Tier 2 by inviting a certified peer reviewer.',
+    tier: role==='auditor'?3:role==='peer'?2:1,
+  };
+}
+
+function resultBadgesHTML(badges) {
+  return badges.map(b=>`<span class="result-badge ${b.type}"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${b.type==='good'?'<path d="M2 5l2 2 4-4"/>':'<path d="M5 3v2.5M5 7.5v.5"/>'}</svg>${b.text}</span>`).join('');
+}
+
+function gateGrid(gatePass, gateDefs) {
+  return gateDefs.map(g=>{
+    const v=gatePass[g.key]; const cls=v===true?'pass':v===false?'fail':'pass'; const mark=v===true?'✓':v===false?'✗':'·';
+    return `<div class="result-gate ${cls}"><div class="result-gate-mark">${mark}</div><div><div class="result-gate-name">${g.label}</div><div class="result-gate-desc">${g.desc}</div></div></div>`;
+  }).join('');
+}
+
+function barGrid(catDefs, catScores) {
+  return catDefs.map(c=>{
+    const v=catScores[c.key]??0; const pct=(v/5)*100; const cls=v>=4?'hi':v>=2.5?'mid':'lo';
+    return `<div class="result-bar-row"><div class="result-bar-label">${c.label}</div><div class="result-bar-track"><div class="result-bar-fill ${cls}" style="width:${pct}%"></div></div><div class="result-bar-val">${v.toFixed(1)}</div></div>`;
+  }).join('');
+}
+
+function confBlock(s) {
+  const ci=confInfo(s.role);
+  return `<div class="result-confidence">
+    <div class="conf-tier-display">${ci.tier}<span style="font-size:22px;color:var(--faint)">/3</span></div>
+    <div class="conf-tier-info">
+      <div class="conf-tier-name">${ci.label}</div>
+      <div class="conf-tier-desc">${ci.desc}</div>
+      <div class="conf-tier-decay">${ci.decay}</div>
+    </div>
+  </div>`;
+}
+
+function reviewThread(steward, role, today, score) {
+  return `<div class="review-thread">
+    <div class="review-thread-head"><span class="rt-dot"></span>Assessment Record · ${today} · ETA v1.0</div>
+    <div class="review-entry">
+      <div class="re-avatar re-av-1">${(steward||'?')[0].toUpperCase()}</div>
+      <div class="re-body">
+        <div class="re-meta"><strong>${steward}</strong> · ${role==='steward'?'Steward':role==='peer'?'Peer Reviewer':'Auditor'} <span class="re-badge ${role==='steward'?'self':'peer'}">${role.toUpperCase()}</span> · ${today}</div>
+        <div class="re-text">${score}</div>
+      </div>
+    </div>
+    <div class="review-entry" style="background:var(--forest-bg)">
+      <div class="re-avatar re-av-2">?</div>
+      <div class="re-body">
+        <div class="re-meta" style="color:var(--faint);font-style:italic">Awaiting peer reviewer</div>
+        <div class="re-text" style="color:var(--dim);font-size:11.5px">A certified peer reviewer can confirm or challenge individual claims. Advancing to Tier 2/3 requires at least one verified review. <a href="#" style="color:var(--forest)">Invite a reviewer →</a></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function evidenceSection(questions, s) {
+  const rows = questions.map(q=>{
+    const note=s.evidence[q.id]; if(!note) return '';
+    return `<div class="evidence-row"><div class="ev-q">${q.num}</div><div class="ev-text"><div>${q.q}</div><div class="ev-note">📎 ${note}</div></div><span class="ev-status confirmed">Noted</span></div>`;
+  }).filter(Boolean).join('');
+  if (!rows) return '';
+  return `<div class="result-section"><div class="result-section-label">Evidence Notes</div><div class="result-evidence-section">${rows}</div></div>`;
+}
+
+function generateResult(mode) {
+  const today = new Date().toISOString().split('T')[0];
+  if (mode==='hw') {
+    const s=calcHW();
+    const name=document.getElementById('hw-name').value||'Unnamed Tool';
+    const desc=document.getElementById('hw-desc').value||'No description.';
+    const steward=document.getElementById('hw-steward').value||'Unknown';
+    const license=document.getElementById('hw-license').value||'Not stated';
+    const badges=[];
+    if(s.gatePass.G1) badges.push({type:'good',text:'Transparent'});
+    if(s.gatePass.G2) badges.push({type:'good',text:'Rights-clear'});
+    if(s.gatePass.G3) badges.push({type:'good',text:'No lock-in'});
+    if(s.gatePass.G4) badges.push({type:'good',text:'Safety docs'});
+    if(s.catScores.resilience>=4) badges.push({type:'good',text:'Repairable'});
+    if(s.catScores.resource>=3.5) badges.push({type:'good',text:'Low-impact materials'});
+    if(s.gateFailCount>0) badges.push({type:'warn',text:`${s.gateFailCount} gate${s.gateFailCount>1?'s':''} failed`});
+    const scoreText=`Initial assessment submitted. Score: ${s.rawScore.toFixed(0)} raw → ${s.displayScore} displayed (confidence ×${s.modifier.toFixed(2)}). License: ${license}. ${s.gateFailCount>0?s.gateFailCount+' gate(s) failed — capped at 79.':'All gates passed.'}`;
+    document.getElementById('hw-result').innerHTML = `<div class="result-card">
+      <div class="result-header rh-hw"><div class="result-score-block"><div class="result-score-num">${s.displayScore}</div><div class="result-score-label">Ethical Tech Score</div><div style="font-family:'DM Mono',monospace;font-size:8.5px;color:rgba(255,255,255,.4);margin-top:3px">${confInfo(s.role).label}</div></div><div class="result-title-block"><div class="result-kicker">Hardware Tool Assessment · ETA v1.0</div><div class="result-tool-name">${name}</div><div class="result-tool-desc">${desc}</div><div class="result-badges">${resultBadgesHTML(badges)}</div></div></div>
+      <div class="result-body">
+        <div class="result-section"><div class="result-section-label">Entry Gates</div><div class="result-gates">${gateGrid(s.gatePass,[{key:'G1',label:'G1 Transparency',desc:'Purpose, limits, and docs publicly accessible'},{key:'G2',label:'G2 Rights & Control',desc:'Clear licensing, data exportability, no lock-in'},{key:'G3',label:'G3 No Abuse',desc:'No surveillance or coercive vendor patterns'},{key:'G4',label:'G4 Safety',desc:'Safety guidance and maintenance documentation'}])}</div></div>
+        <div class="result-section"><div class="result-section-label">Category Scores (0–5 scale)</div><div class="result-bars">${barGrid([{key:'resource',label:'Resource Ethics'},{key:'social',label:'Social Ethics'},{key:'commons',label:'Commons Fit'},{key:'resilience',label:'Resilience'}],s.catScores)}</div></div>
+        <div class="result-section"><div class="result-section-label">Confidence &amp; Review Record</div>${confBlock(s)}</div>
+        <div class="result-section"><div class="result-section-label">Peer Review Thread</div>${reviewThread(steward,s.role,today,scoreText)}</div>
+        ${evidenceSection([...HW_GATES,...HW_SCORED],S.hw)}
+        <div style="padding:10px 0;font-family:'DM Mono',monospace;font-size:9px;color:var(--faint);border-top:1px solid var(--cream-dk);margin-top:6px">Assessed by ${steward} · ${today} · ETA Framework v1.0 · OpenTEAM / Ag Knowledge Concordance · Review cadence: 18 months</div>
+      </div></div>`;
+    goStep('hw',4);
+
+  } else if (mode==='sw') {
+    const s=calcSW();
+    const name=document.getElementById('sw-name').value||'Unnamed Software';
+    const desc=document.getElementById('sw-desc').value||'No description.';
+    const steward=document.getElementById('sw-steward').value||'Unknown';
+    const license=document.getElementById('sw-license').value||'Not stated';
+    const badges=[];
+    if(s.gatePass.G1) badges.push({type:'good',text:'Transparent'});
+    if(s.gatePass.G2) badges.push({type:'good',text:'Data sovereign'});
+    if(s.gatePass.G3) badges.push({type:'good',text:'No data abuse'});
+    if(s.gatePass.G4) badges.push({type:'good',text:'Stewardship'});
+    if(s.catScores.dataethics>=4) badges.push({type:'good',text:'Data-sovereign'});
+    if(s.catScores.interop>=3.5) badges.push({type:'good',text:'Interoperable'});
+    if(s.catScores.commons>=4) badges.push({type:'good',text:'Open source'});
+    if(s.gateFailCount>0) badges.push({type:'warn',text:`${s.gateFailCount} gate${s.gateFailCount>1?'s':''} failed`});
+    const scoreText=`Initial assessment submitted. Score: ${s.rawScore.toFixed(0)} raw → ${s.displayScore} displayed (confidence ×${s.modifier.toFixed(2)}). License: ${license}. ${s.gateFailCount>0?s.gateFailCount+' gate(s) failed — capped at 79.':'All gates passed.'}`;
+    document.getElementById('sw-result').innerHTML = `<div class="result-card">
+      <div class="result-header rh-sw"><div class="result-score-block"><div class="result-score-num">${s.displayScore}</div><div class="result-score-label">Ethical Tech Score</div><div style="font-family:'DM Mono',monospace;font-size:8.5px;color:rgba(255,255,255,.4);margin-top:3px">${confInfo(s.role).label}</div></div><div class="result-title-block"><div class="result-kicker">Software Tool Assessment · ETA v1.0</div><div class="result-tool-name">${name}</div><div class="result-tool-desc">${desc}</div><div class="result-badges">${resultBadgesHTML(badges)}</div></div></div>
+      <div class="result-body">
+        <div class="result-section"><div class="result-section-label">Entry Gates</div><div class="result-gates">${gateGrid(s.gatePass,[{key:'G1',label:'G1 Transparency',desc:'Purpose, data practices, and limitations publicly documented'},{key:'G2',label:'G2 Rights & Control',desc:'Data export, self-hosting permitted, no royalty lock'},{key:'G3',label:'G3 No Abuse',desc:'No data selling, no artificial switching costs'},{key:'G4',label:'G4 Stewardship',desc:'Security process and long-term stewardship committed'}])}</div></div>
+        <div class="result-section"><div class="result-section-label">Category Scores (0–5 scale)</div><div class="result-bars">${barGrid([{key:'dataethics',label:'Data Ethics'},{key:'interop',label:'Interoperability'},{key:'commons',label:'Commons Fit'},{key:'access',label:'Accessibility'}],s.catScores)}</div></div>
+        <div class="result-section"><div class="result-section-label">Confidence &amp; Review Record</div>${confBlock(s)}</div>
+        <div class="result-section"><div class="result-section-label">Peer Review Thread</div>${reviewThread(steward,s.role,today,scoreText)}</div>
+        ${evidenceSection([...SW_GATES,...SW_SCORED],S.sw)}
+        <div style="padding:10px 0;font-family:'DM Mono',monospace;font-size:9px;color:var(--faint);border-top:1px solid var(--cream-dk);margin-top:6px">Assessed by ${steward} · ${today} · ETA Framework v1.0 · OpenTEAM / Ag Knowledge Concordance · Review cadence: 18 months</div>
+      </div></div>`;
+    goStep('sw',4);
+
+  } else { // ds
+    const s=calcDS();
+    const name=document.getElementById('ds-name').value||'Unnamed Dataset';
+    const desc=document.getElementById('ds-desc').value||'No description.';
+    const steward=document.getElementById('ds-steward').value||'Unknown';
+    const badges=[];
+    if(s.dimScores.D1>=3.5) badges.push({type:'good',text:'Farmer consent'});
+    if(s.dimScores.D2>=3.5) badges.push({type:'good',text:'Documented provenance'});
+    if(s.dimScores.D3>=3.5) badges.push({type:'good',text:'Open access'});
+    if(s.dimScores.D4>=3.5) badges.push({type:'good',text:'Machine-readable'});
+    if(s.dimScores.D5>=3.5) badges.push({type:'good',text:'Longitudinal'});
+    if(s.dimScores.D6>=3.5) badges.push({type:'good',text:'Governed'});
+    if(s.dimScores.D1<2) badges.push({type:'warn',text:'Consent gap'});
+    if(s.dimScores.D4<2) badges.push({type:'warn',text:'No machine-readable'});
+    const scoreText=`DTAP assessment submitted. Data Trust Score: ${s.rawScore.toFixed(0)} raw → ${s.displayScore} displayed (confidence ×${s.modifier.toFixed(2)}). Strongest dimension: ${Object.entries(s.dimScores).sort((a,b)=>b[1]-a[1])[0][0]}.`;
+    // Dim bars for result
+    const dimBarHTML = ['D1','D2','D3','D4','D5','D6'].map(d=>{
+      const labels={D1:'Consent',D2:'Provenance',D3:'Access',D4:'Machine-Read',D5:'Longitudinal',D6:'Governance'};
+      const v=s.dimScores[d]??0; const pct=(v/5)*100; const cls=v>=4?'hi':v>=2.5?'mid':'lo';
+      return `<div class="result-bar-row"><div class="result-bar-label">${labels[d]}</div><div class="result-bar-track"><div class="result-bar-fill ${cls}" style="width:${pct}%;background:var(--ds-dark)"></div></div><div class="result-bar-val" style="color:var(--ds-dark)">${v.toFixed(1)}</div></div>`;
+    }).join('');
+    document.getElementById('ds-result').innerHTML = `<div class="result-card">
+      <div class="result-header rh-ds"><div class="result-score-block"><div class="result-score-num">${s.displayScore}</div><div class="result-score-label">Data Trust Score</div><div style="font-family:'DM Mono',monospace;font-size:8.5px;color:rgba(255,255,255,.4);margin-top:3px">${confInfo(s.role).label}</div></div><div class="result-title-block"><div class="result-kicker">Dataset Assessment · DTAP v1.0</div><div class="result-tool-name">${name}</div><div class="result-tool-desc">${desc}</div><div class="result-badges">${resultBadgesHTML(badges)}</div></div></div>
+      <div class="result-body">
+        <div class="result-section"><div class="result-section-label">Trust Dimension Scores (0–5 scale)</div><div class="result-bars">${dimBarHTML}</div></div>
+        <div class="result-section"><div class="result-section-label">Confidence &amp; Review Record</div>${confBlock(s)}</div>
+        <div class="result-section"><div class="result-section-label">Peer Review Thread</div>${reviewThread(steward,s.role,today,scoreText)}</div>
+        ${evidenceSection(DS_SCORED,S.ds)}
+        <div style="padding:10px 0;font-family:'DM Mono',monospace;font-size:9px;color:var(--faint);border-top:1px solid var(--cream-dk);margin-top:6px">Assessed by ${steward} · ${today} · DTAP Framework v1.0 · Ag Knowledge Concordance / OpenTEAM · Review cadence: 12 months</div>
+      </div></div>`;
+    goStep('ds',4);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STACK SECTION (collapsible, shared template)
+// ═══════════════════════════════════════════════════════════════
+function buildStackSection(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = `
+    <button class="stack-toggle-btn" id="${containerId}-btn" onclick="toggleStack('${containerId}')">
+      <div class="stack-toggle-left">
+        <div class="stack-toggle-kicker">Deployment Architectures</div>
+        <div class="stack-toggle-title">Two Approaches for Hosting the Registry &amp; Evaluation Service</div>
+      </div>
+      <div class="stack-toggle-right">
+        <span class="stack-toggle-hint">Click to expand</span>
+        <div class="stack-chevron"><svg viewBox="0 0 14 14" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l5 6 5-6"/></svg></div>
+      </div>
+    </button>
+    <div class="stack-body" id="${containerId}-body">
+      <div class="stack-subhead">Choosing the right stack depends on your community's technical capacity, governance model, and long-term sustainability goals. Both approaches are production-ready and open-source friendly.</div>
+      <div class="stack-grid">
+        <div class="stack-card">
+          <div class="stack-card-head"><div class="stack-approach">Approach A · Lean &amp; Distributed</div><div class="stack-title">JAMstack + Git-native Registry</div><div class="stack-tagline">Static site generation with GitHub/GitLab as the authoritative data store. Assessment records live as version-controlled JSON/YAML. Zero server management, infinitely scalable reads, free at low volume.</div></div>
+          <div class="stack-card-body">
+            <div class="stack-layer"><div class="stack-layer-icon" style="background:#f0f4ff">🗄️</div><div><div class="stack-layer-label">Data Store</div><div class="stack-layer-name">Git Repository (GitHub / GitLab)</div><div class="stack-layer-desc">Each assessment card is a structured YAML or JSON file committed to a repo. Git provides versioning, audit trail, and contributor attribution natively. PRs are the review and dispute mechanism.</div><div class="stack-tags"><span class="stack-tag">YAML/JSON</span><span class="stack-tag">Git history = audit log</span><span class="stack-tag">PR = peer review</span></div></div></div>
+            <div class="stack-layer"><div class="stack-layer-icon" style="background:#f0fff4">⚡</div><div><div class="stack-layer-label">Frontend</div><div class="stack-layer-name">Astro or Next.js (Static Export)</div><div class="stack-layer-desc">Build-time rendering from the YAML registry. Card pages are pre-generated HTML — fast, accessible, and hostable on GitHub Pages, Netlify, or Cloudflare Pages for free.</div><div class="stack-tags"><span class="stack-tag">Astro</span><span class="stack-tag">Next.js SSG</span><span class="stack-tag">Netlify / CF Pages</span></div></div></div>
+            <div class="stack-layer"><div class="stack-layer-icon" style="background:#fff8f0">🔧</div><div><div class="stack-layer-label">Assessment Engine</div><div class="stack-layer-name">Edge Functions + GitHub API</div><div class="stack-layer-desc">Score calculation runs client-side or via lightweight edge functions. Submissions open a GitHub Issue/PR via API. No persistent server needed.</div><div class="stack-tags"><span class="stack-tag">Cloudflare Workers</span><span class="stack-tag">GitHub API</span><span class="stack-tag">Client-side scoring</span></div></div></div>
+            <div class="stack-layer"><div class="stack-layer-icon" style="background:#f5f0ff">🔐</div><div><div class="stack-layer-label">Auth &amp; Identity</div><div class="stack-layer-name">GitHub OAuth + Netlify Identity</div><div class="stack-layer-desc">Reviewer roles managed via GitHub team membership. Certified reviewers get write access to the repo. Stewards are repo maintainers. No separate user database required.</div><div class="stack-tags"><span class="stack-tag">GitHub Teams</span><span class="stack-tag">OAuth 2.0</span></div></div></div>
+          </div>
+          <div class="stack-footer"><div class="stack-footer-label">Trade-offs</div><div style="display:flex;flex-wrap:wrap;gap:5px"><span class="tradeoff-chip tc-pro">Free to host</span><span class="tradeoff-chip tc-pro">Git = audit trail</span><span class="tradeoff-chip tc-pro">No ops burden</span><span class="tradeoff-chip tc-con">Git literacy required</span><span class="tradeoff-chip tc-con">Complex queries harder</span></div></div>
+        </div>
+        <div class="stack-card">
+          <div class="stack-card-head"><div class="stack-approach">Approach B · Full-featured Platform</div><div class="stack-title">Supabase + Next.js App Router</div><div class="stack-tagline">Postgres-backed registry with real-time peer review workflows, role-based access, and a full API. Scales to complex governance needs. Self-hostable and fully open-source.</div></div>
+          <div class="stack-card-body">
+            <div class="stack-layer"><div class="stack-layer-icon" style="background:#f0fff4">🐘</div><div><div class="stack-layer-label">Data Store</div><div class="stack-layer-name">Supabase (Postgres + Row-Level Security)</div><div class="stack-layer-desc">Assessment records, claim evidence, review threads, and version history in structured Postgres tables. RLS policies enforce who can read/write each claim based on reviewer role.</div><div class="stack-tags"><span class="stack-tag">Postgres</span><span class="stack-tag">Row-level security</span><span class="stack-tag">Real-time subscriptions</span></div></div></div>
+            <div class="stack-layer"><div class="stack-layer-icon" style="background:#f0f4ff">🚀</div><div><div class="stack-layer-label">Frontend + API</div><div class="stack-layer-name">Next.js 14 App Router + tRPC</div><div class="stack-layer-desc">Server components fetch card data directly; client components handle the interactive form. tRPC ensures type-safe API calls. Deployable to Vercel or self-hosted.</div><div class="stack-tags"><span class="stack-tag">Next.js 14</span><span class="stack-tag">tRPC</span><span class="stack-tag">React Server Components</span></div></div></div>
+            <div class="stack-layer"><div class="stack-layer-icon" style="background:#fff8f0">⚙️</div><div><div class="stack-layer-label">Assessment Engine</div><div class="stack-layer-name">Supabase Edge Functions (Deno)</div><div class="stack-layer-desc">Score recalculation triggered by database webhooks on claim updates. Confidence decay cron job runs on schedule. Dispute notifications via Resend email API.</div><div class="stack-tags"><span class="stack-tag">Deno edge functions</span><span class="stack-tag">Webhooks</span><span class="stack-tag">pg_cron</span></div></div></div>
+            <div class="stack-layer"><div class="stack-layer-icon" style="background:#fdf0ff">🔐</div><div><div class="stack-layer-label">Auth &amp; Identity</div><div class="stack-layer-name">Supabase Auth + Magic Link</div><div class="stack-layer-desc">Email magic-link login for low-friction onboarding. Reviewer roles stored as Postgres claims. ORCID or GitHub OAuth available for certified reviewer identity verification.</div><div class="stack-tags"><span class="stack-tag">Magic link</span><span class="stack-tag">ORCID OAuth</span><span class="stack-tag">Role-based RLS</span></div></div></div>
+          </div>
+          <div class="stack-footer"><div class="stack-footer-label">Trade-offs</div><div style="display:flex;flex-wrap:wrap;gap:5px"><span class="tradeoff-chip tc-pro">Rich queries &amp; search</span><span class="tradeoff-chip tc-pro">Real-time reviews</span><span class="tradeoff-chip tc-pro">Self-hostable</span><span class="tradeoff-chip tc-con">Needs some ops</span><span class="tradeoff-chip tc-con">Higher complexity</span></div></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function toggleStack(containerId) {
+  const btn = document.getElementById(`${containerId}-btn`);
+  const body = document.getElementById(`${containerId}-body`);
+  const isOpen = body.classList.contains('open');
+  btn.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+  btn.querySelector('.stack-toggle-hint').textContent = isOpen ? 'Click to expand' : 'Click to collapse';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MODE SWITCHER
+// ═══════════════════════════════════════════════════════════════
+function switchMode(mode) {
+  ['hw','sw','ds'].forEach(m => {
+    document.getElementById(`page-${m}`).classList.toggle('active', m===mode);
+    document.getElementById(`nav-${m}`).classList.toggle('active', m===mode);
+  });
+  const topbar = document.getElementById('topbar');
+  topbar.className = 'topbar' + (mode==='sw'?' mode-sw':mode==='ds'?' mode-ds':'');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DEMO DATA LOADERS
+// ═══════════════════════════════════════════════════════════════
+function loadHWDemo() {
+  document.getElementById('hw-name').value='Hoop Chicken Trailer';
+  document.getElementById('hw-type').value='Poultry';
+  document.getElementById('hw-steward').value='Farm Hack Community';
+  document.getElementById('hw-url').value='https://farmhack.org/tools/hoop-chicken-trailer';
+  document.getElementById('hw-desc').value='A light, simply-built hoop trailer for up to ~150 birds. Moves with a small tractor or ATV and supports rotational grazing, manure distribution, and humane daily management.';
+  document.getElementById('hw-license').value='CC BY-SA';
+  S.hw.gates={hwg1a:'pass',hwg1b:'pass',hwg2a:'pass',hwg2b:'pass',hwg3a:'pass',hwg4a:'pass'};
+  S.hw.scored={hwq7:4,hwq8:4,hwq9:5,hwq10:4,hwq11:3,hwq12:3,hwq13:4,hwq14:3,hwq15:3,hwq16:5,hwq17:4,hwq18:4};
+  S.hw.evidence={hwq7:'Materials: steel tubing, lumber, PVC hoop conduit, hardware cloth.',hwq16:'All repairs documented in Farm Hack wiki with illustrated guides.'};
+  updateLive('hw');
+}
+
+function loadSWDemo() {
+  document.getElementById('sw-name').value='farmOS';
+  document.getElementById('sw-type').value='Farm management platform';
+  document.getElementById('sw-steward').value='farmOS Community / Farmier';
+  document.getElementById('sw-url').value='https://farmos.org';
+  document.getElementById('sw-desc').value='An open-source web-based farm record keeping application. Self-hostable, GPL-licensed, with a full REST API and growing ecosystem of modules for soil, livestock, and field management.';
+  document.getElementById('sw-license').value='GPL v2';
+  document.getElementById('sw-hosting').value='Both SaaS + self-host';
+  document.getElementById('sw-api').value='Yes — public, documented';
+  S.sw.gates={swg1a:'pass',swg1b:'pass',swg2a:'pass',swg2b:'pass',swg3a:'pass',swg3b:'pass',swg4a:'pass',swg4b:'pass'};
+  S.sw.scored={swq9:4.5,swq10:4.5,swq11:3,swq12:4,swq13:4.5,swq14:3.5,swq15:4.5,swq16:4.5,swq17:3.5,swq18:3};
+  S.sw.evidence={swq13:'Public JSON:API documented at farmos.org/docs/api. Versioned endpoints. Active changelog.',swq15:'Drupal Association governance model. Community calls monthly. Non-developer forum at forum.farmos.org.'};
+  updateLive('sw');
+}
+
+function loadDSDemo() {
+  document.getElementById('ds-name').value='1000 Farms Initiative';
+  document.getElementById('ds-type').value='Soil health';
+  document.getElementById('ds-steward').value='Ecdysis Foundation';
+  document.getElementById('ds-url').value='https://ecdysis.bio/featured-project';
+  document.getElementById('ds-desc').value='Annual biodiversity and soil health surveys across 1,000+ farms. Tracks birds, insects, soil biology, and economics to understand how farming practices affect ecological health and farm viability.';
+  document.getElementById('ds-size').value='1,000+ farms';
+  document.getElementById('ds-years').value='2022–present';
+  document.getElementById('ds-format').value='CSV / TSV';
+  document.getElementById('ds-access').value='Tiered (aggregate open / individual gated)';
+  S.ds.scored={dsq1:4.5,dsq2:3.5,dsq3:4.5,dsq4:4,dsq5:3,dsq6:4.5,dsq7:3,dsq8:1.5,dsq9:4.5,dsq10:3,dsq11:3,dsq12:3};
+  S.ds.evidence={dsq1:'Each farm signs participation agreement; grower reviews their report before data enters aggregate.',dsq9:'Annual resurveys since 2022; 3-year baseline achieved for cohort farms.'};
+  updateLive('ds');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  // Build HW question panels
+  initMode('hw', HW_GATES, null, {
+    'hw-g1': q=>q.gate==='G1', 'hw-g2': q=>q.gate==='G2',
+    'hw-g3': q=>q.gate==='G3', 'hw-g4': q=>q.gate==='G4',
+  });
+  initMode('hw', null, HW_SCORED, {
+    'hw-resource': q=>q.cat==='resource', 'hw-social': q=>q.cat==='social',
+    'hw-commons': q=>q.cat==='commons', 'hw-resilience': q=>q.cat==='resilience',
+  });
+
+  // Build SW question panels
+  initMode('sw', SW_GATES, null, {
+    'sw-g1': q=>q.gate==='G1', 'sw-g2': q=>q.gate==='G2',
+    'sw-g3': q=>q.gate==='G3', 'sw-g4': q=>q.gate==='G4',
+  });
+  initMode('sw', null, SW_SCORED, {
+    'sw-dataethics': q=>q.cat==='dataethics', 'sw-interop': q=>q.cat==='interop',
+    'sw-commons': q=>q.cat==='commons', 'sw-access': q=>q.cat==='access',
+  });
+
+  // Build DS question panels
+  initMode('ds', null, DS_SCORED, {
+    'ds-d1': q=>q.dim==='D1', 'ds-d2': q=>q.dim==='D2',
+    'ds-d3': q=>q.dim==='D3', 'ds-d4': q=>q.dim==='D4',
+    'ds-d5': q=>q.dim==='D5', 'ds-d6': q=>q.dim==='D6',
+  });
+
+  // Build collapsible stack sections on all three pages
+  buildStackSection('hw-stack');
+  buildStackSection('sw-stack');
+  buildStackSection('ds-stack');
+
+  // Load demo data
+  loadHWDemo();
+  loadSWDemo();
+  loadDSDemo();
+
+  // Init slider backgrounds
+  document.querySelectorAll('input[type=range]').forEach(slider => {
+    const val = parseFloat(slider.value);
+    const pct = (val/5)*100;
+    // Determine mode from id prefix
+    const id = slider.id || '';
+    const color = id.startsWith('sl_sw') ? 'var(--sw-dark)' : id.startsWith('sl_ds') ? 'var(--ds-dark)' : 'var(--forest)';
+    slider.style.background = `linear-gradient(to right, ${color} ${pct}%, var(--line) ${pct}%)`;
+  });
+});
+</script>
+</body>
+</html>
