@@ -22,12 +22,39 @@
                         <div class="text-xs text-slate-400">OpenTEAM • Farm Hack • GIAA</div>
                     </div>
                 </a>
-                <nav class="hidden md:flex items-center gap-6">
-                    <a href="index.html" class="text-slate-300 hover:text-green-400 transition-colors">Home</a>
-                    <a href="needs-assessment.html" class="text-slate-300 hover:text-green-400 transition-colors">Needs Assessment</a>
-                    <a href="assessment-matrix.html" class="text-slate-300 hover:text-green-400 transition-colors">Tool Matrix</a>
-                    <a href="submit-tool.html" class="text-slate-300 hover:text-green-400 transition-colors">Submit Tool</a>
-                    <a href="about.html" class="text-white hover:text-green-400 transition-colors font-medium">About</a>
+                <nav class="hidden md:flex items-center gap-1">
+                    <a href="index.html" class="text-slate-300 hover:text-green-400 transition-colors px-3 py-2 rounded">Home</a>
+                    <a href="needs-assessment.html" class="text-slate-300 hover:text-green-400 transition-colors px-3 py-2 rounded">Needs Assessment</a>
+                    <div class="relative group">
+                        <button class="text-slate-300 hover:text-green-400 transition-colors px-3 py-2 rounded flex items-center gap-1">
+                            ETA Tools
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="absolute right-0 top-full mt-1 w-56 bg-slate-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                            <a href="eta_unified.html" class="block px-4 py-3 text-sm text-slate-200 hover:bg-slate-600 rounded-t-lg">
+                                <div class="font-medium">ETA Assessment Tool</div>
+                                <div class="text-xs text-slate-400">Run full assessments</div>
+                            </a>
+                            <a href="eta-comparison.html" class="block px-4 py-3 text-sm text-slate-200 hover:bg-slate-600">
+                                <div class="font-medium">Tool Comparison</div>
+                                <div class="text-xs text-slate-400">Side-by-side analysis</div>
+                            </a>
+                            <a href="eta-data-comparison.html" class="block px-4 py-3 text-sm text-slate-200 hover:bg-slate-600">
+                                <div class="font-medium">Data Comparison</div>
+                                <div class="text-xs text-slate-400">Compare data practices</div>
+                            </a>
+                            <a href="eta-scorecard.html" class="block px-4 py-3 text-sm text-slate-200 hover:bg-slate-600">
+                                <div class="font-medium">ETA Scorecard</div>
+                                <div class="text-xs text-slate-400">Quick scoring view</div>
+                            </a>
+                            <a href="assessment-matrix.html" class="block px-4 py-3 text-sm text-slate-200 hover:bg-slate-600 rounded-b-lg">
+                                <div class="font-medium">Tool Matrix</div>
+                                <div class="text-xs text-slate-400">East Africa tool assessments</div>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="submit-tool.html" class="text-slate-300 hover:text-green-400 transition-colors px-3 py-2 rounded">Submit Tool</a>
+                    <a href="about.html" class="text-white bg-slate-700 px-3 py-2 rounded font-medium">About</a>
                 </nav>
                 <button onclick="toggleMobileMenu()" class="md:hidden p-2">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
@@ -38,7 +65,12 @@
             <nav id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
                 <a href="index.html" class="block py-2 text-slate-300">Home</a>
                 <a href="needs-assessment.html" class="block py-2 text-slate-300">Needs Assessment</a>
-                <a href="assessment-matrix.html" class="block py-2 text-slate-300">Tool Matrix</a>
+                <div class="py-2 text-slate-400 text-sm">ETA Tools:</div>
+                <a href="eta_unified.html" class="block py-2 pl-4 text-slate-300">→ Assessment Tool</a>
+                <a href="eta-comparison.html" class="block py-2 pl-4 text-slate-300">→ Tool Comparison</a>
+                <a href="eta-data-comparison.html" class="block py-2 pl-4 text-slate-300">→ Data Comparison</a>
+                <a href="eta-scorecard.html" class="block py-2 pl-4 text-slate-300">→ Scorecard</a>
+                <a href="assessment-matrix.html" class="block py-2 pl-4 text-slate-300">→ Tool Matrix</a>
                 <a href="submit-tool.html" class="block py-2 text-slate-300">Submit Tool</a>
                 <a href="about.html" class="block py-2 text-white font-medium">About</a>
             </nav>
