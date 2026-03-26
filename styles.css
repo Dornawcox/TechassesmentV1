@@ -1,0 +1,212 @@
+/* ETA Site Shared Styles */
+
+/* Base */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: #1e293b;
+}
+
+/* Icon Style - Single Stroke, Single Color */
+.icon {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.icon-sm {
+    width: 16px;
+    height: 16px;
+}
+
+.icon-lg {
+    width: 32px;
+    height: 32px;
+}
+
+.icon-xl {
+    width: 48px;
+    height: 48px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slideIn {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Card hover effects */
+.card-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Selection states */
+.selectable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.selectable:hover {
+    border-color: #22c55e;
+}
+
+.selectable.selected {
+    border-color: #22c55e;
+    background-color: #f0fdf4;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+/* CEI Fit badges */
+.cei-high {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.cei-medium-high {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.cei-medium {
+    background-color: #fef9c3;
+    color: #854d0e;
+}
+
+.cei-low {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Score colors */
+.score-high { color: #166534; }
+.score-medium { color: #854d0e; }
+.score-low { color: #991b1b; }
+
+/* Table styles */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.data-table th {
+    background-color: #f8fafc;
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.875rem;
+}
+
+.data-table tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Form styles */
+.form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #22c55e;
+}
+
+.form-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #374151;
+}
+
+/* Button styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-primary {
+    background-color: #22c55e;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #16a34a;
+}
+
+.btn-secondary {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.btn-secondary:hover {
+    background-color: #e2e8f0;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid #cbd5e1;
+    color: #475569;
+}
+
+.btn-outline:hover {
+    border-color: #22c55e;
+    color: #22c55e;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hide-mobile {
+        display: none;
+    }
+}
+
+@media (min-width: 769px) {
+    .hide-desktop {
+        display: none;
+    }
+}

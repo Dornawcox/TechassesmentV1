@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Matrix | Ethical Technology Assessment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-slate-800 text-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <a href="index.html" class="flex items-center gap-3">
+                    <svg class="w-8 h-8" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="16" cy="16" r="14"/>
+                        <path d="M16 6v20M6 16h20M10 10l12 12M22 10L10 22"/>
+                    </svg>
+                    <div>
+                        <div class="font-bold text-lg">Ethical Technology Assessment</div>
+                        <div class="text-xs text-slate-400">OpenTEAM • Farm Hack • GIAA</div>
+                    </div>
+                </a>
+                <nav class="hidden md:flex items-center gap-6">
+                    <a href="index.html" class="text-slate-300 hover:text-green-400 transition-colors">Home</a>
+                    <a href="needs-assessment.html" class="text-slate-300 hover:text-green-400 transition-colors">Needs Assessment</a>
+                    <a href="assessment-matrix.html" class="text-white hover:text-green-400 transition-colors font-medium">Tool Matrix</a>
+                    <a href="submit-tool.html" class="text-slate-300 hover:text-green-400 transition-colors">Submit Tool</a>
+                    <a href="about.html" class="text-slate-300 hover:text-green-400 transition-colors">About</a>
+                </nav>
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                        <path d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+            <nav id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
+                <a href="index.html" class="block py-2 text-slate-300">Home</a>
+                <a href="needs-assessment.html" class="block py-2 text-slate-300">Needs Assessment</a>
+                <a href="assessment-matrix.html" class="block py-2 text-white font-medium">Tool Matrix</a>
+                <a href="submit-tool.html" class="block py-2 text-slate-300">Submit Tool</a>
+                <a href="about.html" class="block py-2 text-slate-300">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <div class="bg-slate-800 text-white pb-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h1 class="text-2xl md:text-3xl font-bold mb-2">Tool Assessment Matrix</h1>
+            <p class="text-slate-400">Detailed ETA scores and comparisons for agricultural digital tools</p>
+        </div>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 -mt-12">
+            <div class="bg-white rounded-xl p-4 shadow-sm text-center">
+                <div class="text-3xl font-bold text-slate-800">10</div>
+                <div class="text-sm text-slate-600">Tools Assessed</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow-sm text-center">
+                <div class="text-3xl font-bold text-green-600">3</div>
+                <div class="text-sm text-slate-600">High CEI Fit</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow-sm text-center">
+                <div class="text-3xl font-bold text-slate-800">6</div>
+                <div class="text-sm text-slate-600">Basic Phone OK</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow-sm text-center">
+                <div class="text-3xl font-bold text-slate-800">5</div>
+                <div class="text-sm text-slate-600">Free Tools</div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white rounded-xl border border-slate-200 p-4 mb-6 flex flex-wrap gap-4">
+            <div>
+                <label class="text-sm font-medium text-slate-600 block mb-1">Sort by</label>
+                <select id="sort-by" onchange="renderTools()" class="px-3 py-2 border border-slate-200 rounded-lg text-sm">
+                    <option value="score">ETA Score (High to Low)</option>
+                    <option value="name">Name (A-Z)</option>
+                    <option value="cei">CEI Fit</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-sm font-medium text-slate-600 block mb-1">CEI Fit</label>
+                <select id="filter-cei" onchange="renderTools()" class="px-3 py-2 border border-slate-200 rounded-lg text-sm">
+                    <option value="all">All Levels</option>
+                    <option value="High">High Only</option>
+                    <option value="Medium-High">Medium-High+</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-sm font-medium text-slate-600 block mb-1">Phone Type</label>
+                <select id="filter-phone" onchange="renderTools()" class="px-3 py-2 border border-slate-200 rounded-lg text-sm">
+                    <option value="all">All</option>
+                    <option value="basic">Basic Phone</option>
+                    <option value="smartphone">Smartphone Only</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Tools Grid -->
+        <div id="tools-grid" class="space-y-4"></div>
+
+        <!-- Legend -->
+        <div class="mt-8 p-4 bg-slate-100 rounded-xl">
+            <h3 class="font-semibold text-slate-700 mb-3">Understanding ETA Scores</h3>
+            <div class="grid md:grid-cols-2 gap-4 text-sm">
+                <div>
+                    <h4 class="font-medium text-slate-700 mb-2">Scored Dimensions (25 points each)</h4>
+                    <ul class="space-y-1 text-slate-600">
+                        <li class="flex items-center gap-2">
+                            <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
+                            Data Ethics — consent, privacy, minimization
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-3 h-3 bg-purple-500 rounded-full"></span>
+                            Interoperability — APIs, standards, export
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                            Commons Fit — license, governance, contribution
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-3 h-3 bg-amber-500 rounded-full"></span>
+                            Accessibility — languages, bandwidth, offline
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-medium text-slate-700 mb-2">CEI Fit Levels</h4>
+                    <ul class="space-y-1 text-slate-600">
+                        <li class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 text-xs rounded bg-green-100 text-green-800">High</span>
+                            Fully aligned with commons principles
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 text-xs rounded bg-emerald-100 text-emerald-800">Medium-High</span>
+                            Mostly aligned, minor concerns
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 text-xs rounded bg-yellow-100 text-yellow-800">Medium</span>
+                            Some alignment, notable trade-offs
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 text-xs rounded bg-red-100 text-red-800">Low</span>
+                            Limited alignment, significant concerns
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-white py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-sm text-slate-400">
+                    © 2026 OpenTEAM. Licensed under CC BY-SA 4.0
+                </div>
+                <div class="flex gap-6 text-sm">
+                    <a href="https://openteam.community" class="text-slate-400 hover:text-white transition-colors">openteam.community</a>
+                    <a href="https://github.com/openteam" class="text-slate-400 hover:text-white transition-colors">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const toolsData = [
+            {
+                id: 'farmos',
+                name: 'farmOS',
+                score: 92,
+                cei: 'High',
+                confidence: 3,
+                basic: false,
+                free: true,
+                operator: 'Community (open source)',
+                license: 'GNU GPL v3',
+                description: 'Complete farm management with full data control. Self-hosted, modular, extensible.',
+                strengths: ['Full data sovereignty', 'Open source', 'Active community', 'Offline capable'],
+                concerns: ['Requires technical setup', 'Self-hosting needed'],
+                dimensions: { ethics: 24, interop: 23, commons: 24, access: 21 },
+                needs: ['records', 'collaboration']
+            },
+            {
+                id: 'litefarm',
+                name: 'LiteFarm',
+                score: 88,
+                cei: 'High',
+                confidence: 3,
+                basic: false,
+                free: true,
+                operator: 'UBC (academic)',
+                license: 'GNU GPL v3',
+                description: 'Free, open source farm management designed for sustainable and diversified farms.',
+                strengths: ['Open source', 'UBC institutional backing', 'OpenTEAM member', '8 languages', 'Offline mode'],
+                concerns: ['Smartphone required', 'Livestock features in development'],
+                dimensions: { ethics: 23, interop: 21, commons: 23, access: 21 },
+                needs: ['records', 'weather', 'training', 'collaboration']
+            },
+            {
+                id: 'kaop',
+                name: 'KAOP',
+                score: 78,
+                cei: 'High',
+                confidence: 2,
+                basic: true,
+                free: true,
+                operator: 'Kenya Government',
+                license: 'Public service',
+                description: 'Government weather and agro-advisory platform with SMS access.',
+                strengths: ['Public infrastructure', 'Free', 'SMS accessible', 'Ward-level forecasts'],
+                concerns: ['Kenya only', 'Government dependent'],
+                dimensions: { ethics: 20, interop: 18, commons: 22, access: 18 },
+                needs: ['weather', 'advice']
+            },
+            {
+                id: 'kuza',
+                name: 'Kuza',
+                score: 74,
+                cei: 'Medium-High',
+                confidence: 2,
+                basic: true,
+                free: false,
+                operator: 'Kuza Biashara (B Corp)',
+                license: 'Proprietary',
+                description: 'Video micro-learning and market linkages for youth agripreneurs.',
+                strengths: ['B Corp certified', 'Offline kits', 'Beckn protocol adoption', 'Youth focus'],
+                concerns: ['Platform-mediated', 'Subscription model'],
+                dimensions: { ethics: 19, interop: 18, commons: 18, access: 19 },
+                needs: ['training', 'market', 'advice', 'collaboration']
+            },
+            {
+                id: 'digital-green',
+                name: 'Digital Green',
+                score: 72,
+                cei: 'Medium-High',
+                confidence: 2,
+                basic: true,
+                free: true,
+                operator: 'Digital Green (nonprofit)',
+                license: 'Mixed (CoCo open source)',
+                description: 'Video-mediated extension with community screenings. Suite includes CoCo, VideoKheti, Loop, FarmerChat.',
+                strengths: ['Community video model', 'CoCo open source', '50+ languages', '15+ year track record'],
+                concerns: ['FarmerChat uses OpenAI', 'Mixed openness across tools'],
+                dimensions: { ethics: 18, interop: 17, commons: 19, access: 18 },
+                needs: ['training', 'advice', 'records', 'market', 'collaboration']
+            },
+            {
+                id: 'ishamba',
+                name: 'iShamba',
+                score: 68,
+                cei: 'Medium',
+                confidence: 2,
+                basic: true,
+                free: false,
+                operator: 'Mediae (social enterprise)',
+                license: 'Proprietary',
+                description: 'Weather, market prices, and expert advice via SMS, call center, and WhatsApp.',
+                strengths: ['Human experts', 'SMS accessible', '500K+ farmers', 'Shamba Shape Up integration'],
+                concerns: ['Subscription model', 'Proprietary platform'],
+                dimensions: { ethics: 17, interop: 16, commons: 17, access: 18 },
+                needs: ['weather', 'advice', 'market', 'training']
+            },
+            {
+                id: 'farmerchat',
+                name: 'FarmerChat',
+                score: 65,
+                cei: 'Medium',
+                confidence: 2,
+                basic: false,
+                free: true,
+                operator: 'Digital Green (nonprofit)',
+                license: 'Proprietary (uses OpenAI)',
+                description: 'AI chatbot for instant agricultural advice with photo diagnosis.',
+                strengths: ['Instant responses', 'Photo diagnosis', 'Multiple languages', 'Nonprofit operator'],
+                concerns: ['OpenAI dependency', 'External AI processing', 'Smartphone required'],
+                dimensions: { ethics: 16, interop: 15, commons: 16, access: 18 },
+                needs: ['advice', 'weather', 'training']
+            },
+            {
+                id: 'shambapro',
+                name: 'ShambaPro',
+                score: 58,
+                cei: 'Medium',
+                confidence: 1,
+                basic: false,
+                free: false,
+                operator: 'ShambaPro (company)',
+                license: 'Proprietary',
+                description: 'Mobile app for simple farm activity tracking and management.',
+                strengths: ['Easy to use', 'Mobile-first'],
+                concerns: ['Cloud-locked', 'Limited export', 'Paid subscription'],
+                dimensions: { ethics: 14, interop: 13, commons: 14, access: 17 },
+                needs: ['records']
+            },
+            {
+                id: 'mfarm',
+                name: 'M-Farm',
+                score: null,
+                cei: 'Medium',
+                confidence: 1,
+                basic: true,
+                free: true,
+                operator: 'M-Farm Ltd',
+                license: 'Proprietary',
+                description: 'Market prices and group selling via SMS.',
+                strengths: ['SMS accessible', 'Free', 'Group selling features'],
+                concerns: ['Limited assessment data', 'Proprietary'],
+                dimensions: null,
+                needs: ['market']
+            },
+            {
+                id: 'gsuite',
+                name: 'GSuite',
+                score: 45,
+                cei: 'Low',
+                confidence: 2,
+                basic: false,
+                free: false,
+                operator: 'Google (corporation)',
+                license: 'Proprietary',
+                description: 'General productivity tools (Sheets, Docs, Forms). Not agriculture-specific.',
+                strengths: ['Familiar interface', 'Collaboration features', 'Widely available'],
+                concerns: ['Corporate control', 'Data privacy', 'Advertising model', 'Not agriculture-specific'],
+                dimensions: { ethics: 10, interop: 12, commons: 8, access: 15 },
+                needs: ['records', 'collaboration']
+            }
+        ];
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function renderTools() {
+            const sortBy = document.getElementById('sort-by').value;
+            const ceiFilter = document.getElementById('filter-cei').value;
+            const phoneFilter = document.getElementById('filter-phone').value;
+
+            let filtered = toolsData.filter(tool => {
+                if (ceiFilter === 'High' && tool.cei !== 'High') return false;
+                if (ceiFilter === 'Medium-High' && !['High', 'Medium-High'].includes(tool.cei)) return false;
+                if (phoneFilter === 'basic' && !tool.basic) return false;
+                if (phoneFilter === 'smartphone' && tool.basic) return false;
+                return true;
+            });
+
+            // Sort
+            filtered.sort((a, b) => {
+                if (sortBy === 'score') return (b.score || 0) - (a.score || 0);
+                if (sortBy === 'name') return a.name.localeCompare(b.name);
+                if (sortBy === 'cei') {
+                    const order = { 'High': 0, 'Medium-High': 1, 'Medium': 2, 'Low': 3 };
+                    return order[a.cei] - order[b.cei];
+                }
+                return 0;
+            });
+
+            const container = document.getElementById('tools-grid');
+            container.innerHTML = filtered.map(tool => `
+                <div id="${tool.id}" class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <div class="flex items-center gap-3 mb-1">
+                                    <h2 class="text-xl font-bold text-slate-800">${tool.name}</h2>
+                                    <span class="text-xs px-2 py-1 rounded-full ${getCEIClass(tool.cei)}">${tool.cei} CEI</span>
+                                </div>
+                                <p class="text-sm text-slate-500">${tool.operator} • ${tool.license}</p>
+                            </div>
+                            <div class="text-right">
+                                ${tool.score ? `
+                                    <div class="text-3xl font-bold ${tool.score >= 80 ? 'text-green-600' : tool.score >= 60 ? 'text-amber-600' : 'text-red-600'}">${tool.score}</div>
+                                    <div class="text-xs text-slate-500">ETA Score</div>
+                                ` : '<div class="text-sm text-slate-400">Not scored</div>'}
+                            </div>
+                        </div>
+                        
+                        <p class="text-slate-600 mb-4">${tool.description}</p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${tool.basic ? '<span class="text-xs px-2 py-1 bg-slate-100 rounded-full text-slate-600">📱 Basic phone OK</span>' : '<span class="text-xs px-2 py-1 bg-slate-100 rounded-full text-slate-600">📲 Smartphone only</span>'}
+                            <span class="text-xs px-2 py-1 bg-slate-100 rounded-full text-slate-600">${tool.free ? '✓ Free' : '💰 Paid'}</span>
+                            <span class="text-xs px-2 py-1 bg-slate-100 rounded-full text-slate-600">${'★'.repeat(tool.confidence)}${'☆'.repeat(3 - tool.confidence)} Confidence</span>
+                        </div>
+
+                        ${tool.dimensions ? `
+                        <div class="grid grid-cols-4 gap-2 mb-4">
+                            <div class="text-center p-2 bg-blue-50 rounded-lg">
+                                <div class="text-lg font-bold text-blue-700">${tool.dimensions.ethics}</div>
+                                <div class="text-xs text-blue-600">Ethics</div>
+                            </div>
+                            <div class="text-center p-2 bg-purple-50 rounded-lg">
+                                <div class="text-lg font-bold text-purple-700">${tool.dimensions.interop}</div>
+                                <div class="text-xs text-purple-600">Interop</div>
+                            </div>
+                            <div class="text-center p-2 bg-green-50 rounded-lg">
+                                <div class="text-lg font-bold text-green-700">${tool.dimensions.commons}</div>
+                                <div class="text-xs text-green-600">Commons</div>
+                            </div>
+                            <div class="text-center p-2 bg-amber-50 rounded-lg">
+                                <div class="text-lg font-bold text-amber-700">${tool.dimensions.access}</div>
+                                <div class="text-xs text-amber-600">Access</div>
+                            </div>
+                        </div>
+                        ` : ''}
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="text-sm font-semibold text-green-700 mb-2 flex items-center gap-1">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                    Strengths
+                                </h4>
+                                <ul class="text-sm text-slate-600 space-y-1">
+                                    ${tool.strengths.map(s => `<li>• ${s}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-amber-700 mb-2 flex items-center gap-1">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                                    Considerations
+                                </h4>
+                                <ul class="text-sm text-slate-600 space-y-1">
+                                    ${tool.concerns.map(c => `<li>• ${c}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getCEIClass(cei) {
+            const classes = {
+                'High': 'bg-green-100 text-green-800',
+                'Medium-High': 'bg-emerald-100 text-emerald-800',
+                'Medium': 'bg-yellow-100 text-yellow-800',
+                'Low': 'bg-red-100 text-red-800'
+            };
+            return classes[cei] || 'bg-slate-100 text-slate-800';
+        }
+
+        document.addEventListener('DOMContentLoaded', renderTools);
+    </script>
+</body>
+</html>

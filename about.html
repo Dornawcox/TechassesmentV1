@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Ethical Technology Assessment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-slate-800 text-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <a href="index.html" class="flex items-center gap-3">
+                    <svg class="w-8 h-8" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="16" cy="16" r="14"/>
+                        <path d="M16 6v20M6 16h20M10 10l12 12M22 10L10 22"/>
+                    </svg>
+                    <div>
+                        <div class="font-bold text-lg">Ethical Technology Assessment</div>
+                        <div class="text-xs text-slate-400">OpenTEAM • Farm Hack • GIAA</div>
+                    </div>
+                </a>
+                <nav class="hidden md:flex items-center gap-6">
+                    <a href="index.html" class="text-slate-300 hover:text-green-400 transition-colors">Home</a>
+                    <a href="needs-assessment.html" class="text-slate-300 hover:text-green-400 transition-colors">Needs Assessment</a>
+                    <a href="assessment-matrix.html" class="text-slate-300 hover:text-green-400 transition-colors">Tool Matrix</a>
+                    <a href="submit-tool.html" class="text-slate-300 hover:text-green-400 transition-colors">Submit Tool</a>
+                    <a href="about.html" class="text-white hover:text-green-400 transition-colors font-medium">About</a>
+                </nav>
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                        <path d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+            <nav id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
+                <a href="index.html" class="block py-2 text-slate-300">Home</a>
+                <a href="needs-assessment.html" class="block py-2 text-slate-300">Needs Assessment</a>
+                <a href="assessment-matrix.html" class="block py-2 text-slate-300">Tool Matrix</a>
+                <a href="submit-tool.html" class="block py-2 text-slate-300">Submit Tool</a>
+                <a href="about.html" class="block py-2 text-white font-medium">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <div class="bg-slate-800 text-white pb-8">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h1 class="text-2xl md:text-3xl font-bold mb-2">About ETA</h1>
+            <p class="text-slate-400">Understanding the framework and the communities behind it</p>
+        </div>
+    </div>
+
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        
+        <!-- The Problem -->
+        <section class="bg-white rounded-xl border border-slate-200 p-6 md:p-8 mb-8">
+            <h2 class="text-xl font-bold text-slate-800 mb-4">The Question Every Farmer Faces</h2>
+            <p class="text-slate-600 mb-4">
+                Agricultural communities are offered an ever-expanding array of digital tools — apps for weather, platforms for selling, systems for record-keeping. Each promises to improve efficiency, increase yields, or connect farmers to markets.
+            </p>
+            <p class="text-slate-600 mb-4">
+                But behind these promises lie deeper questions that are rarely asked at the point of adoption:
+            </p>
+            <ul class="text-slate-600 space-y-2 mb-4">
+                <li class="flex items-start gap-2">
+                    <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                    Who owns the data I put into this system?
+                </li>
+                <li class="flex items-start gap-2">
+                    <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                    Can I leave if I want to, or am I locked in?
+                </li>
+                <li class="flex items-start gap-2">
+                    <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                    Who benefits from the knowledge I contribute?
+                </li>
+                <li class="flex items-start gap-2">
+                    <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                    What happens to this tool if the company fails or changes direction?
+                </li>
+            </ul>
+            <p class="text-slate-700 font-medium">
+                The Ethical Technology Assessment framework exists to help communities answer these questions <em>before</em> adoption, not after.
+            </p>
+        </section>
+
+        <!-- What is CEI -->
+        <section class="bg-white rounded-xl border border-slate-200 p-6 md:p-8 mb-8">
+            <h2 class="text-xl font-bold text-slate-800 mb-4">What is Commons-Enabling Infrastructure?</h2>
+            <p class="text-slate-600 mb-4">
+                Commons-Enabling Infrastructure (CEI) refers to digital systems designed to support—rather than extract from—the communities that use them. It's the difference between a platform that treats farmers as data sources and one that treats them as stakeholders.
+            </p>
+            <div class="grid md:grid-cols-2 gap-6 mt-6">
+                <div class="p-4 bg-green-50 rounded-lg border border-green-200">
+                    <h3 class="font-semibold text-green-800 mb-2">CEI Characteristics</h3>
+                    <ul class="text-sm text-green-700 space-y-2">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            Data sovereignty — users control their information
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            Interoperability — works with other systems
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            Transparency — clear about how it works
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            Accountable governance — community voice
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            Reciprocity — value flows back to contributors
+                        </li>
+                    </ul>
+                </div>
+                <div class="p-4 bg-red-50 rounded-lg border border-red-200">
+                    <h3 class="font-semibold text-red-800 mb-2">Extraction Patterns</h3>
+                    <ul class="text-sm text-red-700 space-y-2">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                            Data captured, sold to third parties
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                            Lock-in through proprietary formats
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                            Black-box algorithms
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                            Unilateral terms changes
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                            Value captured by distant shareholders
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Framework -->
+        <section class="bg-white rounded-xl border border-slate-200 p-6 md:p-8 mb-8">
+            <h2 class="text-xl font-bold text-slate-800 mb-4">The ETA Framework</h2>
+            
+            <h3 class="font-semibold text-slate-700 mt-6 mb-3">Entry Gates (Pass/Fail)</h3>
+            <p class="text-slate-600 mb-4">Every tool must pass these four gates before scored assessment:</p>
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div class="p-3 border border-slate-200 rounded-lg">
+                    <div class="font-medium text-slate-800">G1. Documentation</div>
+                    <p class="text-sm text-slate-600">Is basic functionality publicly documented?</p>
+                </div>
+                <div class="p-3 border border-slate-200 rounded-lg">
+                    <div class="font-medium text-slate-800">G2. Data Rights</div>
+                    <p class="text-sm text-slate-600">Do users retain meaningful control over their data?</p>
+                </div>
+                <div class="p-3 border border-slate-200 rounded-lg">
+                    <div class="font-medium text-slate-800">G3. No Harm</div>
+                    <p class="text-sm text-slate-600">Free from surveillance, manipulation, or abuse potential?</p>
+                </div>
+                <div class="p-3 border border-slate-200 rounded-lg">
+                    <div class="font-medium text-slate-800">G4. Stewardship</div>
+                    <p class="text-sm text-slate-600">Responsible entity with clear accountability?</p>
+                </div>
+            </div>
+
+            <h3 class="font-semibold text-slate-700 mt-6 mb-3">Scored Dimensions (0-25 points each)</h3>
+            <div class="space-y-4">
+                <div class="flex items-start gap-4">
+                    <div class="w-3 h-3 bg-blue-500 rounded-full mt-2"></div>
+                    <div>
+                        <div class="font-medium text-slate-800">Data Ethics</div>
+                        <p class="text-sm text-slate-600">Consent mechanisms, privacy protections, data minimization, algorithmic transparency</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="w-3 h-3 bg-purple-500 rounded-full mt-2"></div>
+                    <div>
+                        <div class="font-medium text-slate-800">Interoperability</div>
+                        <p class="text-sm text-slate-600">Open APIs, standard data formats, export capabilities, integration options</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
+                    <div>
+                        <div class="font-medium text-slate-800">Commons Fit</div>
+                        <p class="text-sm text-slate-600">License terms, governance model, community contribution pathways, knowledge sharing</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="w-3 h-3 bg-amber-500 rounded-full mt-2"></div>
+                    <div>
+                        <div class="font-medium text-slate-800">Accessibility</div>
+                        <p class="text-sm text-slate-600">Languages, bandwidth requirements, offline capability, device compatibility, cost</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="font-semibold text-slate-700 mt-6 mb-3">Confidence Tiers</h3>
+            <div class="flex flex-wrap gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-amber-500">★☆☆</span>
+                    <span class="text-sm text-slate-600">Self-reported / marketing claims</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-amber-500">★★☆</span>
+                    <span class="text-sm text-slate-600">Peer-reviewed / community tested</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-amber-500">★★★</span>
+                    <span class="text-sm text-slate-600">Verified by CGO steward</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Communities -->
+        <section class="bg-white rounded-xl border border-slate-200 p-6 md:p-8 mb-8">
+            <h2 class="text-xl font-bold text-slate-800 mb-4">The Communities Behind ETA</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="font-semibold text-slate-700 mb-2">OpenTEAM</h3>
+                    <p class="text-slate-600">
+                        The Open Technology Ecosystem for Agricultural Management is a coalition of farmers, researchers, technology developers, and agricultural organizations working to ensure that technology serves rather than exploits agricultural communities. OpenTEAM maintains the FAIR Tech Registry and coordinates the development of commons-enabling tools.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold text-slate-700 mb-2">Farm Hack</h3>
+                    <p class="text-slate-600">
+                        A worldwide community of farmers that build and modify tools, share knowledge, and develop open-source solutions. Farm Hack brings practical, on-the-ground perspective to technology assessment — asking not just "does it work?" but "does it work for farmers?"
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold text-slate-700 mb-2">GIAA</h3>
+                    <p class="text-slate-600">
+                        The Grassroots Innovation Assembly for Agroecology brings together farmer innovators, community technologists, and food sovereignty advocates. GIAA ensures that ETA assessments center the needs and values of smallholder farmers and indigenous communities.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Get Involved -->
+        <section class="bg-slate-800 text-white rounded-xl p-6 md:p-8">
+            <h2 class="text-xl font-bold mb-4">Get Involved</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold mb-2">Use the Framework</h3>
+                    <ul class="text-slate-300 space-y-1 text-sm">
+                        <li>• <a href="needs-assessment.html" class="text-green-400 hover:underline">Start with your community's needs</a></li>
+                        <li>• <a href="assessment-matrix.html" class="text-green-400 hover:underline">Compare assessed tools</a></li>
+                        <li>• <a href="submit-tool.html" class="text-green-400 hover:underline">Submit tools for assessment</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-2">Join the Community</h3>
+                    <ul class="text-slate-300 space-y-1 text-sm">
+                        <li>• <a href="https://openteam.community" class="text-green-400 hover:underline">OpenTEAM Community</a></li>
+                        <li>• <a href="https://farmhack.org" class="text-green-400 hover:underline">Farm Hack</a></li>
+                        <li>• <a href="https://github.com/openteam" class="text-green-400 hover:underline">Contribute on GitHub</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-white py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-sm text-slate-400">
+                    © 2026 OpenTEAM. Licensed under CC BY-SA 4.0
+                </div>
+                <div class="flex gap-6 text-sm">
+                    <a href="https://openteam.community" class="text-slate-400 hover:text-white transition-colors">openteam.community</a>
+                    <a href="https://github.com/openteam" class="text-slate-400 hover:text-white transition-colors">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>

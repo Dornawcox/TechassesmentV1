@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Needs Assessment | Ethical Technology Assessment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-slate-800 text-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <a href="index.html" class="flex items-center gap-3">
+                    <svg class="w-8 h-8" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="16" cy="16" r="14"/>
+                        <path d="M16 6v20M6 16h20M10 10l12 12M22 10L10 22"/>
+                    </svg>
+                    <div>
+                        <div class="font-bold text-lg">Ethical Technology Assessment</div>
+                        <div class="text-xs text-slate-400">OpenTEAM • Farm Hack • GIAA</div>
+                    </div>
+                </a>
+                <nav class="hidden md:flex items-center gap-1">
+                    <a href="index.html" class="text-slate-300 hover:text-green-400 transition-colors px-3 py-2 rounded">Home</a>
+                    <a href="needs-assessment.html" class="text-white bg-slate-700 px-3 py-2 rounded font-medium">Needs Assessment</a>
+                    <a href="assessment-matrix.html" class="text-slate-300 hover:text-green-400 transition-colors px-3 py-2 rounded">Tool Matrix</a>
+                    <div class="relative group">
+                        <button class="text-slate-300 hover:text-green-400 transition-colors px-3 py-2 rounded flex items-center gap-1">
+                            ETA Tools
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="absolute right-0 top-full mt-1 w-56 bg-slate-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                            <a href="eta_unified.html" class="block px-4 py-3 text-sm text-slate-200 hover:bg-slate-600 rounded-t-lg">
+                                <div class="font-medium">ETA Assessment Tool</div>
+                                <div class="text-xs text-slate-400">Run full assessments</div>
+                            </a>
+                            <a href="eta-comparison.html" class="block px-4 py-3 text-sm text-slate-200 hover:bg-slate-600">
+                                <div class="font-medium">Tool Comparison</div>
+                                <div class="text-xs text-slate-400">Side-by-side analysis</div>
+                            </a>
+                            <a href="eta-data-comparison.html" class="block px-4 py-3 text-sm text-slate-200 hover:bg-slate-600">
+                                <div class="font-medium">Data Comparison</div>
+                                <div class="text-xs text-slate-400">Compare data practices</div>
+                            </a>
+                            <a href="eta-scorecard.html" class="block px-4 py-3 text-sm text-slate-200 hover:bg-slate-600 rounded-b-lg">
+                                <div class="font-medium">ETA Scorecard</div>
+                                <div class="text-xs text-slate-400">Quick scoring view</div>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="submit-tool.html" class="text-slate-300 hover:text-green-400 transition-colors px-3 py-2 rounded">Submit Tool</a>
+                    <a href="about.html" class="text-slate-300 hover:text-green-400 transition-colors px-3 py-2 rounded">About</a>
+                </nav>
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                        <path d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+            <nav id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
+                <a href="index.html" class="block py-2 text-slate-300">Home</a>
+                <a href="needs-assessment.html" class="block py-2 text-white font-medium">Needs Assessment</a>
+                <a href="assessment-matrix.html" class="block py-2 text-slate-300">Tool Matrix</a>
+                <div class="py-2 text-slate-400 text-sm">ETA Tools:</div>
+                <a href="eta_unified.html" class="block py-2 pl-4 text-slate-300">→ Assessment Tool</a>
+                <a href="eta-comparison.html" class="block py-2 pl-4 text-slate-300">→ Tool Comparison</a>
+                <a href="eta-data-comparison.html" class="block py-2 pl-4 text-slate-300">→ Data Comparison</a>
+                <a href="eta-scorecard.html" class="block py-2 pl-4 text-slate-300">→ Scorecard</a>
+                <a href="submit-tool.html" class="block py-2 text-slate-300">Submit Tool</a>
+                <a href="about.html" class="block py-2 text-slate-300">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <div class="bg-slate-800 text-white pb-8">
+        <div class="max-w-3xl mx-auto px-4 text-center">
+            <h1 class="text-2xl md:text-3xl font-bold mb-2">What Do You Need?</h1>
+            <p class="text-slate-400">Find the right agricultural digital tools for your community</p>
+        </div>
+    </div>
+
+    <!-- View Toggle -->
+    <div class="max-w-3xl mx-auto px-4 -mt-4 mb-6">
+        <div class="bg-white rounded-xl shadow-sm p-2 inline-flex gap-2">
+            <button onclick="setView('guided')" id="btn-guided" 
+                class="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-slate-800 text-white">
+                Guided Assessment
+            </button>
+            <button onclick="setView('matrix')" id="btn-matrix"
+                class="px-4 py-2 rounded-lg text-sm font-medium transition-colors text-slate-600 hover:bg-slate-100">
+                Matrix View
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto px-4 pb-12">
+        
+        <!-- Guided Assessment View -->
+        <div id="guided-view">
+            <!-- Step 1: Select Need -->
+            <section id="step1" class="mb-8">
+                <h2 class="text-lg font-semibold text-slate-700 mb-4">
+                    Step 1: What challenge are you trying to address?
+                </h2>
+                <div class="space-y-3" id="needs-container"></div>
+            </section>
+
+            <!-- Step 2: Filters (Phone, Geography, Data Cost) -->
+            <section id="step2" class="mb-8 hidden">
+                <h2 class="text-lg font-semibold text-slate-700 mb-4">
+                    Step 2: Tell us about your context
+                </h2>
+                
+                <!-- Phone Type -->
+                <div class="mb-6">
+                    <label class="text-sm font-medium text-slate-600 block mb-2">What phones do most farmers have?</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="selectPhone('basic')" id="phone-basic"
+                            class="selectable p-3 rounded-xl border-2 border-slate-200 bg-white text-center">
+                            <svg class="w-6 h-6 mx-auto mb-1 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="5" y="2" width="14" height="20" rx="2"/>
+                                <path d="M12 18h.01"/>
+                            </svg>
+                            <div class="font-medium text-sm">Basic Phone</div>
+                            <div class="text-xs text-slate-500">SMS & calls</div>
+                        </button>
+                        <button onclick="selectPhone('smartphone')" id="phone-smartphone"
+                            class="selectable p-3 rounded-xl border-2 border-slate-200 bg-white text-center">
+                            <svg class="w-6 h-6 mx-auto mb-1 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="5" y="2" width="14" height="20" rx="2"/>
+                                <path d="M12 18h.01M9 6h6"/>
+                            </svg>
+                            <div class="font-medium text-sm">Smartphone</div>
+                            <div class="text-xs text-slate-500">Apps & internet</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Geography -->
+                <div class="mb-6">
+                    <label class="text-sm font-medium text-slate-600 block mb-2">Where are you located?</label>
+                    <select id="geography-select" onchange="selectGeography(this.value)" 
+                        class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-white text-slate-700 focus:border-green-500 focus:outline-none">
+                        <option value="">Select region...</option>
+                        <option value="east-africa">East Africa (Kenya, Tanzania, Uganda, Ethiopia)</option>
+                        <option value="west-africa">West Africa (Nigeria, Ghana, Senegal)</option>
+                        <option value="southern-africa">Southern Africa</option>
+                        <option value="south-asia">South Asia (India, Bangladesh, Nepal)</option>
+                        <option value="southeast-asia">Southeast Asia</option>
+                        <option value="latin-america">Latin America</option>
+                        <option value="north-america">North America</option>
+                        <option value="europe">Europe</option>
+                        <option value="global">Global / Multiple Regions</option>
+                    </select>
+                </div>
+
+                <!-- Data Cost -->
+                <div class="mb-6">
+                    <label class="text-sm font-medium text-slate-600 block mb-2">Is mobile data cost a concern?</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="selectDataCost('yes')" id="data-yes"
+                            class="selectable p-3 rounded-xl border-2 border-slate-200 bg-white text-center">
+                            <svg class="w-6 h-6 mx-auto mb-1 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                            </svg>
+                            <div class="font-medium text-sm">Yes, data is expensive</div>
+                            <div class="text-xs text-slate-500">Prioritize offline/low-data tools</div>
+                        </button>
+                        <button onclick="selectDataCost('no')" id="data-no"
+                            class="selectable p-3 rounded-xl border-2 border-slate-200 bg-white text-center">
+                            <svg class="w-6 h-6 mx-auto mb-1 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12.55a11 11 0 0114.08 0M8.53 16.11a6 6 0 016.95 0M12 20h.01"/>
+                            </svg>
+                            <div class="font-medium text-sm">No, data is affordable</div>
+                            <div class="text-xs text-slate-500">All tools are options</div>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Show Results Button -->
+            <button id="show-results-btn" onclick="showResults()"
+                class="hidden w-full py-4 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition-colors shadow-lg mb-8">
+                Show Recommendations →
+            </button>
+
+            <!-- Results Section -->
+            <section id="results" class="hidden animate-fadeIn">
+                <div class="flex items-center justify-between mb-6">
+                    <div id="results-header" class="flex items-center gap-2 flex-wrap"></div>
+                    <button onclick="reset()" class="text-green-600 hover:text-green-800 text-sm font-medium">
+                        ← Start over
+                    </button>
+                </div>
+
+                <h2 class="text-lg font-semibold text-slate-700 mb-4">Recommended Tools</h2>
+                <div id="results-container" class="space-y-4"></div>
+
+                <!-- Data Cost Notice -->
+                <div id="data-cost-notice" class="hidden mt-6 p-4 bg-amber-50 rounded-xl border border-amber-200">
+                    <h3 class="font-semibold text-amber-800 mb-2 flex items-center gap-2">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                        </svg>
+                        Reducing Data Costs
+                    </h3>
+                    <ul class="text-sm text-amber-700 space-y-1">
+                        <li>• <strong>Self-hosting</strong>: Tools like farmOS and LiteFarm can be hosted locally by your organization</li>
+                        <li>• <strong>Offline kits</strong>: Kuza and Digital Green offer portable video kits for areas without connectivity</li>
+                        <li>• <strong>Local downloads</strong>: Web Soil Survey and SoilGrids data can be downloaded once for offline reference</li>
+                        <li>• <strong>SMS-based tools</strong>: KAOP and iShamba work via SMS without data plans</li>
+                    </ul>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                    <h3 class="font-semibold text-blue-800 mb-2 flex items-center gap-2">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+                            <rect x="9" y="3" width="6" height="4" rx="1"/>
+                            <path d="M9 12l2 2 4-4"/>
+                        </svg>
+                        Next Steps
+                    </h3>
+                    <ul class="text-sm text-blue-700 space-y-1">
+                        <li>• Try tools before committing — start small</li>
+                        <li>• Ask: Can you export your data if you leave?</li>
+                        <li>• Check: Who controls this tool and your information?</li>
+                        <li>• For detailed evaluation, use the <a href="eta_unified.html" class="underline font-medium">full ETA Assessment Tool</a></li>
+                    </ul>
+                </div>
+
+                <!-- Key Question -->
+                <div class="mt-6 p-4 bg-green-50 rounded-xl border border-green-200 text-center">
+                    <p class="text-green-800 font-medium italic">
+                        "Not just 'does it work?' but 'who does it work for?'"
+                    </p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Matrix View -->
+        <div id="matrix-view" class="hidden">
+            <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                <!-- Filter Bar -->
+                <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-wrap gap-4">
+                    <div>
+                        <label class="text-sm font-medium text-slate-600 block mb-1">Filter by Need</label>
+                        <select id="filter-need" onchange="filterMatrix()" class="px-3 py-2 border border-slate-200 rounded-lg text-sm">
+                            <option value="all">All Needs</option>
+                            <option value="advice">Expert Advice</option>
+                            <option value="records">Farm Records</option>
+                            <option value="market">Market Access</option>
+                            <option value="training">Training</option>
+                            <option value="collaboration">Collaboration</option>
+                            <option value="weather">Weather, Soils & Climate</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-slate-600 block mb-1">Phone Type</label>
+                        <select id="filter-phone" onchange="filterMatrix()" class="px-3 py-2 border border-slate-200 rounded-lg text-sm">
+                            <option value="all">All Types</option>
+                            <option value="basic">Basic Phone</option>
+                            <option value="smartphone">Smartphone</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-slate-600 block mb-1">CEI Fit</label>
+                        <select id="filter-cei" onchange="filterMatrix()" class="px-3 py-2 border border-slate-200 rounded-lg text-sm">
+                            <option value="all">All Levels</option>
+                            <option value="High">High</option>
+                            <option value="Medium-High">Medium-High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-slate-600 block mb-1">Offline Capable</label>
+                        <select id="filter-offline" onchange="filterMatrix()" class="px-3 py-2 border border-slate-200 rounded-lg text-sm">
+                            <option value="all">All</option>
+                            <option value="yes">Yes</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Table -->
+                <div class="overflow-x-auto">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Tool</th>
+                                <th>ETA Score</th>
+                                <th>CEI Fit</th>
+                                <th>Basic Phone</th>
+                                <th>Offline</th>
+                                <th>Cost</th>
+                                <th>Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matrix-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <p class="text-sm text-slate-500 mt-4 text-center">
+                Click any tool row for detailed assessment • <a href="eta-comparison.html" class="text-green-600 hover:underline">Open full comparison tool →</a>
+            </p>
+        </div>
+
+        <!-- Submit Tool CTA -->
+        <div class="mt-12 p-6 bg-slate-800 rounded-xl text-white text-center">
+            <svg class="w-10 h-10 mx-auto mb-3 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 8v8M8 12h8"/>
+            </svg>
+            <h3 class="font-bold text-lg mb-2">Know a tool that should be here?</h3>
+            <p class="text-slate-400 text-sm mb-4">Submit it for community review and inclusion in the ETA registry</p>
+            <a href="submit-tool.html" class="inline-flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-semibold transition-colors">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+                Submit a Tool
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-white py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-sm text-slate-400">
+                    © 2026 OpenTEAM. Licensed under CC BY-SA 4.0
+                </div>
+                <div class="flex gap-6 text-sm">
+                    <a href="https://openteam.community" class="text-slate-400 hover:text-white transition-colors">openteam.community</a>
+                    <a href="https://github.com/openteam" class="text-slate-400 hover:text-white transition-colors">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Needs - reordered with Weather, Soils & Climate at the bottom
+        const needs = [
+            { id: 'advice', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', title: 'Expert Advice', question: 'We need help with farming problems' },
+            { id: 'records', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01', title: 'Farm Records', question: 'We need to track our farming activities' },
+            { id: 'market', icon: 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z', title: 'Market Access', question: 'We need to sell our products better' },
+            { id: 'training', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', title: 'Training & Learning', question: 'We need to learn new practices' },
+            { id: 'collaboration', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', title: 'Community & Collaboration', question: 'We need to coordinate with other farmers' },
+            { id: 'weather', icon: 'M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15zM12 9v2m0 4h.01', title: 'Weather, Soils & Climate', question: 'We need weather forecasts, soil information, and climate data' }
+        ];
+
+        // Tools data with geography, offline capability, and expanded weather/soils category
+        const tools = {
+            advice: {
+                basic: [
+                    { name: 'iShamba', score: 68, description: 'Call center with real agronomists', free: 'partial', cei: 'Medium', geo: ['east-africa'], offline: false },
+                    { name: 'Digital Green Videos', score: 72, description: 'Community video screenings', free: true, cei: 'Medium-High', geo: ['east-africa', 'south-asia', 'west-africa'], offline: true },
+                    { name: 'KAOP', score: 78, description: 'Best practices database via USSD', free: true, cei: 'High', geo: ['east-africa'], offline: false }
+                ],
+                smartphone: [
+                    { name: 'FarmerChat', score: 65, description: 'AI chatbot, instant answers, photo diagnosis', free: true, cei: 'Medium', geo: ['east-africa', 'south-asia'], offline: false, note: 'Uses external AI (OpenAI)' },
+                    { name: 'Digital Green VideoKheti', score: 72, description: '8,000+ farmer training videos', free: true, cei: 'Medium-High', geo: ['south-asia', 'east-africa'], offline: true },
+                    { name: 'iShamba', score: 68, description: 'Human experts + digital', free: 'partial', cei: 'Medium', geo: ['east-africa'], offline: false },
+                    { name: 'Kuza', score: 74, description: 'Video learning library', free: 'partial', cei: 'Medium-High', geo: ['east-africa'], offline: true }
+                ]
+            },
+            records: {
+                basic: [
+                    { name: 'Paper + M-Pesa', description: 'Manual records with mobile money tracking', free: true, cei: 'N/A', geo: ['global'], offline: true }
+                ],
+                smartphone: [
+                    { name: 'farmOS', score: 92, description: 'Complete control, self-hosted, open source', free: true, cei: 'High', geo: ['global'], offline: true, note: 'Can be self-hosted locally to avoid data costs', selfHost: true },
+                    { name: 'LiteFarm', score: 88, description: 'Free, open source, designed for sustainable farms', free: true, cei: 'High', geo: ['global'], offline: true, selfHost: true },
+                    { name: 'Digital Green CoCo', score: 72, description: 'Data collection that works offline', free: true, cei: 'Medium-High', geo: ['south-asia', 'east-africa'], offline: true },
+                    { name: 'ShambaPro', score: 58, description: 'Easy mobile app for farm management', free: false, cei: 'Medium', geo: ['east-africa'], offline: false },
+                    { name: 'GSuite', score: 45, description: 'Spreadsheets (DIY approach)', free: 'partial', cei: 'Low', geo: ['global'], offline: false, warning: 'Data goes to Google' }
+                ]
+            },
+            market: {
+                basic: [
+                    { name: 'iShamba', score: 68, description: 'Market prices for 42 commodities', free: 'partial', cei: 'Medium', geo: ['east-africa'], offline: false },
+                    { name: 'M-Farm', description: 'Prices + group selling via SMS', free: true, cei: 'Medium', geo: ['east-africa'], offline: false }
+                ],
+                smartphone: [
+                    { name: 'Digital Green Loop', score: 70, description: 'Farm-to-market linkage app', free: true, cei: 'Medium-High', geo: ['south-asia'], offline: false },
+                    { name: 'Kuza OneNetwork', score: 74, description: 'Digital marketplace with Beckn protocol', free: 'partial', cei: 'Medium-High', geo: ['east-africa'], offline: false },
+                    { name: 'M-Farm', description: 'Full marketplace platform', free: true, cei: 'Medium', geo: ['east-africa'], offline: false }
+                ]
+            },
+            training: {
+                basic: [
+                    { name: 'Digital Green Videos', score: 72, description: 'Community video screenings with mediators', free: true, cei: 'Medium-High', geo: ['south-asia', 'east-africa', 'west-africa'], offline: true, note: 'Offline kits available for download' },
+                    { name: 'Shamba Shape Up + iShamba', description: 'TV show + SMS follow-up', free: true, cei: 'Medium', geo: ['east-africa'], offline: false },
+                    { name: 'Kuza Offline', score: 74, description: 'Portable video kits for groups', free: 'partial', cei: 'Medium-High', geo: ['east-africa'], offline: true, note: 'Content downloaded locally — no ongoing data costs' }
+                ],
+                smartphone: [
+                    { name: 'Digital Green VideoKheti', score: 72, description: '8,000+ videos in 50+ languages', free: true, cei: 'Medium-High', geo: ['south-asia', 'east-africa'], offline: true },
+                    { name: 'Kuza', score: 74, description: 'Video micro-learning + mentorship', free: 'partial', cei: 'Medium-High', geo: ['east-africa'], offline: true },
+                    { name: 'LiteFarm', score: 88, description: 'Built-in learning through use', free: true, cei: 'High', geo: ['global'], offline: true },
+                    { name: 'FarmerChat', score: 65, description: 'Learn by asking questions', free: true, cei: 'Medium', geo: ['east-africa', 'south-asia'], offline: false }
+                ]
+            },
+            collaboration: {
+                basic: [
+                    { name: 'WhatsApp Groups', description: 'Simple group messaging', free: true, cei: 'Low', geo: ['global'], offline: false, note: 'Data owned by Meta' },
+                    { name: 'Digital Green CoCo', score: 72, description: 'Offline data collection for groups', free: true, cei: 'Medium-High', geo: ['south-asia', 'east-africa'], offline: true }
+                ],
+                smartphone: [
+                    { name: 'farmOS', score: 92, description: 'Multi-user farm management, full control', free: true, cei: 'High', geo: ['global'], offline: true, selfHost: true },
+                    { name: 'LiteFarm', score: 88, description: 'Team collaboration with shared tasks', free: true, cei: 'High', geo: ['global'], offline: true },
+                    { name: 'Kuza OneNetwork', score: 74, description: 'Agripreneur network coordination', free: 'partial', cei: 'Medium-High', geo: ['east-africa'], offline: false },
+                    { name: 'Digital Green CoCo', score: 72, description: 'Community data dashboards', free: true, cei: 'Medium-High', geo: ['south-asia', 'east-africa'], offline: true }
+                ]
+            },
+            weather: {
+                basic: [
+                    { name: 'KAOP', score: 78, description: 'Government weather service via SMS (Kenya)', free: true, cei: 'High', geo: ['east-africa'], offline: false },
+                    { name: 'iShamba', score: 68, description: 'Weather + prices via SMS/call', free: 'partial', cei: 'Medium', geo: ['east-africa'], offline: false }
+                ],
+                smartphone: [
+                    { name: 'Web Soil Survey', score: 85, description: 'USDA soil maps, properties, and suitability ratings', free: true, cei: 'High', geo: ['north-america'], offline: true, note: 'Data can be downloaded for offline use — US only' },
+                    { name: 'LandPKS', score: 80, description: 'Mobile app for soil ID, land potential, vegetation monitoring', free: true, cei: 'High', geo: ['global'], offline: true, note: 'Works offline; USDA/USAID supported' },
+                    { name: 'SoilGrids', score: 82, description: 'Global soil property predictions (ISRIC)', free: true, cei: 'High', geo: ['global'], offline: true, note: 'Downloadable datasets available for offline analysis' },
+                    { name: 'KAOP', score: 78, description: 'Government platform with ward-level forecasts', free: true, cei: 'High', geo: ['east-africa'], offline: false },
+                    { name: 'LiteFarm', score: 88, description: 'Weather integration for crop planning', free: true, cei: 'High', geo: ['global'], offline: true },
+                    { name: 'FarmerChat', score: 65, description: 'AI assistant with weather integration', free: true, cei: 'Medium', geo: ['east-africa', 'south-asia'], offline: false },
+                    { name: 'iShamba', score: 68, description: 'Full service including WhatsApp', free: 'partial', cei: 'Medium', geo: ['east-africa'], offline: false }
+                ]
+            }
+        };
+
+        const allTools = [
+            { name: 'farmOS', score: 92, cei: 'High', basic: false, free: true, bestFor: 'Complete farm management with full data control', needs: ['records', 'collaboration'], offline: true, selfHost: true },
+            { name: 'LiteFarm', score: 88, cei: 'High', basic: false, free: true, bestFor: 'Sustainable/diversified farms, crop planning', needs: ['records', 'weather', 'training', 'collaboration'], offline: true },
+            { name: 'Web Soil Survey', score: 85, cei: 'High', basic: false, free: true, bestFor: 'US soil maps, properties, agricultural ratings', needs: ['weather'], offline: true },
+            { name: 'SoilGrids', score: 82, cei: 'High', basic: false, free: true, bestFor: 'Global soil data (ISRIC)', needs: ['weather'], offline: true },
+            { name: 'LandPKS', score: 80, cei: 'High', basic: false, free: true, bestFor: 'Mobile soil ID, land potential assessment', needs: ['weather'], offline: true },
+            { name: 'KAOP', score: 78, cei: 'High', basic: true, free: true, bestFor: 'Weather forecasts, climate advisories (Kenya)', needs: ['weather', 'advice'], offline: false },
+            { name: 'Kuza', score: 74, cei: 'Medium-High', basic: true, free: false, bestFor: 'Youth training, market linkages', needs: ['training', 'market', 'advice', 'collaboration'], offline: true },
+            { name: 'Digital Green', score: 72, cei: 'Medium-High', basic: true, free: true, bestFor: 'Video-based training, community extension', needs: ['training', 'advice', 'records', 'market', 'collaboration'], offline: true },
+            { name: 'iShamba', score: 68, cei: 'Medium', basic: true, free: false, bestFor: 'Weather + prices + expert advice via SMS', needs: ['weather', 'advice', 'market', 'training'], offline: false },
+            { name: 'FarmerChat', score: 65, cei: 'Medium', basic: false, free: true, bestFor: 'AI-powered instant advice', needs: ['advice', 'weather', 'training'], offline: false },
+            { name: 'ShambaPro', score: 58, cei: 'Medium', basic: false, free: false, bestFor: 'Simple farm activity tracking', needs: ['records'], offline: false },
+            { name: 'M-Farm', score: null, cei: 'Medium', basic: true, free: true, bestFor: 'Market prices and group selling', needs: ['market'], offline: false },
+            { name: 'GSuite', score: 45, cei: 'Low', basic: false, free: false, bestFor: 'General productivity (not agriculture-specific)', needs: ['records', 'collaboration'], offline: false }
+        ];
+
+        // State
+        let selectedNeed = null;
+        let selectedPhone = null;
+        let selectedGeography = null;
+        let selectedDataCost = null;
+        let currentView = 'guided';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNeeds();
+            renderMatrixTable();
+        });
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function setView(view) {
+            currentView = view;
+            document.getElementById('guided-view').classList.toggle('hidden', view !== 'guided');
+            document.getElementById('matrix-view').classList.toggle('hidden', view !== 'matrix');
+            document.getElementById('btn-guided').classList.toggle('bg-slate-800', view === 'guided');
+            document.getElementById('btn-guided').classList.toggle('text-white', view === 'guided');
+            document.getElementById('btn-guided').classList.toggle('text-slate-600', view !== 'guided');
+            document.getElementById('btn-matrix').classList.toggle('bg-slate-800', view === 'matrix');
+            document.getElementById('btn-matrix').classList.toggle('text-white', view === 'matrix');
+            document.getElementById('btn-matrix').classList.toggle('text-slate-600', view !== 'matrix');
+        }
+
+        function renderNeeds() {
+            const container = document.getElementById('needs-container');
+            container.innerHTML = needs.map(need => `
+                <button onclick="selectNeed('${need.id}')" id="need-${need.id}"
+                    class="selectable w-full p-4 rounded-xl border-2 border-slate-200 bg-white text-left">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-6 h-6 text-slate-600 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="${need.icon}"/>
+                        </svg>
+                        <div>
+                            <div class="font-medium text-slate-800">${need.title}</div>
+                            <div class="text-sm text-slate-600">${need.question}</div>
+                        </div>
+                    </div>
+                </button>
+            `).join('');
+        }
+
+        function selectNeed(needId) {
+            selectedNeed = needId;
+            document.querySelectorAll('#needs-container button').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById(`need-${needId}`).classList.add('selected');
+            document.getElementById('step2').classList.remove('hidden');
+            document.getElementById('step2').classList.add('animate-fadeIn');
+            updateShowResultsButton();
+        }
+
+        function selectPhone(phoneType) {
+            selectedPhone = phoneType;
+            document.querySelectorAll('#step2 button[id^="phone-"]').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById(`phone-${phoneType}`).classList.add('selected');
+            updateShowResultsButton();
+        }
+
+        function selectGeography(geo) {
+            selectedGeography = geo;
+            updateShowResultsButton();
+        }
+
+        function selectDataCost(cost) {
+            selectedDataCost = cost;
+            document.querySelectorAll('#step2 button[id^="data-"]').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById(`data-${cost}`).classList.add('selected');
+            updateShowResultsButton();
+        }
+
+        function updateShowResultsButton() {
+            const btn = document.getElementById('show-results-btn');
+            if (selectedNeed && selectedPhone && selectedGeography && selectedDataCost) {
+                btn.classList.remove('hidden');
+                btn.classList.add('animate-fadeIn');
+            }
+        }
+
+        function showResults() {
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('show-results-btn').classList.add('hidden');
+            document.getElementById('results').classList.remove('hidden');
+
+            // Show data cost notice if relevant
+            if (selectedDataCost === 'yes') {
+                document.getElementById('data-cost-notice').classList.remove('hidden');
+            } else {
+                document.getElementById('data-cost-notice').classList.add('hidden');
+            }
+
+            const need = needs.find(n => n.id === selectedNeed);
+            const geoLabel = document.querySelector(`#geography-select option[value="${selectedGeography}"]`)?.text || selectedGeography;
+            
+            document.getElementById('results-header').innerHTML = `
+                <svg class="w-6 h-6 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="${need.icon}"/>
+                </svg>
+                <span class="font-semibold text-slate-800">${need.title}</span>
+                <span class="text-slate-400 mx-1">•</span>
+                <span class="text-slate-600 text-sm">${selectedPhone === 'basic' ? 'Basic' : 'Smartphone'}</span>
+                <span class="text-slate-400 mx-1">•</span>
+                <span class="text-slate-600 text-sm">${geoLabel}</span>
+            `;
+
+            let recommendations = tools[selectedNeed]?.[selectedPhone] || [];
+            
+            // Filter by geography
+            if (selectedGeography && selectedGeography !== 'global') {
+                recommendations = recommendations.filter(tool => 
+                    tool.geo?.includes(selectedGeography) || tool.geo?.includes('global')
+                );
+            }
+
+            // Prioritize offline tools if data cost is a concern
+            if (selectedDataCost === 'yes') {
+                recommendations = recommendations.sort((a, b) => {
+                    if (a.offline && !b.offline) return -1;
+                    if (!a.offline && b.offline) return 1;
+                    return 0;
+                });
+            }
+
+            const container = document.getElementById('results-container');
+            
+            if (recommendations.length === 0) {
+                container.innerHTML = `
+                    <div class="p-6 bg-slate-100 rounded-xl text-center">
+                        <p class="text-slate-600 mb-4">No tools found matching your exact criteria.</p>
+                        <p class="text-sm text-slate-500">Try selecting "Global" for geography, or check the <a href="assessment-matrix.html" class="text-green-600 hover:underline">full matrix</a>.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = recommendations.map(tool => `
+                <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm card-hover">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h3 class="font-semibold text-slate-800">${tool.name}</h3>
+                            ${tool.score ? `<span class="text-xs px-2 py-1 bg-slate-100 rounded-full text-slate-600">ETA: ${tool.score}/100</span>` : ''}
+                            ${tool.cei && tool.cei !== 'N/A' ? `<span class="text-xs px-2 py-1 rounded-full ${getCEIClass(tool.cei)}">${tool.cei}</span>` : ''}
+                            ${tool.offline ? `<span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700">Offline ✓</span>` : ''}
+                        </div>
+                        <span class="text-xs px-2 py-1 rounded-full ${tool.free === true ? 'bg-green-100 text-green-800' : tool.free === false ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}">
+                            ${tool.free === true ? 'Free' : tool.free === false ? 'Paid' : 'Free tier'}
+                        </span>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-2">${tool.description}</p>
+                    ${tool.selfHost ? `<p class="text-xs text-green-700 bg-green-50 p-2 rounded mt-2 flex items-start gap-2">
+                        <svg class="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        <strong>Self-hosting available:</strong> Can be run locally by your organization to avoid ongoing data costs
+                    </p>` : ''}
+                    ${tool.note && !tool.selfHost ? `<p class="text-xs text-amber-700 bg-amber-50 p-2 rounded mt-2 flex items-start gap-2">
+                        <svg class="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                        ${tool.note}
+                    </p>` : ''}
+                    ${tool.warning ? `<p class="text-xs text-red-700 bg-red-50 p-2 rounded mt-2 flex items-start gap-2">
+                        <svg class="w-4 h-4 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        ${tool.warning}
+                    </p>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function getCEIClass(cei) {
+            const classes = {
+                'High': 'bg-green-100 text-green-800',
+                'Medium-High': 'bg-emerald-100 text-emerald-800',
+                'Medium': 'bg-yellow-100 text-yellow-800',
+                'Low': 'bg-red-100 text-red-800'
+            };
+            return classes[cei] || 'bg-slate-100 text-slate-800';
+        }
+
+        function reset() {
+            selectedNeed = null;
+            selectedPhone = null;
+            selectedGeography = null;
+            selectedDataCost = null;
+            document.querySelectorAll('.selectable').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('geography-select').value = '';
+            document.getElementById('step1').classList.remove('hidden');
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('show-results-btn').classList.add('hidden');
+            document.getElementById('results').classList.add('hidden');
+        }
+
+        function renderMatrixTable() {
+            filterMatrix();
+        }
+
+        function filterMatrix() {
+            const needFilter = document.getElementById('filter-need').value;
+            const phoneFilter = document.getElementById('filter-phone').value;
+            const ceiFilter = document.getElementById('filter-cei').value;
+            const offlineFilter = document.getElementById('filter-offline').value;
+
+            let filtered = allTools.filter(tool => {
+                if (needFilter !== 'all' && !tool.needs.includes(needFilter)) return false;
+                if (phoneFilter === 'basic' && !tool.basic) return false;
+                if (phoneFilter === 'smartphone' && tool.basic) return false;
+                if (ceiFilter !== 'all' && tool.cei !== ceiFilter) return false;
+                if (offlineFilter === 'yes' && !tool.offline) return false;
+                return true;
+            });
+
+            const tbody = document.getElementById('matrix-table-body');
+            tbody.innerHTML = filtered.map(tool => `
+                <tr class="cursor-pointer hover:bg-slate-50" onclick="window.location.href='assessment-matrix.html#${tool.name.toLowerCase().replace(/\s+/g, '-')}'">
+                    <td class="font-medium text-slate-800">${tool.name}</td>
+                    <td>${tool.score ? `<span class="font-medium ${tool.score >= 80 ? 'text-green-700' : tool.score >= 60 ? 'text-amber-700' : 'text-red-700'}">${tool.score}/100</span>` : '—'}</td>
+                    <td><span class="text-xs px-2 py-1 rounded-full ${getCEIClass(tool.cei)}">${tool.cei}</span></td>
+                    <td>${tool.basic ? '✓' : '—'}</td>
+                    <td>${tool.offline ? '✓' : '—'}</td>
+                    <td>${tool.free === true ? 'Free' : tool.free === false ? 'Paid' : 'Freemium'}</td>
+                    <td class="text-sm text-slate-600">${tool.bestFor}</td>
+                </tr>
+            `).join('');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center text-slate-500 py-8">No tools match your filters</td></tr>`;
+            }
+        }
+    </script>
+
+    <style>
+        .selectable {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .selectable:hover {
+            border-color: #22c55e;
+        }
+        .selectable.selected {
+            border-color: #22c55e;
+            background-color: #f0fdf4;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+        }
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th, .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .data-table th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.875rem;
+        }
+        .data-table tr:hover {
+            background-color: #f8fafc;
+        }
+    </style>
+</body>
+</html>

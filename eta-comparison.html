@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETA Registry — Community Infrastructure Tool Comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root{--forest:#1e4d2b;--forest-md:#2a6338;--forest-lt:#4a7c59;--forest-bg:#eaf3ec;--forest-rim:#d0e8d6;--sage:#5a7f5e;--sage-lt:#c8deca;--ink:#1a1a14;--ink-dim:#6b6760;--ink-faint:#9e9a93;--cream:#f7f3ec;--cream-dk:#ede8df;--line:#ddd8ce;--line-dk:#b8b2a6;--good:#1e6b3a;--good-bg:#d4edda;--warn:#8a5d00;--warn-bg:#fef3c7;--bad:#8b1a1a;--bad-bg:#fee2e2;--white:#fff;--r:8px;--shadow:0 2px 16px rgba(30,77,43,.10);--shadow-lg:0 8px 40px rgba(30,77,43,.14)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;background:var(--cream);color:var(--ink)}
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:2px solid #16381f;box-shadow:0 2px 16px rgba(0,0,0,.22)}
+.topbar-inner{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;padding:13px 0;text-decoration:none}
+.brand-icon{width:30px;height:30px;flex:0 0 30px;background:rgba(255,255,255,.12);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.brand-icon svg{width:17px;height:17px}
+.brand-name{font-family:'DM Mono',monospace;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#fff}
+.brand-sep{width:1px;height:20px;background:rgba(255,255,255,.2);margin:0 6px}
+.brand-sub{font-size:11.5px;color:rgba(255,255,255,.5)}
+.topbar-nav{display:flex}
+.topbar-nav a{font-family:'DM Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5);text-decoration:none;padding:0 14px;height:56px;display:flex;align-items:center;border-left:1px solid rgba(255,255,255,.1);transition:color .12s,background .12s;position:relative}
+.topbar-nav a:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.08)}
+.topbar-nav a.active{color:#fff;background:rgba(255,255,255,.12)}
+.topbar-nav a.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.6)}
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--forest) 0%,var(--forest-md) 60%,var(--forest-lt) 100%);padding:44px 20px 40px;overflow:hidden;position:relative}
+.hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 80% 20%,rgba(255,255,255,.07) 0%,transparent 55%);pointer-events:none}
+.hero-inner{max-width:1100px;margin:0 auto;position:relative}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--sage-lt);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.hero-eyebrow::before{content:'';width:20px;height:2px;background:var(--sage-lt)}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:400;color:#fff;line-height:1.1;margin-bottom:12px}
+.hero h1 em{font-style:italic;color:var(--sage-lt)}
+.hero-sub{font-size:15px;color:rgba(255,255,255,.65);max-width:620px;line-height:1.65;margin-bottom:28px}
+.hero-stats{display:flex;flex-wrap:wrap;gap:28px}
+.hs-n{font-family:'DM Mono',monospace;font-size:22px;font-weight:600;color:#fff;line-height:1;display:block}
+.hs-l{font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.12em;text-transform:uppercase;margin-top:4px;display:block}
+.hero-div{width:1px;height:32px;background:rgba(255,255,255,.15);align-self:center}
+/* FRAMEWORK ROW */
+.fw-row{background:var(--forest-md);padding:11px 20px}
+.fw-inner{max-width:1100px;margin:0 auto;display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+.fw-label{font-family:'DM Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--sage-lt)}
+.fw-pill{font-family:'DM Mono',monospace;font-size:9.5px;padding:3px 10px;border-radius:12px;display:inline-flex;align-items:center;gap:4px}
+.fw-pill.gate{background:rgba(255,255,255,.12);color:rgba(255,255,255,.7)}
+.fw-pill.cat{background:rgba(255,255,255,.06);color:rgba(255,255,255,.5)}
+.fw-pts{font-size:8.5px;opacity:.7;border:1px solid currentColor;border-radius:2px;padding:0 4px}
+/* PAGE */
+.page-outer{max-width:1100px;margin:0 auto;padding:32px 20px 80px}
+/* SECTION HEADS */
+.sec-head{margin-bottom:22px;padding-bottom:14px;border-bottom:2px solid var(--forest)}
+.sec-ey{font-family:'DM Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--forest-lt);margin-bottom:5px}
+.sec-title{font-family:'DM Serif Display',serif;font-size:clamp(1.3rem,2.4vw,1.9rem);font-weight:400;color:var(--ink);letter-spacing:-.01em}
+.sec-sub{font-size:13px;color:var(--ink-dim);margin-top:4px;line-height:1.55}
+/* CARD GRID */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;margin-bottom:52px}
+@media(max-width:700px){.card-grid{grid-template-columns:1fr}}
+/* TOOL CARD */
+.tool-card{background:var(--white);border:1.5px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s}
+.tool-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.tc-stripe{height:4px}
+.tc-head{padding:18px 18px 14px;border-bottom:1px solid var(--line)}
+.tc-top{display:flex;align-items:flex-start;gap:11px;margin-bottom:12px}
+.tc-logo{width:44px;height:44px;flex:0 0 44px;border-radius:9px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.tc-logo svg{width:44px;height:44px}
+.tc-info{flex:1;min-width:0}
+.tc-name{font-family:'DM Serif Display',serif;font-size:17px;font-weight:400;line-height:1.15;margin-bottom:2px}
+.tc-type{font-family:'DM Mono',monospace;font-size:8.5px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);margin-top:2px;line-height:1.4}
+.tc-verdict{font-family:'DM Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border-radius:3px;flex:0 0 auto;align-self:flex-start;white-space:nowrap}
+.v-eligible{background:var(--good-bg);color:var(--good)}
+.v-conditional{background:var(--warn-bg);color:var(--warn)}
+.v-ineligible{background:var(--bad-bg);color:var(--bad)}
+.tc-score-row{display:flex;align-items:center;gap:12px}
+.tc-donut{position:relative;width:68px;height:68px;flex:0 0 68px}
+.tc-donut svg{width:100%;height:100%}
+.tc-donut-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:17px;font-weight:600}
+.tc-score-lbl{font-family:'DM Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:1px}
+.tc-score-big{font-family:'DM Serif Display',serif;font-size:26px;line-height:1;letter-spacing:-.02em}
+.tc-tier{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--ink-faint);margin-top:2px}
+.tc-desc{font-size:12px;color:var(--ink-dim);line-height:1.55;margin-top:9px}
+.tc-gates{display:flex;flex-wrap:wrap;gap:4px;padding:10px 18px;border-bottom:1px solid var(--line);background:var(--cream)}
+.tc-gate{display:inline-flex;align-items:center;gap:4px;padding:3px 7px;border-radius:3px;font-family:'DM Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.gate-pass{background:var(--good-bg);color:var(--good)}
+.gate-fail{background:var(--bad-bg);color:var(--bad)}
+.tc-cats{padding:12px 18px;flex:1}
+.tc-cat{margin-bottom:9px}.tc-cat:last-child{margin:0}
+.tcc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.tcc-name{font-family:'DM Mono',monospace;font-size:9.5px;font-weight:500;color:var(--ink)}
+.tcc-val{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--ink-dim)}
+.tcc-track{height:5px;background:var(--cream-dk);border-radius:5px;overflow:hidden}
+.tcc-fill{height:100%;border-radius:5px}
+/* ACTION BUTTONS */
+.tc-actions{display:flex;gap:7px;padding:10px 18px;border-top:1px solid var(--line);background:var(--forest-bg)}
+.tc-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:5px;font-family:'DM Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;transition:all .15s;flex:1;justify-content:center}
+.tc-btn-primary{background:var(--forest);color:#fff}
+.tc-btn-primary:hover{background:var(--forest-md)}
+.tc-btn-secondary{background:transparent;color:var(--forest);border:1.5px solid var(--forest-rim)}
+.tc-btn-secondary:hover{background:var(--forest-bg);border-color:var(--forest)}
+.tc-btn svg{width:10px;height:10px;stroke:currentColor;fill:none;flex:0 0 10px;stroke-linecap:round;stroke-linejoin:round}
+/* EXPAND */
+.tc-expand-btn{width:100%;padding:9px 18px;border:none;background:transparent;border-top:1px solid var(--line);font-family:'DM Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s,color .15s}
+.tc-expand-btn:hover{background:var(--cream);color:var(--forest)}
+.tc-expand-btn svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-linecap:round;transition:transform .2s}
+.tool-card.open .tc-expand-btn svg{transform:rotate(180deg)}
+.tc-detail{display:none;padding:16px 18px;border-top:1px solid var(--line);background:var(--cream)}
+.tool-card.open .tc-detail{display:block}
+.td-sec{margin-bottom:14px}.td-sec:last-child{margin:0}
+.td-label{font-family:'DM Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.td-label::before{content:'';width:12px;height:1px;background:var(--forest-rim)}
+.flag-i,.str-i{display:inline-flex;padding:3px 8px;border-radius:3px;margin:2px;font-family:'DM Mono',monospace;font-size:9px;line-height:1.4}
+.flag-i{background:var(--bad-bg);color:var(--bad)}.flag-i::before{content:'⚑ '}
+.str-i{background:var(--good-bg);color:var(--good)}.str-i::before{content:'✓ '}
+.rat-item{margin-bottom:7px;font-size:12px;color:var(--ink-dim);line-height:1.6}
+.rat-item strong{color:var(--ink);font-weight:600}
+/* WINNER */
+.winner{background:linear-gradient(135deg,var(--forest) 0%,var(--forest-md) 100%);border-radius:var(--r);padding:22px 24px;margin-bottom:36px;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center}
+@media(max-width:600px){.winner{grid-template-columns:1fr}.wc-scores{display:none}}
+.wc-icon{width:32px;height:32px;flex:0 0 32px}
+.wc-ey{font-family:'DM Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--sage-lt);margin-bottom:4px}
+.wc-title{font-family:'DM Serif Display',serif;font-size:1.2rem;color:#fff;line-height:1.2}
+.wc-desc{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px;line-height:1.55}
+.wc-scores{display:flex;gap:16px}
+.wcs-n{font-family:'DM Mono',monospace;font-size:22px;font-weight:600;color:#fff;line-height:1;display:block;text-align:center}
+.wcs-l{font-family:'DM Mono',monospace;font-size:8.5px;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;display:block;text-align:center}
+/* COMPARE TABLE */
+.compare-wrap{overflow-x:auto;border:1.5px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:44px}
+.compare-table{width:100%;border-collapse:collapse;background:var(--white);min-width:820px}
+.cth-row{border-bottom:2px solid var(--forest)}
+.cth-first{width:165px;padding:14px 16px;background:var(--cream);border-right:1px solid var(--line);vertical-align:bottom;font-family:'DM Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)}
+.cth-tool{padding:12px 10px 9px;text-align:center;border-right:1px solid var(--line);vertical-align:bottom}
+.cth-tool:last-child{border-right:none}
+.cth-stripe{height:4px;border-radius:2px;margin-bottom:9px}
+.cth-logo{width:34px;height:34px;margin:0 auto 7px;display:flex;align-items:center;justify-content:center;border-radius:7px;overflow:hidden}
+.cth-logo svg{width:34px;height:34px}
+.cth-name{font-family:'DM Serif Display',serif;font-size:13.5px;color:var(--ink);letter-spacing:-.01em}
+.cth-type{font-family:'DM Mono',monospace;font-size:8px;color:var(--ink-faint);letter-spacing:.07em;text-transform:uppercase;margin-top:2px}
+.score-row td{background:var(--cream-dk);border-bottom:2px solid var(--line-dk)}
+.score-cell-first{padding:12px 16px;border-right:1px solid var(--line);font-family:'DM Mono',monospace;font-size:9.5px;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.1em}
+.score-cell{padding:12px 10px;text-align:center;border-right:1px solid var(--line)}
+.score-cell:last-child{border-right:none}
+.score-num{font-family:'DM Serif Display',serif;font-size:28px;line-height:1}
+.score-vp{font-family:'DM Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;border-radius:3px;display:inline-block;margin-top:3px}
+.row-lc{padding:10px 16px;border-right:1px solid var(--line);background:var(--cream);vertical-align:middle}
+.rl-n{font-family:'DM Mono',monospace;font-size:9.5px;font-weight:500;color:var(--ink)}
+.rl-s{font-size:10px;color:var(--ink-faint);margin-top:1px}
+.gate-cell{padding:9px 10px;text-align:center;border-right:1px solid var(--line);vertical-align:middle}
+.gate-cell:last-child{border-right:none}
+.gm{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.gm-pass{background:var(--good-bg);color:var(--good)}
+.gm-fail{background:var(--bad-bg);color:var(--bad)}
+.bar-cell{padding:7px 10px;border-right:1px solid var(--line);vertical-align:middle}
+.bar-cell:last-child{border-right:none}
+.bc-track{height:6px;background:var(--cream-dk);border-radius:6px;overflow:hidden;margin-bottom:3px}
+.bc-fill{height:100%;border-radius:6px}
+.bc-val{font-family:'DM Mono',monospace;font-size:9.5px;font-weight:500;color:var(--ink-dim);text-align:center}
+.rp{display:inline-block;font-family:'DM Mono',monospace;font-size:8px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-top:2px}
+.rp-5{background:var(--good-bg);color:var(--good)}.rp-4{background:#e8f5e9;color:#2e7d32}
+.rp-3{background:var(--warn-bg);color:var(--warn)}.rp-2{background:#fce4ec;color:#ad1457}.rp-1{background:var(--bad-bg);color:var(--bad)}
+.sec-sep td{padding:6px 16px;background:var(--forest);font-family:'DM Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.ct-body tr:nth-child(even) .row-lc{background:var(--cream)}
+.rec-cell{padding:9px 10px;text-align:center;border-right:1px solid var(--line)}.rec-cell:last-child{border-right:none}
+/* METHODOLOGY */
+.methodology{background:var(--white);border:1.5px solid var(--line);border-radius:var(--r);padding:22px;margin-top:36px}
+.meth-head{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--ink);margin-bottom:10px;letter-spacing:-.01em}
+.meth-body{font-size:12px;color:var(--ink-dim);line-height:1.7;column-count:2;column-gap:24px}
+@media(max-width:600px){.meth-body{column-count:1}}
+.meth-body p{margin-bottom:8px}.meth-body p:last-child{margin:0}
+.meth-body strong{color:var(--ink);font-weight:600}
+/* FOOTER */
+footer{background:var(--forest);padding:20px}
+.foot-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.foot-l{font-family:'DM Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.35);letter-spacing:.06em}
+.foot-r a{font-family:'DM Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.5);text-decoration:none;margin-left:14px;transition:color .12s}
+.foot-r a:hover{color:#fff}
+</style>
+</head>
+<body>
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon">
+        <svg viewBox="0 0 17 17" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="13" height="13" rx="2"/><path d="M5 8.5h7M8.5 5v7"/></svg>
+      </div>
+      <span class="brand-name">ETA</span>
+      <div class="brand-sep"></div>
+      <span class="brand-sub">Ethical Technology Assessment</span>
+    </a>
+    <div class="topbar-nav">
+      <a href="index.html">Home</a>
+      <a href="needs-assessment.html">Needs</a>
+      <a href="#" class="active">Comparison</a>
+      <a href="eta-data-comparison.html">Data Tools</a>
+      <a href="eta-scorecard.html">Scorecard</a>
+      <a href="eta_unified.html">Full Assessment</a>
+    </div>
+  </div>
+</nav>
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Community Infrastructure Registry · Cohort 1 · 2025</div>
+    <h1>Which tools can <em>communities trust?</em></h1>
+    <p class="hero-sub">An independent Ethical Technology Assessment of five communication and coordination platforms — evaluated for agricultural and commons-based community infrastructure use.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hs-n">5</span><span class="hs-l">Tools Assessed</span></div>
+      <div class="hero-div"></div>
+      <div class="hero-stat"><span class="hs-n">18</span><span class="hs-l">ETA Questions</span></div>
+      <div class="hero-div"></div>
+      <div class="hero-stat"><span class="hs-n">4</span><span class="hs-l">Entry Gates</span></div>
+      <div class="hero-div"></div>
+      <div class="hero-stat"><span class="hs-n">Tier 2</span><span class="hs-l">Confidence</span></div>
+    </div>
+  </div>
+</header>
+<div class="fw-row">
+  <div class="fw-inner">
+    <span class="fw-label">ETA Framework v1.0</span>
+    <span class="fw-pill gate">G1 Transparency <span class="fw-pts">10pts</span></span>
+    <span class="fw-pill gate">G2 Rights &amp; Control <span class="fw-pts">10pts</span></span>
+    <span class="fw-pill gate">G3 No Abuse <span class="fw-pts">10pts</span></span>
+    <span class="fw-pill gate">G4 Stewardship <span class="fw-pts">10pts</span></span>
+    <span class="fw-pill cat">Data Ethics <span class="fw-pts">15pts</span></span>
+    <span class="fw-pill cat">Interoperability <span class="fw-pts">15pts</span></span>
+    <span class="fw-pill cat">Commons Fit <span class="fw-pts">15pts</span></span>
+    <span class="fw-pill cat">Accessibility <span class="fw-pts">15pts</span></span>
+  </div>
+</div>
+<div class="page-outer">
+  <div style="padding-top:8px">
+    <div class="sec-head">
+      <div class="sec-ey">01 — Individual Assessments</div>
+      <div class="sec-title">Full ETA Scorecards</div>
+      <div class="sec-sub">Each card links to a fully editable dynamic scorecard where you can submit your own assessment as an independent reviewer. Scores are peer-reviewed (Tier 2 confidence).</div>
+    </div>
+    <div class="card-grid" id="card-grid"></div>
+  </div>
+  <div class="sec-head">
+    <div class="sec-ey">02 — Side-by-Side Comparison</div>
+    <div class="sec-title">All Tools · All Dimensions</div>
+    <div class="sec-sub">Direct category-by-category comparison. Higher scores indicate stronger ethical alignment for community infrastructure use.</div>
+  </div>
+  <div class="winner">
+    <div class="wc-icon"><svg viewBox="0 0 32 32" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4h12v10a6 6 0 01-12 0V4z"/><path d="M10 8H6a4 4 0 004 4M22 8h4a4 4 0 01-4 4M16 20v5M10 25h12"/></svg></div>
+    <div>
+      <div class="wc-ey">Recommended · Community Infrastructure Stack</div>
+      <div class="wc-title">Signal + Hylo + Infomaniak — The Sovereign Stack</div>
+      <div class="wc-desc">Signal for encrypted comms (88), Hylo for coordination (82), and Infomaniak for hosting (85). Together these form a fully ETA-eligible, non-extractive, commons-aligned technology stack for agricultural communities.</div>
+    </div>
+    <div class="wc-scores">
+      <div><span class="wcs-n">88</span><span class="wcs-l">Signal</span></div>
+      <div><span class="wcs-n">85</span><span class="wcs-l">Infomaniak</span></div>
+      <div><span class="wcs-n">82</span><span class="wcs-l">Hylo</span></div>
+    </div>
+  </div>
+  <div class="compare-wrap"><table class="compare-table" id="compare-table"></table></div>
+  <div class="methodology">
+    <div class="meth-head">Assessment Methodology &amp; Confidence</div>
+    <div class="meth-body">
+      <p><strong>Framework:</strong> ETA v1.0 Software Assessment at Tier 2 (Peer-Reviewed) confidence (×1.00). Scores reflect publicly available documentation, privacy policies, source code, and independent audits as of Q1 2025.</p>
+      <p><strong>Gate structure:</strong> All four entry gates (G1–G4) are binary pass/fail, 10 points each. Any gate failure prevents ETA Eligible status regardless of category scores. Category questions scored 0–5, multiplied by 3 = category points.</p>
+      <p><strong>Categories:</strong> <strong>Data Ethics</strong> — data minimization, purpose limitation, secondary use controls. <strong>Interoperability</strong> — open standards, API quality, data portability. <strong>Commons Fit</strong> — open source licensing, self-hosting viability, community governance. <strong>Accessibility</strong> — pricing equity, multilingual support, onboarding friction.</p>
+      <p><strong>Critical stance:</strong> Marketing claims are not accepted at face value. WhatsApp's E2E encryption is acknowledged but does not compensate for extensive metadata collection and Meta data sharing, failing G2 and G3. Proton's score is reduced by its closed backend and 2021 IP logging incident under court order.</p>
+      <p><strong>Contribute:</strong> Use the "Add Your Review" button on any scorecard to submit an independent assessment. Community reviews aggregate to update confidence tiers. Future versions will integrate a database backend for registry persistence.</p>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="foot-inner">
+    <span class="foot-l">OpenTEAM · ETA Registry · Community Infrastructure Cohort 1 · ETA Framework v1.0 · 2025</span>
+    <div class="foot-r">
+      <a href="index.html">Home</a>
+      <a href="needs-assessment.html">Needs Assessment</a>
+      <a href="eta_unified.html">Assessment Tool</a>
+    </div>
+  </div>
+</footer>
+<script>
+const TOOLS=[{id:'signal',name:'Signal',color:'#3a86ff',pale:'#deeaff',type:'Encrypted Messaging · Nonprofit',score:88,verdict:'eligible',tier:'Tier 2 · Peer Reviewed',desc:'Gold standard for E2E encrypted messaging. AGPL-licensed, nonprofit-run, minimal data collection. Centralized architecture and phone-number requirement are the primary limitations.',gates:{'G1 Transparency':true,'G2 Rights & Control':true,'G3 No Abuse':true,'G4 Stewardship':true},cats:{'Data Ethics':{s:4.8,p:14.4},'Interoperability':{s:3.2,p:9.6},'Commons Fit':{s:4.5,p:13.5},'Accessibility':{s:3.5,p:10.5}},strengths:['Full AGPL-3.0 source code — clients and server','Zero data monetization — 501(c)(3) nonprofit','Legally proven minimal data retention (creation date + last login only)','Signal Protocol adopted as encryption industry standard','Independent cryptography audits published','Disappearing messages, sealed sender, usernames (2024)'],flags:['Centralized architecture — single point of failure','Phone number required for registration','Server anti-spam component is proprietary/closed','No self-hosting — dependency on Signal Foundation','Limited interoperability with other platforms'],rationale:{'G1 Transparency':'Full source code on GitHub (AGPL-3). Security audits published. Changelog public. Protocol spec openly documented.','G2 Rights & Control':'Messages stored locally only. Full data export possible. Account deletion removes all data. Signal cannot access message content by design.','G3 No Abuse':'No data monetization. No advertising. No secondary data use. Nonprofit structure prevents extractive pivot.','G4 Stewardship':'Signal Foundation is a named 501(c)(3). Active development, responsive security disclosure, regular independent audits.','Data Ethics':'4.8/5 — Near-perfect data minimization. Only phone number and timestamps retained. No tracking. Deducted 0.2 for phone number requirement.','Interoperability':'3.2/5 — Signal Protocol is open but Signal app is a walled garden. No federation, no bridges, no third-party clients.','Commons Fit':'4.5/5 — AGPL-3 ensures commons alignment. Fully auditable. No self-hosting option creates infrastructure dependency.','Accessibility':'3.5/5 — Free, cross-platform. Phone number requirement excludes some privacy-conscious users. No SMS fallback since 2023.'}},{id:'whatsapp',name:'WhatsApp',color:'#25d366',pale:'#dcf8e8',type:'Encrypted Messaging · Meta (For-Profit)',score:38,verdict:'ineligible',tier:'Tier 2 · Peer Reviewed',desc:'Despite strong message encryption, fails critical ETA gates for extensive metadata harvesting, mandatory Meta data sharing, and Meta AI integration without user consent.',gates:{'G1 Transparency':true,'G2 Rights & Control':false,'G3 No Abuse':false,'G4 Stewardship':true},cats:{'Data Ethics':{s:1.2,p:3.6},'Interoperability':{s:2.5,p:7.5},'Commons Fit':{s:0.5,p:1.5},'Accessibility':{s:3.8,p:11.4}},strengths:['Signal Protocol E2E encryption for message content','2B+ users — broadest reach of any secure messenger','Free, zero subscription cost','Polished cross-platform UX','EU DMA compliance forcing some interoperability (2024)'],flags:['GATE G2 FAIL — data locked to Meta ecosystem','GATE G3 FAIL — metadata shared with Meta ad infrastructure','Extensive metadata: device fingerprint, contact graph, behavior patterns','Meta AI integrated 2025 without consent — not E2E encrypted','78% law enforcement data disclosure rate (2024)','Cloud backups unencrypted by default','Server code 100% closed source','Pegasus/Paragon spyware vulnerabilities (2019, 2024)'],rationale:{'G1 Transparency':'Privacy policy published. However, "privacy is in our DNA" marketing while harvesting massive metadata is misleading. Documentation deliberately opaque about Meta sharing scope.','G2 Rights & Control':'FAIL — Messages cannot be meaningfully exported. Metadata shared with Meta without granular opt-out. Cannot use WhatsApp without accepting full Meta data processing.','G3 No Abuse':'FAIL — Metadata feeds Meta advertising. Meta AI without consent. "Legitimate interest" used as blanket GDPR justification for behavioral profiling.','G4 Stewardship':'Meta is a named accountable organization with security teams and bug bounty. Despite privacy failures, security infrastructure is mature.','Data Ethics':'1.2/5 — Worst in cohort. Metadata flows to Meta. Meta AI without opt-out is a significant 2025 breach. No meaningful purpose limitation.','Interoperability':'2.5/5 — EU DMA forced limited interoperability. Business APIs available. No open protocol, no self-hosting, no meaningful data portability.','Commons Fit':'0.5/5 — Lowest score. Entirely proprietary extractive model. Platform optimized for ad revenue. Antithetical to commons principles.','Accessibility':'3.8/5 — Free, 2B+ users, widest reach in cohort.'}},{id:'hylo',name:'Hylo',color:'#7b5ea7',pale:'#ede8f7',type:'Community Coordination · Nonprofit Commons',score:82,verdict:'eligible',tier:'Tier 2 · Peer Reviewed',desc:'Built explicitly for purpose-driven communities with cooperative governance. Open source Apache 2.0, nonprofit-run by Terran Collective. OpenTEAM implementation partner. Perfect Commons Fit score.',gates:{'G1 Transparency':true,'G2 Rights & Control':true,'G3 No Abuse':true,'G4 Stewardship':true},cats:{'Data Ethics':{s:4.5,p:13.5},'Interoperability':{s:3.0,p:9.0},'Commons Fit':{s:5.0,p:15.0},'Accessibility':{s:3.0,p:9.0}},strengths:['Apache 2.0 open source — full code on GitHub','Nonprofit: Terran Collective / Empowerment Works 501(c)(3)','Explicit data sovereignty: export, delete, no resale ever','OpenTEAM implementation partner (USDA Climate Smart Commodities)','Sociocracy internal governance — transparent circles','Transparent finances via Open Collective','Cooperative governance roadmap with stakeholder participation','Holochain/p2p decentralization roadmap'],flags:['Messages not E2E encrypted — platform can read content','Small team: sustainability depends on grant funding','No current self-hosting for non-technical communities','Limited API documentation','Mobile UX trails commercial platforms','Cooperative governance still in formation'],rationale:{'G1 Transparency':'Source code fully public. Finances transparent via Open Collective. Governance documented via Sociocracy circles. Exemplary transparency for a small nonprofit.','G2 Rights & Control':'Explicit policy: never sell data, users can export and delete at will. No advertising model.','G3 No Abuse':'No advertising. No secondary data use. Community can formally participate in governance decisions about data use.','G4 Stewardship':'Named maintainers (Terran Collective). Active since 2020. 700+ open source contributors. Fiscal sponsorship through established nonprofit.','Data Ethics':'4.5/5 — Excellent data minimization and sovereignty. Only deduction: messages not E2E encrypted. No advertising, no secondary use whatsoever.','Interoperability':'3.0/5 — Open source forkable. ActivityPub integration under exploration. Holochain migration planned. Current production has limited external API.','Commons Fit':'5.0/5 — Perfect. Purpose-built as a technology commons. Open source. Nonprofit. Participatory governance. Transparent finances. Designed for commons-based communities.','Accessibility':'3.0/5 — Free. Web and mobile. UX requires onboarding. Limited language localization. Self-hosting not available for typical groups.'}},{id:'proton',name:'Proton',color:'#6d4aff',pale:'#ede8ff',type:'Privacy Suite — Email · Drive · VPN · Foundation',score:85,verdict:'eligible',tier:'Tier 2 · Peer Reviewed',desc:'Swiss-based nonprofit foundation offering E2E encrypted email, file storage, VPN, and calendar. Independently audited, strong Swiss legal jurisdiction. Closed backend and 2021 IP logging incident are main reductions.',gates:{'G1 Transparency':true,'G2 Rights & Control':true,'G3 No Abuse':true,'G4 Stewardship':true},cats:{'Data Ethics':{s:4.5,p:13.5},'Interoperability':{s:3.5,p:10.5},'Commons Fit':{s:3.8,p:11.4},'Accessibility':{s:3.2,p:9.6}},strengths:['Swiss jurisdiction — strong privacy laws, outside Five Eyes','Client-side E2E: Proton technically cannot read emails','Open source clients (iOS, Android, web, bridge) — independently audited','Proton Foundation nonprofit majority owner since June 2024','Annual transparency reports published','GDPR + nFADP (Swiss) dual compliance','PGP standard email interoperability','Board includes Tim Berners-Lee','100M+ users'],flags:['Backend server code remains closed source','Legally compelled to log IP under Swiss court order (2021)','Desktop app restricted to paid subscribers only','Cannot fully verify server-side practices without open source','Swiss surveillance law amendments proposed 2025'],rationale:{'G1 Transparency':'Client source open on GitHub. Annual transparency reports. Independent security audits published. Deducted slightly for closed-source backend.','G2 Rights & Control':'Users can export all data. Account deletion complete. Import/export tools (Easy Switch). PGP key management gives cryptographic control.','G3 No Abuse':'Zero-access encryption means content cannot be monetized. No ads. Subscription-only revenue. IP logging under court order is legal obligation — conditional pass.','G4 Stewardship':'Proton Foundation nonprofit majority owner since June 2024. Named CEO, DPO available. Bug bounty active. Board includes Tim Berners-Lee.','Data Ethics':'4.5/5 — Excellent minimization. Zero-access by design. Deducted 0.5 for 2021 court-compelled IP logging and closed backend.','Interoperability':'3.5/5 — PGP enables cross-platform email. Proton Bridge allows IMAP/SMTP. Drive/Calendar less interoperable.','Commons Fit':'3.8/5 — Nonprofit foundation. Open source clients. Not self-hostable — full dependency on Proton infrastructure.','Accessibility':'3.2/5 — Free tier but limited. Desktop app paid-only. 30+ languages. Complex PGP for non-technical users.'}},{id:'infomaniak',name:'Infomaniak',color:'#0086c3',pale:'#ddf0fb',type:'Sovereign Cloud · Hosting · Productivity Suite',score:85,verdict:'eligible',tier:'Tier 2 · Peer Reviewed',desc:'Swiss employee-owned cloud provider committed to digital sovereignty, open source, and ecological responsibility. ISO 27001 certified. Strongest self-hosting option in cohort.',gates:{'G1 Transparency':true,'G2 Rights & Control':true,'G3 No Abuse':true,'G4 Stewardship':true},cats:{'Data Ethics':{s:4.3,p:12.9},'Interoperability':{s:4.5,p:13.5},'Commons Fit':{s:4.2,p:12.6},'Accessibility':{s:3.5,p:10.5}},strengths:['100% employee-owned, independent — no outside investors','All data exclusively in Switzerland — no third-party transfer','ISO 27001 certified information security management','Open source infrastructure: OpenStack, Debian, FSF contributor','Self-hosting via JelasticCloud, Kubernetes, managed databases','100% renewable energy, 200% CO2 offset, heats 6,000 homes','GDPR + nFADP (Swiss) dual compliance','Serves UN, central banks, thousands of municipalities','kSuite: full Google Workspace alternative'],flags:['For-profit (employee-owned) — profit motive exists','Proprietary components in kSuite apps','Smaller ecosystem than hyperscalers','Self-hosting requires technical capacity','Swiss surveillance law amendments proposed 2025'],rationale:{'G1 Transparency':'Comprehensive docs. Bug bounty. Confidentiality policy updated 2024. Annual impact report. Open source infrastructure inspectable.','G2 Rights & Control':'Data stays in Switzerland. No third-party transfer. Full GDPR subject rights. Complete data deletion. Domain privacy available.','G3 No Abuse':'No advertising. Employee-owned prevents hostile acquisition. No secondary data use. OpenStack base eliminates vendor dependency.','G4 Stewardship':'Named founders, CSO. ISO 27001 with regular audits. 24/7 monitoring. 30 years in operation. Serves UN and critical institutions.','Data Ethics':'4.3/5 — Strong minimization. Swiss jurisdiction. Slight deduction for proprietary kSuite components and for-profit status.','Interoperability':'4.5/5 — OpenStack APIs. Standard email protocols. GDPR-standard export. OpenAI-compatible AI APIs in Switzerland. Strongest in cohort.','Commons Fit':'4.2/5 — Open source infrastructure. Contributes to OpenStack, Debian, FSF. Self-hosting enabled. Employee-owned for-profit prevents user community governance.','Accessibility':'3.5/5 — Free kMail tier. Productivity subscription-based. Multi-language docs. European-market focus.'}}];
+
+const LOGOS={signal:`<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="10" fill="#3a86ff"/><path d="M20 8C13.4 8 8 12.9 8 18.9c0 2.8 1.2 5.4 3.2 7.3l-1.1 4.2 4.5-1.1c1.6.8 3.4 1.3 5.4 1.3 6.6 0 12-4.9 12-10.9S26.6 8 20 8z" fill="white" opacity=".95"/><rect x="16" y="17" width="8" height="5.5" rx="1.5" fill="#3a86ff" opacity=".7"/><path d="M18 17v-1.5a2 2 0 014 0V17" stroke="#3a86ff" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg>`,whatsapp:`<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="10" fill="#25d366"/><path d="M20 9.5C14.2 9.5 9.5 14.2 9.5 20c0 2.2.6 4.2 1.7 6l-1.8 5.3 5.5-1.8c1.7.9 3.6 1.5 5.6 1.5C26.1 31 30.5 26.3 30.5 20S26.1 9.5 20 9.5z" fill="white"/><path d="M16.2 17.1c-.2-.5-.5-.5-.7-.5h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.2.2 2.1 3.3 5 4.5 2.4 1 2.9.8 3.4.7.5-.1 1.6-.6 1.8-1.3.2-.6.2-1.2.1-1.3-.1-.1-.3-.2-.7-.4s-2.2-1.1-2.5-1.2c-.3-.1-.6-.2-.9.2-.3.4-.9 1.1-1.1 1.3-.2.2-.5.3-.9.1-.4-.2-1.7-.6-3.2-2-.9-.8-1.5-1.8-1.7-2.2-.2-.4.1-.6.3-.8l.6-.7c.2-.2.2-.4.3-.7.1-.3 0-.5-.1-.7z" fill="#25d366"/></svg>`,hylo:`<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="10" fill="#7b5ea7"/><circle cx="20" cy="13" r="5.5" fill="white" opacity=".92"/><circle cx="12" cy="27" r="4.5" fill="white" opacity=".78"/><circle cx="28" cy="27" r="4.5" fill="white" opacity=".78"/><path d="M20 18.5L12 22.5M20 18.5L28 22.5" stroke="white" stroke-width="2" stroke-linecap="round" opacity=".5"/></svg>`,proton:`<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="10" fill="#6d4aff"/><path d="M20 8.5L10.5 12.5V20.5c0 5.5 4 10.5 9.5 12 5.5-1.5 9.5-6.5 9.5-12v-8L20 8.5z" fill="white" opacity=".9"/><path d="M15.5 21l4 4L25 17" stroke="#6d4aff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,infomaniak:`<svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="10" fill="#0086c3"/><rect x="17.5" y="9.5" width="5" height="5" rx="2.5" fill="white"/><rect x="17.5" y="17.5" width="5" height="13" rx="2" fill="white"/></svg>`};
+
+function sc(s){if(s>=70)return{t:'var(--good)',b:'var(--good-bg)'};if(s>=50)return{t:'var(--warn)',b:'var(--warn-bg)'};return{t:'var(--bad)',b:'var(--bad-bg)'};}
+function cc(v){if(v>=4)return'#1a6b42';if(v>=3)return'#2d9a6b';if(v>=2)return'#ca8a04';return'#dc2626';}
+function vl(v){return{eligible:'ETA Eligible',conditional:'Conditional',ineligible:'ETA Ineligible'}[v]||v;}
+function vc(v){return{eligible:'v-eligible',conditional:'v-conditional',ineligible:'v-ineligible'}[v]||'';}
+function rp(v){if(v>=4.5)return{c:'rp-5',l:'Excellent'};if(v>=3.5)return{c:'rp-4',l:'Strong'};if(v>=2.5)return{c:'rp-3',l:'Moderate'};if(v>=1.5)return{c:'rp-2',l:'Weak'};return{c:'rp-1',l:'Poor'};}
+function donut(score){const r=28,circ=2*Math.PI*r,f=(score/100*circ).toFixed(1),col=sc(score);return`<svg viewBox="0 0 72 72" fill="none"><circle cx="36" cy="36" r="${r}" stroke="${col.b}" stroke-width="8"/><circle cx="36" cy="36" r="${r}" stroke="${col.t}" stroke-width="8" stroke-dasharray="${f} ${circ.toFixed(1)}" stroke-dashoffset="${(circ*0.25).toFixed(1)}" stroke-linecap="round"/></svg>`;}
+
+function buildCards(){
+  const g=document.getElementById('card-grid');
+  TOOLS.forEach(t=>{
+    const col=sc(t.score);
+    const el=document.createElement('div');
+    el.className='tool-card';el.id='card-'+t.id;
+    el.innerHTML=`<div class="tc-stripe" style="background:${t.color}"></div>
+<div class="tc-head">
+  <div class="tc-top">
+    <div class="tc-logo">${LOGOS[t.id]}</div>
+    <div class="tc-info">
+      <div class="tc-name" style="color:${t.color}">${t.name}</div>
+      <div class="tc-type">${t.type}</div>
+    </div>
+    <span class="tc-verdict ${vc(t.verdict)}">${vl(t.verdict)}</span>
+  </div>
+  <div class="tc-score-row">
+    <div class="tc-donut">${donut(t.score)}<div class="tc-donut-num" style="color:${col.t}">${t.score}</div></div>
+    <div class="tc-score-meta">
+      <div class="tc-score-lbl">ETA Score / 100</div>
+      <div class="tc-score-big" style="color:${col.t}">${t.score}</div>
+      <div class="tc-tier">${t.tier}</div>
+    </div>
+  </div>
+  <p class="tc-desc">${t.desc}</p>
+</div>
+<div class="tc-gates">${Object.entries(t.gates).map(([n,p])=>`<span class="tc-gate ${p?'gate-pass':'gate-fail'}">${p?'✓':'✗'} ${n}</span>`).join('')}</div>
+<div class="tc-cats">${Object.entries(t.cats).map(([n,d])=>`<div class="tc-cat"><div class="tcc-top"><span class="tcc-name">${n}</span><span class="tcc-val">${d.s.toFixed(1)}/5 · ${d.p.toFixed(1)}pts</span></div><div class="tcc-track"><div class="tcc-fill" style="width:${(d.s/5*100).toFixed(0)}%;background:${cc(d.s)}"></div></div></div>`).join('')}</div>
+<div class="tc-actions">
+  <a class="tc-btn tc-btn-primary" href="eta-scorecard.html?tool=${t.id}" target="_blank"><svg viewBox="0 0 12 12" stroke-width="2"><path d="M6 1v10M1 6h10"/></svg>Add Your Review</a>
+  <a class="tc-btn tc-btn-secondary" href="eta-scorecard.html?tool=${t.id}&view=full" target="_blank"><svg viewBox="0 0 12 12" stroke-width="2"><rect x="1" y="1" width="10" height="10" rx="1"/><path d="M4 4h4M4 7h2"/></svg>Full Scorecard</a>
+</div>
+<button class="tc-expand-btn" onclick="tog('${t.id}')"><svg viewBox="0 0 12 12" stroke-width="2" stroke-linecap="round"><path d="M2 5l4 4 4-4"/></svg>Assessment Rationale</button>
+<div class="tc-detail">
+  <div class="td-sec"><div class="td-label">Strengths</div>${t.strengths.map(s=>`<span class="str-i">${s}</span>`).join('')}</div>
+  <div class="td-sec" style="margin-top:12px"><div class="td-label">Flags &amp; Concerns</div>${t.flags.map(f=>`<span class="flag-i">${f}</span>`).join('')}</div>
+  <div class="td-sec" style="margin-top:12px"><div class="td-label">Gate &amp; Category Rationale</div>${Object.entries(t.rationale).map(([k,v])=>`<div class="rat-item"><strong>${k}:</strong> ${v}</div>`).join('')}</div>
+</div>`;
+    g.appendChild(el);
+  });
+}
+function tog(id){document.getElementById('card-'+id).classList.toggle('open');}
+
+function buildTable(){
+  const tbl=document.getElementById('compare-table');
+  const head=document.createElement('thead');
+  const body=document.createElement('tbody');
+  body.className='ct-body';
+  head.innerHTML=`<tr class="cth-row"><td class="cth-first">Tool →</td>${TOOLS.map(t=>`<td class="cth-tool"><div class="cth-stripe" style="background:${t.color}"></div><div class="cth-logo">${LOGOS[t.id]}</div><div class="cth-name" style="color:${t.color}">${t.name}</div><div class="cth-type">${t.type.split('·')[0].trim()}</div></td>`).join('')}</tr>`;
+  tbl.appendChild(head);
+  body.innerHTML+=`<tr class="score-row"><td class="score-cell-first">ETA Score</td>${TOOLS.map(t=>{const c=sc(t.score);return`<td class="score-cell"><div class="score-num" style="color:${c.t}">${t.score}</div><div class="score-vp ${vc(t.verdict)}">${vl(t.verdict)}</div></td>`;}).join('')}</tr>`;
+  body.innerHTML+=`<tr class="sec-sep"><td colspan="${TOOLS.length+1}">Entry Gates — 40 pts · Binary Pass/Fail</td></tr>`;
+  Object.keys(TOOLS[0].gates).forEach(g=>{body.innerHTML+=`<tr><td class="row-lc"><div class="rl-n">${g}</div><div class="rl-s">10 pts</div></td>${TOOLS.map(t=>`<td class="gate-cell"><div class="gm ${t.gates[g]?'gm-pass':'gm-fail'}">${t.gates[g]?'✓':'✗'}</div></td>`).join('')}</tr>`;});
+  body.innerHTML+=`<tr class="sec-sep"><td colspan="${TOOLS.length+1}">Scored Categories — 60 pts · 0–5 per question</td></tr>`;
+  Object.keys(TOOLS[0].cats).forEach(c=>{body.innerHTML+=`<tr><td class="row-lc"><div class="rl-n">${c}</div><div class="rl-s">15 pts max</div></td>${TOOLS.map(t=>{const d=t.cats[c],p=rp(d.s);return`<td class="bar-cell"><div class="bc-track"><div class="bc-fill" style="width:${(d.s/5*100).toFixed(0)}%;background:${cc(d.s)}"></div></div><div class="bc-val">${d.s.toFixed(1)}/5</div><div style="text-align:center"><span class="rp ${p.c}">${p.l}</span></div></td>`;}).join('')}</tr>`;});
+  body.innerHTML+=`<tr class="sec-sep"><td colspan="${TOOLS.length+1}">Community Infrastructure Recommendation</td></tr>`;
+  const REC={signal:{l:'Best encrypted comms',c:'rp-5'},whatsapp:{l:'Not recommended',c:'rp-1'},hylo:{l:'Best for coordination',c:'rp-5'},proton:{l:'Best email & storage',c:'rp-5'},infomaniak:{l:'Best sovereign hosting',c:'rp-5'}};
+  body.innerHTML+=`<tr><td class="row-lc"><div class="rl-n">Recommendation</div></td>${TOOLS.map(t=>`<td class="rec-cell"><span class="rp ${REC[t.id].c}">${REC[t.id].l}</span></td>`).join('')}</tr>`;
+  tbl.appendChild(body);
+}
+buildCards();buildTable();
+setTimeout(()=>document.getElementById('card-signal')?.classList.add('open'),500);
+</script>
+</body>
+</html>
