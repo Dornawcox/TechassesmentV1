@@ -813,6 +813,7 @@ input[type=range]::-moz-range-thumb {
       <span class="type-pill current">🔩 Hardware</span>
       <a class="type-pill" href="#" onclick="switchMode('sw');return false;">💻 Software</a>
       <a class="type-pill" href="#" onclick="switchMode('ds');return false;">📊 Datasets</a>
+      <a class="type-pill" href="#" onclick="switchMode('sg');return false;">🌾 Seeds</a>
     </div>
   </div>
 
@@ -916,7 +917,7 @@ input[type=range]::-moz-range-thumb {
     </div>
   </div>
   <!-- Stack section -->
-  <div class="stack-section" id="hw-stack"></div>
+
 </div><!-- /page-hw -->
 
 <!-- ═══════════════════════════════════════════════════════
@@ -931,6 +932,7 @@ input[type=range]::-moz-range-thumb {
       <a class="type-pill" href="#" onclick="switchMode('hw');return false;">🔩 Hardware</a>
       <span class="type-pill current">💻 Software</span>
       <a class="type-pill" href="#" onclick="switchMode('ds');return false;">📊 Datasets</a>
+      <a class="type-pill" href="#" onclick="switchMode('sg');return false;">🌾 Seeds</a>
     </div>
   </div>
   <div class="step-rail" id="sw-step-rail">
@@ -1019,7 +1021,7 @@ input[type=range]::-moz-range-thumb {
       </div>
     </div>
   </div>
-  <div class="stack-section" id="sw-stack"></div>
+
 </div><!-- /page-sw -->
 
 <!-- ═══════════════════════════════════════════════════════
@@ -1034,6 +1036,7 @@ input[type=range]::-moz-range-thumb {
       <a class="type-pill" href="#" onclick="switchMode('hw');return false;">🔩 Hardware</a>
       <a class="type-pill" href="#" onclick="switchMode('sw');return false;">💻 Software</a>
       <span class="type-pill current">📊 Datasets</span>
+      <a class="type-pill" href="#" onclick="switchMode('sg');return false;">🌾 Seeds</a>
     </div>
   </div>
   <div class="step-rail" id="ds-step-rail">
@@ -1115,7 +1118,7 @@ input[type=range]::-moz-range-thumb {
       </div>
     </div>
   </div>
-  <div class="stack-section" id="ds-stack"></div>
+
 </div><!-- /page-ds -->
 
 <!-- ═══════════════════════════════════════════════════════
@@ -1133,6 +1136,7 @@ input[type=range]::-moz-range-thumb {
       <a class="type-pill" href="#" onclick="switchMode('hw');return false;">🔩 Hardware</a>
       <a class="type-pill" href="#" onclick="switchMode('sw');return false;">💻 Software</a>
       <a class="type-pill" href="#" onclick="switchMode('ds');return false;">📊 Datasets</a>
+      <a class="type-pill" href="#" onclick="switchMode('sg');return false;">🌾 Seeds</a>
       <span class="type-pill current" style="background:rgba(14,165,233,.3);border-color:rgba(255,255,255,.4)">🛡️ Guardian</span>
     </div>
   </div>
@@ -1274,7 +1278,7 @@ input[type=range]::-moz-range-thumb {
       </div>
     </div>
   </div>
-  <div class="stack-section" id="gc-stack"></div>
+
 </div><!-- /page-gc -->
 
 <!-- ═══════════════════════════════════════════════════════
@@ -1416,7 +1420,7 @@ input[type=range]::-moz-range-thumb {
       </div>
     </div>
   </div>
-  <div class="stack-section" id="sg-stack"></div>
+
 </div><!-- /page-sg -->
 
 </div><!-- /page-outer -->
@@ -2677,13 +2681,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initMode('sg', null, SG_PILLAR3, { 'sg-p3': q=>q.pillar==='P3' });
   initMode('sg', null, SG_PILLAR4, { 'sg-p4': q=>q.pillar==='P4' });
 
-  // Build collapsible stack sections on all three pages
-  buildStackSection('hw-stack');
-  buildStackSection('sw-stack');
-  buildStackSection('ds-stack');
-  buildStackSection('gc-stack');
-  buildStackSection('sg-stack');
-
   // Load demo data
   loadHWDemo();
   loadSWDemo();
@@ -2700,6 +2697,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const color = id.startsWith('sl_sw') ? 'var(--sw-dark)' : id.startsWith('sl_ds') ? 'var(--ds-dark)' : id.startsWith('sl_gc') ? '#0369a1' : id.startsWith('sl_sg') ? '#a67c2a' : 'var(--forest)';
     slider.style.background = `linear-gradient(to right, ${color} ${pct}%, var(--line) ${pct}%)`;
   });
+
+  // Check localStorage for mode preference (e.g., from index.html link)
+  const savedMode = localStorage.getItem('eta-mode');
+  if (savedMode && ['hw','sw','ds','gc','sg'].includes(savedMode)) {
+    switchMode(savedMode);
+    localStorage.removeItem('eta-mode');
+  }
 });
 </script>
 </body>
