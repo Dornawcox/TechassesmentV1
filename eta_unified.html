@@ -91,6 +91,8 @@ body {
 }
 .topbar.mode-sw { background: var(--sw-dark); border-bottom-color: #122840; }
 .topbar.mode-ds { background: var(--ds-dark); border-bottom-color: #3e1a08; }
+.topbar.mode-gc { background: #0c4a6e; border-bottom-color: #075985; }
+.topbar.mode-sg { background: #7c5c1c; border-bottom-color: #5c440f; }
 .topbar-inner {
   max-width: 1100px; margin: 0 auto;
   padding: 0 20px;
@@ -662,6 +664,94 @@ input[type=range]::-moz-range-thumb {
 ═══════════════════════════════════════════════════════════ */
 .mode-sw-active { --mode-dark: var(--sw-dark); --mode-md: var(--sw-md); --mode-lt: var(--sw-lt); --mode-bg: var(--sw-bg); --mode-rim: var(--sw-rim); }
 .mode-ds-active { --mode-dark: var(--ds-dark); --mode-md: var(--ds-md); --mode-lt: var(--ds-lt); --mode-bg: var(--ds-bg); --mode-rim: var(--ds-rim); }
+
+/* ═══════════════════════════════════════════════════════════
+   GUARDIAN CONNECTOR — IDSov Module Styles
+═══════════════════════════════════════════════════════════ */
+.gc-principle-note {
+  background: rgba(14, 165, 233, 0.08);
+  border-left: 3px solid #0ea5e9;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--dim);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  border-radius: 0 6px 6px 0;
+}
+.care-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid rgba(255,255,255,.2);
+  transition: all .2s;
+}
+.care-result-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.care-result-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  border-radius: 8px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+}
+.care-result-item.pass { background: #ecfdf5; border-color: #a7f3d0; }
+.care-result-item.partial { background: #fffbeb; border-color: #fde68a; }
+.care-result-item.gap { background: #fef2f2; border-color: #fecaca; }
+.care-letter {
+  font-family: 'DM Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+}
+.care-result-item.pass .care-letter { color: #059669; }
+.care-result-item.partial .care-letter { color: #d97706; }
+.care-result-item.gap .care-letter { color: #dc2626; }
+.care-name {
+  font-size: 9px;
+  color: var(--dim);
+  text-align: center;
+  margin-top: 4px;
+  line-height: 1.2;
+}
+.care-score {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+.care-result-item.pass .care-score { color: #059669; }
+.care-result-item.partial .care-score { color: #d97706; }
+.care-result-item.gap .care-score { color: #dc2626; }
+
+.ref-link {
+  display: inline-flex;
+  padding: 4px 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--cream);
+  color: var(--dim);
+  transition: all 0.15s;
+}
+.ref-link:hover {
+  border-color: var(--forest);
+  color: var(--forest);
+}
 </style>
 </head>
 <body>
@@ -697,6 +787,12 @@ input[type=range]::-moz-range-thumb {
       </a>
       <a id="nav-ds" onclick="switchMode('ds');return false;" href="#">
         <span class="nav-dot"></span>Datasets
+      </a>
+      <a id="nav-gc" onclick="switchMode('gc');return false;" href="#">
+        <span class="nav-dot" style="background:#0ea5e9"></span>Guardian
+      </a>
+      <a id="nav-sg" onclick="switchMode('sg');return false;" href="#">
+        <span class="nav-dot" style="background:#c9a046"></span>Seeds
       </a>
       <a href="eta-comparison.html">Registry</a>
     </nav>
@@ -1022,6 +1118,307 @@ input[type=range]::-moz-range-thumb {
   <div class="stack-section" id="ds-stack"></div>
 </div><!-- /page-ds -->
 
+<!-- ═══════════════════════════════════════════════════════
+     GUARDIAN CONNECTOR PAGE
+     Custom ETA Module · Data Sovereignty Assessment
+     Criteria Attribution: Guardian Connector / Conservation Metrics
+     https://docs.guardianconnector.net/overview/design-principles/data-sovereignty/
+═══════════════════════════════════════════════════════ -->
+<div class="mode-page" id="page-gc">
+  <div class="hero" style="background:linear-gradient(135deg,#0c4a6e 0%,#0369a1 60%,#0ea5e9 100%)">
+    <div class="hero-kicker">ETA Framework v1.1 · Custom Module · Guardian Connector Data Sovereignty Criteria</div>
+    <h1>Indigenous Data Sovereignty Assessment<br><em>Guardian Connector × ETA</em></h1>
+    <div class="hero-desc">20 questions across 4 pillars aligned with CARE Principles and UN Indigenous Data Rights. Evaluates tools for community-controlled conservation data infrastructure.</div>
+    <div class="hero-type-pills">
+      <a class="type-pill" href="#" onclick="switchMode('hw');return false;">🔩 Hardware</a>
+      <a class="type-pill" href="#" onclick="switchMode('sw');return false;">💻 Software</a>
+      <a class="type-pill" href="#" onclick="switchMode('ds');return false;">📊 Datasets</a>
+      <span class="type-pill current" style="background:rgba(14,165,233,.3);border-color:rgba(255,255,255,.4)">🛡️ Guardian</span>
+    </div>
+  </div>
+
+  <!-- Attribution Banner -->
+  <div style="background:#0c4a6e;padding:12px 20px;margin-bottom:24px;border-radius:8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.5" style="width:20px;height:20px;flex-shrink:0"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+    <div style="flex:1;min-width:200px">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.1em;text-transform:uppercase">Criteria Attribution</div>
+      <div style="font-size:13px;color:#fff">Guardian Connector · Conservation Metrics · <a href="https://docs.guardianconnector.net/overview/design-principles/data-sovereignty/" style="color:#7dd3fc" target="_blank">Data Sovereignty Pillars v1.0</a></div>
+    </div>
+    <div style="font-size:11px;color:rgba(255,255,255,.6);text-align:right">
+      <div>Aligned with CARE Principles</div>
+      <div>& UN Expert Mechanism on Indigenous Data Rights</div>
+    </div>
+  </div>
+
+  <!-- Step rail -->
+  <div class="step-rail" id="gc-step-rail">
+    <div class="step-item active" data-step="0" onclick="goStep('gc',0)">
+      <div class="step-num">1</div><div class="step-label">Tool Info</div><div class="step-sub">Name & context</div>
+    </div>
+    <div class="step-item" data-step="1" onclick="goStep('gc',1)">
+      <div class="step-num">2</div><div class="step-label">Infrastructure</div><div class="step-sub">Control & Exit</div>
+    </div>
+    <div class="step-item" data-step="2" onclick="goStep('gc',2)">
+      <div class="step-num">3</div><div class="step-label">Security</div><div class="step-sub">Resilience</div>
+    </div>
+    <div class="step-item" data-step="3" onclick="goStep('gc',3)">
+      <div class="step-num">4</div><div class="step-label">Governance</div><div class="step-sub">Rights & CARE</div>
+    </div>
+    <div class="step-item" data-step="4" onclick="goStep('gc',4)">
+      <div class="step-num">5</div><div class="step-label">Usability</div><div class="step-sub">Capacity</div>
+    </div>
+    <div class="step-item" data-step="5" onclick="goStep('gc',5)">
+      <div class="step-num">6</div><div class="step-label">Result</div><div class="step-sub">Sovereignty Card</div>
+    </div>
+  </div>
+  <div class="progress-bar-outer"><div class="progress-bar-fill" id="gc-progress" style="background:linear-gradient(90deg,#0ea5e9,#06b6d4)"></div></div>
+
+  <div class="main-grid">
+    <div id="gc-form-area">
+      <!-- Step 0: Tool Info -->
+      <div class="form-panel" id="gc-step0">
+        <div class="form-panel-head"><div class="form-panel-title">About the Tool</div><div class="form-panel-meta">Step 1 of 6</div></div>
+        <div class="section-block">
+          <div class="section-kicker">Basic Information</div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">Tool Name</label><input class="field-input" id="gc-name" type="text" placeholder="e.g. CoMapeo, KoboToolbox, Mapeo" oninput="updateLive('gc')"></div>
+            <div class="field-group"><label class="field-label">Tool Type</label><select class="field-select" id="gc-type" onchange="updateLive('gc')"><option value="">Select…</option><option>Data collection</option><option>Mapping / GIS</option><option>Database / Storage</option><option>Analysis / Visualization</option><option>Communication</option><option>Full stack / Platform</option><option>Other</option></select></div>
+          </div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">Assessor / Organization</label><input class="field-input" id="gc-steward" type="text" placeholder="Your name or organization" oninput="updateLive('gc')"></div>
+            <div class="field-group"><label class="field-label">Community Context</label><input class="field-input" id="gc-community" type="text" placeholder="e.g. Territorial monitoring, biodiversity"></div>
+          </div>
+          <div class="field-row single"><div class="field-group"><label class="field-label">Short Description</label><textarea class="field-textarea" id="gc-desc" placeholder="What this tool does and how it relates to community data sovereignty…" oninput="updateLive('gc')"></textarea></div></div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">License</label><select class="field-select" id="gc-license"><option value="">Select…</option><option>AGPL</option><option>GPL</option><option>Apache 2.0</option><option>MIT</option><option>CC BY</option><option>CC BY-SA</option><option>Proprietary</option><option>Not stated</option></select></div>
+            <div class="field-group"><label class="field-label">Assessor Role</label><select class="field-select" id="gc-role" onchange="updateLive('gc')"><option value="steward">Community assessor (self)</option><option value="peer">Partner organization review</option><option value="auditor">Independent IDSov auditor</option></select><span class="field-hint">Sets confidence tier</span></div>
+          </div>
+        </div>
+        <div class="action-row"><button class="btn btn-primary" onclick="goStep('gc',1)" style="background:#0369a1"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h8M8 4l3 3-3 3"/></svg>Continue to Infrastructure Control</button></div>
+      </div>
+
+      <!-- Step 1: Infrastructure Control -->
+      <div class="form-panel" id="gc-step1" style="display:none">
+        <div class="form-panel-head"><div class="form-panel-title">Pillar 1: Infrastructure Control</div><div class="form-panel-meta">25 points · 5 questions</div></div>
+        <div class="section-block">
+          <div class="section-kicker">Hosting & Ownership <span class="kicker-badge" style="background:#0369a1">GC Pillar 1</span></div>
+          <div class="gc-principle-note">Community organizations choose servers (local, regional, or cloud) and retain control. Platform designed to remain functional beyond funding cycles.</div>
+          <div id="gc-p1"></div>
+        </div>
+        <div class="action-row"><button class="btn btn-secondary" onclick="goStep('gc',0)">← Back</button><button class="btn btn-primary" onclick="goStep('gc',2)" style="background:#0369a1">Continue →</button></div>
+      </div>
+
+      <!-- Step 2: Security & Resilience -->
+      <div class="form-panel" id="gc-step2" style="display:none">
+        <div class="form-panel-head"><div class="form-panel-title">Pillar 2: Security & Resilience</div><div class="form-panel-meta">20 points · 4 questions</div></div>
+        <div class="section-block">
+          <div class="section-kicker">Protection & Continuity <span class="kicker-badge" style="background:#0369a1">GC Pillar 2</span></div>
+          <div class="gc-principle-note">Database protection, cybersecurity resilience, community-controlled backups, and auditability of data provenance and access.</div>
+          <div id="gc-p2"></div>
+        </div>
+        <div class="action-row"><button class="btn btn-secondary" onclick="goStep('gc',1)">← Back</button><button class="btn btn-primary" onclick="goStep('gc',3)" style="background:#0369a1">Continue →</button></div>
+      </div>
+
+      <!-- Step 3: Governance & Rights -->
+      <div class="form-panel" id="gc-step3" style="display:none">
+        <div class="form-panel-head"><div class="form-panel-title">Pillar 3: Governance & Rights</div><div class="form-panel-meta">25 points · 5 questions</div></div>
+        <div class="section-block">
+          <div class="section-kicker">Data Sovereignty & CARE Alignment <span class="kicker-badge" style="background:#0369a1">GC Pillar 3</span></div>
+          <div class="gc-principle-note">Private by default, shareable by choice. Role-based permissions aligned with community rules. Transparent pipelines and legal/ethical guardrails.</div>
+          <div id="gc-p3"></div>
+        </div>
+        <div class="action-row"><button class="btn btn-secondary" onclick="goStep('gc',2)">← Back</button><button class="btn btn-primary" onclick="goStep('gc',4)" style="background:#0369a1">Continue →</button></div>
+      </div>
+
+      <!-- Step 4: Usability & Capacity -->
+      <div class="form-panel" id="gc-step4" style="display:none">
+        <div class="form-panel-head"><div class="form-panel-title">Pillar 4: Usability & Capacity</div><div class="form-panel-meta">30 points · 6 questions</div></div>
+        <div class="section-block">
+          <div class="section-kicker">Accessibility & Community Empowerment <span class="kicker-badge" style="background:#0369a1">GC Pillar 4</span></div>
+          <div class="gc-principle-note">Interoperability with existing tools, accessible interfaces, localization support, and capacity building resources for sustainable community management.</div>
+          <div id="gc-p4"></div>
+        </div>
+        <div class="action-row"><button class="btn btn-secondary" onclick="goStep('gc',3)">← Back</button><button class="btn btn-primary" onclick="generateResult('gc')" style="background:#0369a1"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 1v6M7 7l-3 3M7 7l3 3"/><path d="M2 11h10"/></svg>Generate Sovereignty Card</button></div>
+      </div>
+
+      <!-- Step 5: Result -->
+      <div id="gc-step5" style="display:none"><div id="gc-result"></div></div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="score-card" style="background:linear-gradient(180deg,#0c4a6e 0%,#0369a1 100%)">
+      <div class="score-card-head">
+        <div class="score-card-kicker">Live Score · Guardian Connector IDSov</div>
+        <div class="score-display">
+          <div><div class="score-big-num" id="gc-big">—</div><div class="score-meta-row"><span class="conf-badge provisional" id="gc-conf">Community · 1/3</span></div></div>
+          <div class="score-ring-wrap"><svg viewBox="0 0 76 76"><circle cx="38" cy="38" r="30" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="6"/><circle id="gc-ring" cx="38" cy="38" r="30" fill="none" stroke="rgba(255,255,255,.88)" stroke-width="6" stroke-dasharray="0 188" stroke-dashoffset="47" transform="rotate(-90 38 38)" stroke-linecap="round"/></svg><div class="score-ring-label" id="gc-ring-label">0</div></div>
+        </div>
+      </div>
+      <div class="score-card-body">
+        <div class="sbar-label">Pillar Scores</div>
+        <div class="dim-bar-group" id="gc-pillars">
+          <div class="dim-bar"><div class="dim-bar-label">P1 · Infrastructure</div><div class="dim-bar-track"><div class="dim-bar-fill" id="gc-bar-p1" style="width:0;background:#0ea5e9"></div></div><div class="dim-bar-val" id="gc-val-p1">0</div></div>
+          <div class="dim-bar"><div class="dim-bar-label">P2 · Security</div><div class="dim-bar-track"><div class="dim-bar-fill" id="gc-bar-p2" style="width:0;background:#0ea5e9"></div></div><div class="dim-bar-val" id="gc-val-p2">0</div></div>
+          <div class="dim-bar"><div class="dim-bar-label">P3 · Governance</div><div class="dim-bar-track"><div class="dim-bar-fill" id="gc-bar-p3" style="width:0;background:#0ea5e9"></div></div><div class="dim-bar-val" id="gc-val-p3">0</div></div>
+          <div class="dim-bar"><div class="dim-bar-label">P4 · Usability</div><div class="dim-bar-track"><div class="dim-bar-fill" id="gc-bar-p4" style="width:0;background:#0ea5e9"></div></div><div class="dim-bar-val" id="gc-val-p4">0</div></div>
+        </div>
+        <div class="sbar-label" style="margin-top:16px">CARE Alignment</div>
+        <div class="care-badges" id="gc-care" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+          <span class="care-badge" id="gc-care-c" title="Collective Benefit" style="opacity:0.3">C</span>
+          <span class="care-badge" id="gc-care-a" title="Authority to Control" style="opacity:0.3">A</span>
+          <span class="care-badge" id="gc-care-r" title="Responsibility" style="opacity:0.3">R</span>
+          <span class="care-badge" id="gc-care-e" title="Ethics" style="opacity:0.3">E</span>
+        </div>
+        <div class="sbar-label">Flags</div>
+        <div class="flags-area" id="gc-flags"><div class="flag-item info"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="4.5"/><path d="M6 4v3"/></svg>Complete assessment to generate flags</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="stack-section" id="gc-stack"></div>
+</div><!-- /page-gc -->
+
+<!-- ═══════════════════════════════════════════════════════
+     SEEDS / GERMPLASM PAGE
+═══════════════════════════════════════════════════════ -->
+<div class="mode-page" id="page-sg">
+  <div class="hero" style="background:linear-gradient(135deg,#7c5c1c 0%,#a67c2a 60%,#c9a046 100%)">
+    <div class="hero-kicker">Seeds & Germplasm · Wheat Workers' Code · CARE Principles</div>
+    <h1>Seeds & Germplasm Assessment<br><em>Ethical Seed Sharing</em></h1>
+    <div class="hero-desc">20 questions across 4 pillars: Originator Rights, Distribution Controls, Benefit Sharing, and Special Use Conditions. Based on the Wheat Workers' Code of Ethics (1994) and CARE Principles.</div>
+    <div class="hero-type-pills">
+      <a class="type-pill" href="#" onclick="switchMode('hw');return false;">🔩 Hardware</a>
+      <a class="type-pill" href="#" onclick="switchMode('sw');return false;">💻 Software</a>
+      <a class="type-pill" href="#" onclick="switchMode('ds');return false;">📊 Datasets</a>
+      <span class="type-pill current">🌾 Seeds</span>
+    </div>
+  </div>
+
+  <!-- Step rail -->
+  <div class="step-rail" id="sg-step-rail">
+    <div class="step-item active" data-step="0" onclick="goStep('sg',0)">
+      <div class="step-num">1</div><div class="step-label">Material Info</div><div class="step-sub">Name &amp; context</div>
+    </div>
+    <div class="step-item" data-step="1" onclick="goStep('sg',1)">
+      <div class="step-num">2</div><div class="step-label">P1: Rights</div><div class="step-sub">Originator</div>
+    </div>
+    <div class="step-item" data-step="2" onclick="goStep('sg',2)">
+      <div class="step-num">3</div><div class="step-label">P2: Distribution</div><div class="step-sub">Controls</div>
+    </div>
+    <div class="step-item" data-step="3" onclick="goStep('sg',3)">
+      <div class="step-num">4</div><div class="step-label">P3: Benefit</div><div class="step-sub">Sharing</div>
+    </div>
+    <div class="step-item" data-step="4" onclick="goStep('sg',4)">
+      <div class="step-num">5</div><div class="step-label">P4: Special Use</div><div class="step-sub">Conditions</div>
+    </div>
+    <div class="step-item" data-step="5" onclick="goStep('sg',5)">
+      <div class="step-num">6</div><div class="step-label">Result</div><div class="step-sub">Final card</div>
+    </div>
+  </div>
+  <div class="progress-bar-outer"><div class="progress-bar-fill" id="sg-progress" style="background:linear-gradient(90deg,#a67c2a,#c9a046)"></div></div>
+
+  <div class="main-grid">
+    <div id="sg-form-area">
+      <!-- Step 0: Material Info -->
+      <div class="form-panel" id="sg-step0">
+        <div class="form-panel-head"><div class="form-panel-title">About the Germplasm</div><div class="form-panel-meta">Step 1 of 6</div></div>
+        <div class="section-block">
+          <div class="section-kicker">Basic Information</div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">Material Name / Accession</label><input class="field-input" id="sg-name" type="text" placeholder="e.g. Kernza IWG-3902, MN Hard Red" oninput="updateLive('sg')"></div>
+            <div class="field-group"><label class="field-label">Material Type</label><select class="field-select" id="sg-type" onchange="updateLive('sg')"><option value="">Select…</option><option>Unreleased / Experimental</option><option>Released Cultivar</option><option>Landrace / Traditional</option><option>Wild Relative</option><option>Genetic Stock</option><option>Breeding Line</option></select></div>
+          </div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">Originator / Institution</label><input class="field-input" id="sg-originator" type="text" placeholder="Institution or breeder name" oninput="updateLive('sg')"></div>
+            <div class="field-group"><label class="field-label">Crop / Species</label><input class="field-input" id="sg-crop" type="text" placeholder="e.g. Wheat, Intermediate Wheatgrass"></div>
+          </div>
+          <div class="field-row single"><div class="field-group"><label class="field-label">Short Description</label><textarea class="field-textarea" id="sg-desc" placeholder="Characteristics, intended use, provenance…" oninput="updateLive('sg')"></textarea></div></div>
+          <div class="field-row">
+            <div class="field-group"><label class="field-label">Current Agreement Type</label><select class="field-select" id="sg-agreement"><option value="">Select…</option><option>OSSI Pledge</option><option>Standard MTA</option><option>ITPGRFA SMTA</option><option>PVP</option><option>Institutional MOU</option><option>No formal agreement</option><option>Custom / Other</option></select></div>
+            <div class="field-group"><label class="field-label">Assessor Role</label><select class="field-select" id="sg-role" onchange="updateLive('sg')"><option value="steward">Originator (self-assessment)</option><option value="peer">Peer breeder review</option><option value="auditor">External review</option></select><span class="field-hint">Sets confidence tier</span></div>
+          </div>
+        </div>
+        <div class="action-row"><button class="btn btn-primary" onclick="goStep('sg',1)" style="background:#a67c2a"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7h8M8 4l3 3-3 3"/></svg>Continue to Originator Rights</button></div>
+      </div>
+
+      <!-- Step 1: Pillar 1 - Originator Rights -->
+      <div class="form-panel" id="sg-step1" style="display:none">
+        <div class="form-panel-head"><div class="form-panel-title">Pillar 1: Originator Rights & Transparency</div><div class="form-panel-meta">20 points · 4 questions</div></div>
+        <div class="section-block">
+          <div class="section-kicker">Rights & Documentation <span class="kicker-badge" style="background:#a67c2a">WWC §1</span></div>
+          <div class="gc-principle-note" style="background:rgba(166,124,42,0.08);border-left-color:#a67c2a">"The originating breeder, institution, or company retains certain rights to any breeding material they have developed and/or released." — Wheat Workers' Code §1</div>
+          <div id="sg-p1"></div>
+        </div>
+        <div class="action-row"><button class="btn btn-secondary" onclick="goStep('sg',0)">← Back</button><button class="btn btn-primary" onclick="goStep('sg',2)" style="background:#a67c2a">Continue →</button></div>
+      </div>
+
+      <!-- Step 2: Pillar 2 - Distribution Controls -->
+      <div class="form-panel" id="sg-step2" style="display:none">
+        <div class="form-panel-head"><div class="form-panel-title">Pillar 2: Distribution Controls</div><div class="form-panel-meta">20 points · 4 questions</div></div>
+        <div class="section-block">
+          <div class="section-kicker">Secondary Distribution & Uses <span class="kicker-badge" style="background:#a67c2a">WWC §2-3</span></div>
+          <div class="gc-principle-note" style="background:rgba(166,124,42,0.08);border-left-color:#a67c2a">"It is the recipient's responsibility to see that any unreleased material received is not distributed to others without the originator's permission." — Wheat Workers' Code §2</div>
+          <div id="sg-p2"></div>
+        </div>
+        <div class="action-row"><button class="btn btn-secondary" onclick="goStep('sg',1)">← Back</button><button class="btn btn-primary" onclick="goStep('sg',3)" style="background:#a67c2a">Continue →</button></div>
+      </div>
+
+      <!-- Step 3: Pillar 3 - Benefit Sharing -->
+      <div class="form-panel" id="sg-step3" style="display:none">
+        <div class="form-panel-head"><div class="form-panel-title">Pillar 3: Benefit Sharing & Equity</div><div class="form-panel-meta">25 points · 5 questions</div></div>
+        <div class="section-block">
+          <div class="section-kicker">CARE: Collective Benefit <span class="kicker-badge" style="background:#a67c2a">CARE · WWC</span></div>
+          <div class="gc-principle-note" style="background:rgba(166,124,42,0.08);border-left-color:#a67c2a">Data ecosystems shall be designed and function in ways that enable Indigenous Peoples to derive benefit from the data. — CARE Principles (Collective Benefit)</div>
+          <div id="sg-p3"></div>
+        </div>
+        <div class="action-row"><button class="btn btn-secondary" onclick="goStep('sg',2)">← Back</button><button class="btn btn-primary" onclick="goStep('sg',4)" style="background:#a67c2a">Continue →</button></div>
+      </div>
+
+      <!-- Step 4: Pillar 4 - Special Use Conditions -->
+      <div class="form-panel" id="sg-step4" style="display:none">
+        <div class="form-panel-head"><div class="form-panel-title">Pillar 4: Special Use Conditions</div><div class="form-panel-meta">35 points · 7 questions</div></div>
+        <div class="section-block">
+          <div class="section-kicker">Restricted Uses <span class="kicker-badge" style="background:#a67c2a">WWC §3-4</span></div>
+          <div class="gc-principle-note" style="background:rgba(166,124,42,0.08);border-left-color:#a67c2a">"Certain uses of unreleased materials are restricted and require written approval, including: regional trials, cultivar release, backcrossing, gene transfer." — Wheat Workers' Code §3</div>
+          <div id="sg-p4"></div>
+        </div>
+        <div class="action-row"><button class="btn btn-secondary" onclick="goStep('sg',3)">← Back</button><button class="btn btn-primary" onclick="generateResult('sg')" style="background:#a67c2a"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 1v6M7 7l-3 3M7 7l3 3"/><path d="M2 11h10"/></svg>Generate Assessment Card</button></div>
+      </div>
+
+      <!-- Step 5: Result -->
+      <div id="sg-step5" style="display:none"><div id="sg-result"></div></div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="score-card" style="background:linear-gradient(135deg,#7c5c1c,#a67c2a)">
+      <div class="score-card-head">
+        <div class="score-card-kicker">Live Score · Seeds/Germplasm ETA</div>
+        <div class="score-display">
+          <div><div class="score-big-num" id="sg-big">—</div><div class="score-meta-row"><span class="conf-badge provisional" id="sg-conf">Self-assessed · 1/3</span></div></div>
+          <div class="score-ring-wrap"><svg viewBox="0 0 76 76"><circle cx="38" cy="38" r="30" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="6"/><circle id="sg-ring" cx="38" cy="38" r="30" fill="none" stroke="rgba(255,255,255,.88)" stroke-width="6" stroke-dasharray="0 188" stroke-dashoffset="47" transform="rotate(-90 38 38)" stroke-linecap="round"/></svg><div class="score-ring-label" id="sg-ring-label">0</div></div>
+        </div>
+      </div>
+      <div class="score-card-body">
+        <div class="score-bar-section"><div class="sbar-label">Pillars</div>
+          <div class="dim-bar"><div class="dim-bar-label">P1 · Rights/Transparency</div><div class="dim-bar-track"><div class="dim-bar-fill" id="sg-bar-p1" style="width:0;background:#c9a046"></div></div><div class="dim-bar-val" id="sg-val-p1">0</div></div>
+          <div class="dim-bar"><div class="dim-bar-label">P2 · Distribution</div><div class="dim-bar-track"><div class="dim-bar-fill" id="sg-bar-p2" style="width:0;background:#c9a046"></div></div><div class="dim-bar-val" id="sg-val-p2">0</div></div>
+          <div class="dim-bar"><div class="dim-bar-label">P3 · Benefit Sharing</div><div class="dim-bar-track"><div class="dim-bar-fill" id="sg-bar-p3" style="width:0;background:#c9a046"></div></div><div class="dim-bar-val" id="sg-val-p3">0</div></div>
+          <div class="dim-bar"><div class="dim-bar-label">P4 · Special Use</div><div class="dim-bar-track"><div class="dim-bar-fill" id="sg-bar-p4" style="width:0;background:#c9a046"></div></div><div class="dim-bar-val" id="sg-val-p4">0</div></div>
+        </div>
+        <div class="sbar-label" style="margin-top:16px">CARE Alignment</div>
+        <div class="care-badges" id="sg-care" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+          <span class="care-badge" id="sg-care-c" title="Collective Benefit" style="opacity:0.3;background:#a67c2a">C</span>
+          <span class="care-badge" id="sg-care-a" title="Authority to Control" style="opacity:0.3;background:#a67c2a">A</span>
+          <span class="care-badge" id="sg-care-r" title="Responsibility" style="opacity:0.3;background:#a67c2a">R</span>
+          <span class="care-badge" id="sg-care-e" title="Ethics" style="opacity:0.3;background:#a67c2a">E</span>
+        </div>
+        <div class="sbar-label">Flags</div>
+        <div class="flags-area" id="sg-flags"><div class="flag-item info"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="4.5"/><path d="M6 4v3"/></svg>Complete assessment to generate flags</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="stack-section" id="sg-stack"></div>
+</div><!-- /page-sg -->
+
 </div><!-- /page-outer -->
 
 <script>
@@ -1093,12 +1490,129 @@ const DS_SCORED = [
 ];
 
 // ═══════════════════════════════════════════════════════════════
+// GUARDIAN CONNECTOR — INDIGENOUS DATA SOVEREIGNTY QUESTIONS
+// Criteria Attribution: Conservation Metrics / Guardian Connector
+// https://docs.guardianconnector.net/overview/design-principles/data-sovereignty/
+// ═══════════════════════════════════════════════════════════════
+
+const GC_PILLAR1 = [ // Infrastructure Control - 25pts
+  { id:'gcp1q1', pillar:'P1', num:'P1.1', q:'Can community organizations choose and control their own infrastructure — local servers, regional cloud, or global cloud — without vendor restriction?', 
+    guidance:'Score 5: full self-hosting supported with documentation; community owns server decision.\nScore 3: limited self-hosting options; some vendor dependency.\nScore 1: vendor-controlled infrastructure only; no self-hosting.', care:'A' },
+  { id:'gcp1q2', pillar:'P1', num:'P1.2', q:'Is all core software non-proprietary and open source, preventing vendor lock-in and enabling transparency?', 
+    guidance:'Score 5: AGPL/GPL/Apache licensed; full source available; forkable.\nScore 3: open core with some proprietary components.\nScore 1: proprietary codebase; source not available.', care:'A' },
+  { id:'gcp1q3', pillar:'P1', num:'P1.3', q:'Does the tool use file-first, open formats (CSV, JSON, GeoJSON, GPX, KML) ensuring data remains portable and usable outside the platform?', 
+    guidance:'Score 5: all data in open formats; schema documented; export anytime.\nScore 3: some open formats; some proprietary.\nScore 1: proprietary formats; data locked to platform.', care:'A' },
+  { id:'gcp1q4', pillar:'P1', num:'P1.4', q:'Is the platform designed as a durable digital good — functional and relevant beyond funding cycles as projects and tools come and go?', 
+    guidance:'Score 5: documented sustainability plan; modular architecture; active community.\nScore 3: reasonable longevity but funding-dependent.\nScore 1: appears tied to single project/grant cycle.', care:'C' },
+  { id:'gcp1q5', pillar:'P1', num:'P1.5', q:'Does the community have full right of exit — ability to remove, download, and migrate all data at any time with minimal friction?', 
+    guidance:'Score 5: one-click full export; documented migration path; no exit penalties.\nScore 3: export available but requires technical skill.\nScore 1: data locked; migration difficult or impossible.', care:'A' },
+];
+
+const GC_PILLAR2 = [ // Security & Resilience - 20pts
+  { id:'gcp2q1', pillar:'P2', num:'P2.1', q:'Is the database protected with encryption at rest and in transit, integrity checks, and controlled access appropriate to sensitive community data?', 
+    guidance:'Score 5: end-to-end encryption; access logs; integrity verification.\nScore 3: standard encryption; basic access control.\nScore 1: unencrypted storage; weak access controls.', care:'E' },
+  { id:'gcp2q2', pillar:'P2', num:'P2.2', q:'Does the tool have cybersecurity resilience — vulnerability scanning, patching, automated upgrades, and response protocols?', 
+    guidance:'Score 5: documented security program; regular audits; responsible disclosure.\nScore 3: periodic updates; no formal security program.\nScore 1: no documented security practices.', care:'E' },
+  { id:'gcp2q3', pillar:'P2', num:'P2.3', q:'Are community-controlled backups available to prevent loss or external deletion, with redundancy that the community owns?', 
+    guidance:'Score 5: community-controlled backup location; documented recovery.\nScore 3: vendor backups with community access.\nScore 1: no backup control; vendor-only.', care:'A' },
+  { id:'gcp2q4', pillar:'P2', num:'P2.4', q:'Is there auditability — ability to trace data provenance, transformations, and access history?', 
+    guidance:'Score 5: full audit trail; access logs available to community.\nScore 3: partial logging; some traceability.\nScore 1: no audit capability.', care:'R' },
+];
+
+const GC_PILLAR3 = [ // Governance & Rights - 25pts
+  { id:'gcp3q1', pillar:'P3', num:'P3.1', q:'Is data private by default, shareable by choice — with communities deciding if, when, and how to share datasets publicly on their own terms?', 
+    guidance:'Score 5: private default; granular sharing controls; community-defined terms.\nScore 3: private default but limited sharing options.\nScore 1: public default or vendor-controlled sharing.', care:'A' },
+  { id:'gcp3q2', pillar:'P3', num:'P3.2', q:'Does the tool support role-based permissions aligned with community or organizational governance rules and roles?', 
+    guidance:'Score 5: customizable roles matching community structure; inheritance rules.\nScore 3: preset roles with some customization.\nScore 1: single permission level; no role differentiation.', care:'A' },
+  { id:'gcp3q3', pillar:'P3', num:'P3.3', q:'Are all data pipelines transparent — ETL and processing code free and open source so communities can audit, understand, and adapt workflows?', 
+    guidance:'Score 5: all pipeline code open; documented; auditable.\nScore 3: partially open; some black-box processing.\nScore 1: proprietary pipelines; no visibility.', care:'R' },
+  { id:'gcp3q4', pillar:'P3', num:'P3.4', q:'Are legal/ethical guardrails provided — data protocols and third-party usage agreement templates to protect against extractive or unauthorized use?', 
+    guidance:'Score 5: templates provided; legal guidance; FPIC support.\nScore 3: basic terms of use; no community-specific templates.\nScore 1: no protective documentation.', care:'E' },
+  { id:'gcp3q5', pillar:'P3', num:'P3.5', q:'Does the tool explicitly align with CARE Principles (Collective Benefit, Authority to Control, Responsibility, Ethics) or equivalent Indigenous data governance frameworks?', 
+    guidance:'Score 5: explicit CARE alignment documented; implementation guidance.\nScore 3: implicit alignment; values overlap.\nScore 1: no Indigenous data governance consideration.', care:'C' },
+];
+
+const GC_PILLAR4 = [ // Usability & Capacity - 30pts
+  { id:'gcp4q1', pillar:'P4', num:'P4.1', q:'Is the tool interoperable — connecting with tools communities already use, and designed so new tools can integrate easily?', 
+    guidance:'Score 5: documented APIs; standard formats; integration guides.\nScore 3: some integrations; limited documentation.\nScore 1: isolated system; no interoperability.', care:'C' },
+  { id:'gcp4q2', pillar:'P4', num:'P4.2', q:'Are interfaces and workflows designed around specific user personas within communities, matching real roles and capacities?', 
+    guidance:'Score 5: persona-based design; role-appropriate interfaces.\nScore 3: general usability; not role-specific.\nScore 1: one-size-fits-all; technical interface only.', care:'C' },
+  { id:'gcp4q3', pillar:'P4', num:'P4.3', q:'Is data organized with clear structures, metadata, and search so users can find and understand datasets without technical support?', 
+    guidance:'Score 5: cataloged; searchable; rich metadata.\nScore 3: organized but requires some expertise.\nScore 1: unorganized; requires technical knowledge.', care:'C' },
+  { id:'gcp4q4', pillar:'P4', num:'P4.4', q:'Does the tool support localization — local languages, classifications, and cultural categories appropriate to community contexts?', 
+    guidance:'Score 5: multi-language; customizable taxonomies; localization community.\nScore 3: some language support; English-primary.\nScore 1: English only; no localization path.', care:'C' },
+  { id:'gcp4q5', pillar:'P4', num:'P4.5', q:'Is there capacity building support — documentation, guides, and self-serve resources empowering communities to manage and analyze their own data sustainably?', 
+    guidance:'Score 5: comprehensive guides; video tutorials; community training program.\nScore 3: basic documentation; some training.\nScore 1: minimal documentation; requires external support.', care:'C' },
+  { id:'gcp4q6', pillar:'P4', num:'P4.6', q:'Does the tool work offline-first, with core workflows functional without internet connection for rural and remote use?', 
+    guidance:'Score 5: full offline capability; sync when connected.\nScore 3: partial offline; some features require connection.\nScore 1: requires constant internet connection.', care:'C' },
+];
+
+// ═══════════════════════════════════════════════════════════════
+// SEEDS/GERMPLASM — WHEAT WORKERS' CODE + CARE PRINCIPLES
+// Based on: Wheat Workers' Code of Ethics (1994), CARE Principles
+// ═══════════════════════════════════════════════════════════════
+
+const SG_PILLAR1 = [ // Originator Rights & Transparency - 20pts
+  { id:'sgp1q1', pillar:'P1', num:'P1.1', q:'Is the originator (breeder, institution, or company) clearly identified with complete contact information and documentation of their rights?', 
+    guidance:'Score 5: Full originator info, institutional affiliation, contact details, and rights statement publicly available.\nScore 3: Originator identified but incomplete documentation.\nScore 1: Originator unclear or undocumented.', care:'R', wwc:'§1' },
+  { id:'sgp1q2', pillar:'P1', num:'P1.2', q:'Is there a complete pedigree/provenance record documenting the material\'s origins, including any traditional knowledge or community sources?', 
+    guidance:'Score 5: Complete pedigree with all parent lines documented; traditional knowledge sources acknowledged with FPIC.\nScore 3: Basic pedigree available; some gaps in documentation.\nScore 1: No pedigree or provenance documentation.', care:'R', wwc:'§1' },
+  { id:'sgp1q3', pillar:'P1', num:'P1.3', q:'Are the terms of use clearly documented in plain language and publicly accessible before material is distributed?', 
+    guidance:'Score 5: Clear, plain-language terms publicly available; restrictions explicitly stated upfront.\nScore 3: Terms exist but require request or are in legal language.\nScore 1: No documented terms; unclear what is permitted.', care:'A', wwc:'§1' },
+  { id:'sgp1q4', pillar:'P1', num:'P1.4', q:'If the material incorporates traditional varieties or Indigenous knowledge, is this acknowledged with appropriate consent protocols?', 
+    guidance:'Score 5: Full acknowledgment with documented FPIC from source communities; benefit-sharing agreement in place.\nScore 3: Acknowledgment present but formal consent unclear.\nScore 1: No acknowledgment of traditional sources or consent not sought.', care:'E', wwc:'CARE' },
+];
+
+const SG_PILLAR2 = [ // Distribution Controls - 20pts (WWC §2-3)
+  { id:'sgp2q1', pillar:'P2', num:'P2.1', q:'Does the agreement clearly prohibit secondary distribution without written originator permission?', 
+    guidance:'Score 5: Explicit prohibition on redistribution; clear process for requesting permission documented.\nScore 3: Redistribution discouraged but not formally prohibited.\nScore 1: No mention of secondary distribution restrictions.', care:'A', wwc:'§2' },
+  { id:'sgp2q2', pillar:'P2', num:'P2.2', q:'Are permitted uses (testing, crosses) clearly distinguished from restricted uses (cultivar release, commercial multiplication)?', 
+    guidance:'Score 5: Clear list of permitted vs. restricted uses; no ambiguity about what requires approval.\nScore 3: Some uses specified but gaps in coverage.\nScore 1: No distinction between permitted and restricted uses.', care:'A', wwc:'§3' },
+  { id:'sgp2q3', pillar:'P2', num:'P2.3', q:'Is there a documented process for requesting approval for restricted uses, with reasonable response timeframes?', 
+    guidance:'Score 5: Clear approval process with contact info, expected timelines, and documented criteria.\nScore 3: Approval process exists but informal or slow.\nScore 1: No documented approval process; unclear how to request permission.', care:'A', wwc:'§3' },
+  { id:'sgp2q4', pillar:'P2', num:'P2.4', q:'Are seed increase/multiplication rules clearly stated, especially for trial materials?', 
+    guidance:'Score 5: Explicit rules about seed increase; trial materials clearly marked as not for multiplication.\nScore 3: Some guidance but not comprehensive.\nScore 1: No rules about seed increase documented.', care:'A', wwc:'§4' },
+];
+
+const SG_PILLAR3 = [ // Benefit Sharing & Equity - 25pts (CARE Collective Benefit)
+  { id:'sgp3q1', pillar:'P3', num:'P3.1', q:'If commercialization occurs, are there documented mechanisms for sharing benefits with source communities or contributing institutions?', 
+    guidance:'Score 5: Formal benefit-sharing agreement; royalty or contribution structure documented.\nScore 3: Informal benefit-sharing; good intentions but not formalized.\nScore 1: No benefit-sharing provisions.', care:'C', wwc:'CARE' },
+  { id:'sgp3q2', pillar:'P3', num:'P3.2', q:'Does the agreement ensure continued farmer access to the material, especially for subsistence or small-scale use?', 
+    guidance:'Score 5: Explicit farmer access provisions; no restrictions on personal/subsistence use.\nScore 3: Farmer access implied but not explicitly protected.\nScore 1: Restrictions that could limit farmer access.', care:'C', wwc:'CARE' },
+  { id:'sgp3q3', pillar:'P3', num:'P3.3', q:'Is the material accessible for research commons use (research exemption maintained)?', 
+    guidance:'Score 5: Research exemption explicitly preserved; breeding use permitted with acknowledgment.\nScore 3: Research use likely permitted but not explicitly stated.\nScore 1: Restrictions that could impede research use.', care:'C', wwc:'§3' },
+  { id:'sgp3q4', pillar:'P3', num:'P3.4', q:'How does the IP approach align with open-source/commons principles (OSSI Pledge, ITPGRFA, etc.)?', 
+    guidance:'Score 5: OSSI Pledge or equivalent open commitment; material \"freed\" from restrictive IP.\nScore 3: Standard MTA with reasonable terms; not explicitly open-source.\nScore 1: Restrictive IP (e.g., utility patent with no exemptions).', care:'C', wwc:'OSSI' },
+  { id:'sgp3q5', pillar:'P3', num:'P3.5', q:'Is there community representation or governance input in decisions about the material\'s future use?', 
+    guidance:'Score 5: Formal community governance role; advisory board with farmer/community representation.\nScore 3: Community input solicited informally.\nScore 1: No community voice in governance.', care:'A', wwc:'CARE' },
+];
+
+const SG_PILLAR4 = [ // Special Use Conditions - 35pts (WWC §3-4 detailed)
+  { id:'sgp4q1', pillar:'P4', num:'P4.1', q:'Does inclusion in regional/international nursery trials require written approval?', 
+    guidance:'Score 5: Explicit approval requirement for regional/international trials; process documented.\nScore 3: Approval expected but not formally required.\nScore 1: No mention of trial restrictions.', care:'A', wwc:'§3(a)' },
+  { id:'sgp4q2', pillar:'P4', num:'P4.2', q:'Is increase and release as a cultivar subject to originator approval and acknowledgment requirements?', 
+    guidance:'Score 5: Cultivar release requires written approval; co-authorship/acknowledgment requirements clear.\nScore 3: Approval expected for release; acknowledgment informal.\nScore 1: No cultivar release restrictions.', care:'A', wwc:'§3(b)' },
+  { id:'sgp4q3', pillar:'P4', num:'P4.3', q:'Are backcrossing restrictions (use as recurrent parent) clearly documented?', 
+    guidance:'Score 5: Backcrossing restrictions explicit; approval process for use as recurrent parent.\nScore 3: Some mention of backcross restrictions.\nScore 1: No backcross restrictions documented.', care:'A', wwc:'§3(e)' },
+  { id:'sgp4q4', pillar:'P4', num:'P4.4', q:'Are molecular/gene transfer technique restrictions documented (recipient parent use)?', 
+    guidance:'Score 5: Gene transfer/molecular technique restrictions explicit; approval required for transgenic use.\nScore 3: Some mention of molecular technique restrictions.\nScore 1: No molecular technique restrictions.', care:'A', wwc:'§3(h)' },
+  { id:'sgp4q5', pillar:'P4', num:'P4.5', q:'Are mutation breeding and somaclonal variant selection restrictions specified?', 
+    guidance:'Score 5: Mutation/somaclonal restrictions explicit; approval process documented.\nScore 3: Some mention of these restrictions.\nScore 1: No mutation breeding restrictions.', care:'A', wwc:'§3(f,g)' },
+  { id:'sgp4q6', pillar:'P4', num:'P4.6', q:'Are associated data rights (phenotypic, genomic, passport data) clearly addressed?', 
+    guidance:'Score 5: Data rights explicitly addressed; community control over associated data maintained.\nScore 3: Data mentioned but rights unclear.\nScore 1: No mention of data rights.', care:'A', wwc:'CARE' },
+  { id:'sgp4q7', pillar:'P4', num:'P4.7', q:'Is there a documented dispute resolution process if conflicts arise?', 
+    guidance:'Score 5: Formal dispute resolution; mediation process documented.\nScore 3: Informal dispute handling; contact person identified.\nScore 1: No dispute resolution process.', care:'E', wwc:'CARE' },
+];
+
+// ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
 const S = {
   hw: { gates:{}, scored:{}, evidence:{}, step:0 },
   sw: { gates:{}, scored:{}, evidence:{}, step:0 },
   ds: { scored:{}, evidence:{}, step:0 },
+  gc: { scored:{}, evidence:{}, step:0 },
+  sg: { scored:{}, evidence:{}, step:0 },
 };
 
 // ═══════════════════════════════════════════════════════════════
@@ -1219,10 +1733,11 @@ function toggleEvidence(btn) {
 }
 
 function goStep(mode, n) {
-  [0,1,2,3,4].forEach(i => {
+  const maxSteps = mode === 'gc' ? 6 : 5;
+  for (let i = 0; i < maxSteps; i++) {
     const p = document.getElementById(`${mode}-step${i}`);
     if (p) p.style.display = i===n ? '' : 'none';
-  });
+  }
   const rail = document.getElementById(`${mode}-step-rail`);
   if (rail) rail.querySelectorAll('.step-item').forEach(el => {
     const s = parseInt(el.dataset.step);
@@ -1230,7 +1745,7 @@ function goStep(mode, n) {
     el.classList.toggle('done', s<n);
   });
   S[mode].step = n;
-  const pct = (n/4)*100;
+  const pct = (n/(maxSteps-1))*100;
   document.getElementById(`${mode}-progress`).style.width = pct+'%';
   window.scrollTo({ top: 0, behavior:'smooth' });
 }
@@ -1303,12 +1818,114 @@ function calcDS() {
   return { displayScore:Math.min(100,Math.round(raw*mod)), rawScore:raw, dimScores, modifier:mod, role };
 }
 
+function calcGC() {
+  // Guardian Connector: 4 pillars with different weights
+  // P1: 5 Qs × 5pts = 25 max → weight 0.25
+  // P2: 4 Qs × 5pts = 20 max → weight 0.20
+  // P3: 5 Qs × 5pts = 25 max → weight 0.25
+  // P4: 6 Qs × 5pts = 30 max → weight 0.30
+  const pillars = {
+    P1: { qs: ['gcp1q1','gcp1q2','gcp1q3','gcp1q4','gcp1q5'], max: 25 },
+    P2: { qs: ['gcp2q1','gcp2q2','gcp2q3','gcp2q4'], max: 20 },
+    P3: { qs: ['gcp3q1','gcp3q2','gcp3q3','gcp3q4','gcp3q5'], max: 25 },
+    P4: { qs: ['gcp4q1','gcp4q2','gcp4q3','gcp4q4','gcp4q5','gcp4q6'], max: 30 }
+  };
+  const pillarScores = {}; let totalPts = 0;
+  Object.entries(pillars).forEach(([p, cfg]) => {
+    const sum = cfg.qs.reduce((s, id) => s + (S.gc.scored[id] ?? 0), 0);
+    const avg = sum / cfg.qs.length;
+    pillarScores[p] = avg;
+    totalPts += sum;
+  });
+  // Total max = 100, raw score is sum of all Q scores
+  let raw = totalPts;
+  const role = document.getElementById('gc-role')?.value || 'steward';
+  const mod = role === 'auditor' ? 1.04 : role === 'peer' ? 1.0 : 0.92;
+  
+  // Calculate CARE alignment (each principle maps to certain questions)
+  const careScores = { C: 0, A: 0, R: 0, E: 0 };
+  const careCounts = { C: 0, A: 0, R: 0, E: 0 };
+  const allQs = [...GC_PILLAR1, ...GC_PILLAR2, ...GC_PILLAR3, ...GC_PILLAR4];
+  allQs.forEach(q => {
+    const score = S.gc.scored[q.id] ?? 0;
+    if (q.care) {
+      careScores[q.care] += score;
+      careCounts[q.care]++;
+    }
+  });
+  const careAvg = {};
+  Object.keys(careScores).forEach(c => {
+    careAvg[c] = careCounts[c] > 0 ? careScores[c] / careCounts[c] : 0;
+  });
+  
+  return { 
+    displayScore: Math.min(100, Math.round(raw * mod)), 
+    rawScore: raw, 
+    pillarScores, 
+    careAvg,
+    modifier: mod, 
+    role 
+  };
+}
+
+function calcSG() {
+  // Seeds/Germplasm: 4 pillars with different weights
+  // P1: 4 Qs × 5pts = 20 max → weight 0.20
+  // P2: 4 Qs × 5pts = 20 max → weight 0.20
+  // P3: 5 Qs × 5pts = 25 max → weight 0.25
+  // P4: 7 Qs × 5pts = 35 max → weight 0.35
+  const pillars = {
+    P1: { qs: ['sgp1q1','sgp1q2','sgp1q3','sgp1q4'], max: 20 },
+    P2: { qs: ['sgp2q1','sgp2q2','sgp2q3','sgp2q4'], max: 20 },
+    P3: { qs: ['sgp3q1','sgp3q2','sgp3q3','sgp3q4','sgp3q5'], max: 25 },
+    P4: { qs: ['sgp4q1','sgp4q2','sgp4q3','sgp4q4','sgp4q5','sgp4q6','sgp4q7'], max: 35 }
+  };
+  const pillarScores = {}; let totalPts = 0;
+  Object.entries(pillars).forEach(([p, cfg]) => {
+    const sum = cfg.qs.reduce((s, id) => s + (S.sg.scored[id] ?? 0), 0);
+    const avg = sum / cfg.qs.length;
+    pillarScores[p] = avg;
+    totalPts += sum;
+  });
+  // Total max = 100, raw score is sum of all Q scores
+  let raw = totalPts;
+  const role = document.getElementById('sg-role')?.value || 'steward';
+  const mod = role === 'auditor' ? 1.04 : role === 'peer' ? 1.0 : 0.92;
+  
+  // Calculate CARE alignment (each principle maps to certain questions)
+  const careScores = { C: 0, A: 0, R: 0, E: 0 };
+  const careCounts = { C: 0, A: 0, R: 0, E: 0 };
+  const allQs = [...SG_PILLAR1, ...SG_PILLAR2, ...SG_PILLAR3, ...SG_PILLAR4];
+  allQs.forEach(q => {
+    const score = S.sg.scored[q.id] ?? 0;
+    if (q.care) {
+      careScores[q.care] += score;
+      careCounts[q.care]++;
+    }
+  });
+  const careAvg = {};
+  Object.keys(careScores).forEach(c => {
+    careAvg[c] = careCounts[c] > 0 ? careScores[c] / careCounts[c] : 0;
+  });
+  
+  return { 
+    displayScore: Math.min(100, Math.round(raw * mod)), 
+    rawScore: raw, 
+    pillarScores, 
+    careAvg,
+    modifier: mod, 
+    role 
+  };
+}
+
 // ═══════════════════════════════════════════════════════════════
 // LIVE UPDATE
 // ═══════════════════════════════════════════════════════════════
 function updateLive(mode) {
   if (mode==='hw') updateHWLive();
   else if (mode==='sw') updateSWLive();
+  else if (mode==='gc') updateGCLive();
+  else if (mode==='sg') updateSGLive();
   else updateDSLive();
 }
 
@@ -1406,6 +2023,95 @@ function genDSFlags(s) {
   if (s.dimScores.D4<2.5) fl.push({type:'warn',text:'Poor machine-readability — reuse barrier'});
   if (s.dimScores.D6<2.5) fl.push({type:'warn',text:'Governance gap — farmer representation missing'});
   if (s.displayScore>=80) fl.push({type:'info',text:'FAIR-aligned threshold reached'});
+  return fl;
+}
+
+function updateGCLive() {
+  const s = calcGC();
+  document.getElementById('gc-big').textContent = s.displayScore || '—';
+  setRing('gc-ring', 'gc-ring-label', s.displayScore);
+  const cb = document.getElementById('gc-conf');
+  cb.textContent = s.role === 'auditor' ? 'IDSov Audited · 3/3' : s.role === 'peer' ? 'Partner-reviewed · 2/3' : 'Community · 1/3';
+  cb.className = 'conf-badge ' + (s.role === 'steward' ? 'provisional' : 'reviewed');
+  
+  // Update pillar bars
+  ['P1', 'P2', 'P3', 'P4'].forEach((p, i) => {
+    const v = s.pillarScores[p] ?? 0;
+    const bar = document.getElementById(`gc-bar-p${i + 1}`);
+    const val = document.getElementById(`gc-val-p${i + 1}`);
+    if (bar) bar.style.width = (v / 5 * 100) + '%';
+    if (val) val.textContent = v.toFixed(1);
+  });
+  
+  // Update CARE badges
+  ['C', 'A', 'R', 'E'].forEach(c => {
+    const badge = document.getElementById(`gc-care-${c.toLowerCase()}`);
+    if (badge) {
+      const avg = s.careAvg[c] ?? 0;
+      badge.style.opacity = avg >= 3.5 ? '1' : avg >= 2 ? '0.6' : '0.3';
+      badge.style.background = avg >= 3.5 ? '#0ea5e9' : avg >= 2 ? '#64748b' : 'transparent';
+      badge.style.color = avg >= 2 ? '#fff' : 'var(--faint)';
+    }
+  });
+  
+  renderFlags('gc-flags', genGCFlags(s));
+}
+
+function genGCFlags(s) {
+  const fl = [];
+  if (s.role === 'steward') fl.push({type: 'info', text: 'Community assessment — invite partner review for Tier 2'});
+  if (s.pillarScores.P1 < 2.5) fl.push({type: 'warn', text: 'Infrastructure control weak — sovereignty risk'});
+  if (s.pillarScores.P2 < 2.5) fl.push({type: 'warn', text: 'Security concerns — data protection gaps'});
+  if (s.pillarScores.P3 < 2.5) fl.push({type: 'warn', text: 'Governance gaps — CARE alignment needed'});
+  if (s.pillarScores.P4 < 2.5) fl.push({type: 'warn', text: 'Usability barriers — capacity building required'});
+  if (s.careAvg.A < 2.5) fl.push({type: 'warn', text: 'Authority to Control principle not met'});
+  if (s.displayScore >= 80) fl.push({type: 'info', text: 'Indigenous Data Sovereignty threshold reached'});
+  if (Object.values(s.careAvg).every(v => v >= 3.5)) fl.push({type: 'info', text: 'Full CARE Principles alignment'});
+  return fl;
+}
+
+function updateSGLive() {
+  const s = calcSG();
+  document.getElementById('sg-big').textContent = s.displayScore || '—';
+  setRing('sg-ring', 'sg-ring-label', s.displayScore);
+  const cb = document.getElementById('sg-conf');
+  cb.textContent = s.role === 'auditor' ? 'External Review · 3/3' : s.role === 'peer' ? 'Peer-reviewed · 2/3' : 'Self-assessed · 1/3';
+  cb.className = 'conf-badge ' + (s.role === 'steward' ? 'provisional' : 'reviewed');
+  
+  // Update pillar bars
+  ['P1', 'P2', 'P3', 'P4'].forEach((p, i) => {
+    const v = s.pillarScores[p] ?? 0;
+    const bar = document.getElementById(`sg-bar-p${i + 1}`);
+    const val = document.getElementById(`sg-val-p${i + 1}`);
+    if (bar) bar.style.width = (v / 5 * 100) + '%';
+    if (val) val.textContent = v.toFixed(1);
+  });
+  
+  // Update CARE badges
+  ['C', 'A', 'R', 'E'].forEach(c => {
+    const badge = document.getElementById(`sg-care-${c.toLowerCase()}`);
+    if (badge) {
+      const avg = s.careAvg[c] ?? 0;
+      badge.style.opacity = avg >= 3.5 ? '1' : avg >= 2 ? '0.6' : '0.3';
+      badge.style.background = avg >= 3.5 ? '#a67c2a' : avg >= 2 ? '#64748b' : 'transparent';
+      badge.style.color = avg >= 2 ? '#fff' : 'var(--faint)';
+    }
+  });
+  
+  renderFlags('sg-flags', genSGFlags(s));
+}
+
+function genSGFlags(s) {
+  const fl = [];
+  if (s.role === 'steward') fl.push({type: 'info', text: 'Originator assessment — peer review recommended'});
+  if (s.pillarScores.P1 < 2.5) fl.push({type: 'warn', text: 'Rights documentation weak — provenance unclear'});
+  if (s.pillarScores.P2 < 2.5) fl.push({type: 'warn', text: 'Distribution controls insufficient — WWC §2 concern'});
+  if (s.pillarScores.P3 < 2.5) fl.push({type: 'warn', text: 'Benefit sharing gaps — CARE Collective Benefit'});
+  if (s.pillarScores.P4 < 2.5) fl.push({type: 'warn', text: 'Special use conditions unclear — WWC §3 compliance'});
+  if (s.careAvg.A < 2.5) fl.push({type: 'warn', text: 'Authority to Control principle needs attention'});
+  if (s.displayScore >= 70) fl.push({type: 'info', text: 'ETA Eligible threshold reached'});
+  if (s.displayScore >= 50 && s.displayScore < 70) fl.push({type: 'info', text: 'Conditional status — address flagged areas'});
+  if (Object.values(s.careAvg).every(v => v >= 3.5)) fl.push({type: 'info', text: 'Full CARE Principles alignment'});
   return fl;
 }
 
@@ -1537,6 +2243,207 @@ function generateResult(mode) {
       </div></div>`;
     goStep('sw',4);
 
+  } else if (mode==='gc') {
+    // Guardian Connector - Indigenous Data Sovereignty Assessment
+    const s = calcGC();
+    const name = document.getElementById('gc-name').value || 'Unnamed Tool';
+    const desc = document.getElementById('gc-desc').value || 'No description.';
+    const steward = document.getElementById('gc-steward').value || 'Unknown';
+    const community = document.getElementById('gc-community').value || '';
+    const license = document.getElementById('gc-license').value || 'Not stated';
+    const badges = [];
+    
+    // Pillar-based badges
+    if (s.pillarScores.P1 >= 4) badges.push({type: 'good', text: 'Full infrastructure control'});
+    if (s.pillarScores.P2 >= 4) badges.push({type: 'good', text: 'Security resilient'});
+    if (s.pillarScores.P3 >= 4) badges.push({type: 'good', text: 'Sovereignty-aligned'});
+    if (s.pillarScores.P4 >= 4) badges.push({type: 'good', text: 'Community-operable'});
+    
+    // CARE badges
+    if (s.careAvg.C >= 3.5) badges.push({type: 'good', text: 'Collective Benefit'});
+    if (s.careAvg.A >= 3.5) badges.push({type: 'good', text: 'Authority to Control'});
+    if (s.careAvg.R >= 3.5) badges.push({type: 'good', text: 'Responsibility'});
+    if (s.careAvg.E >= 3.5) badges.push({type: 'good', text: 'Ethics'});
+    
+    // Warning badges
+    if (s.pillarScores.P1 < 2.5) badges.push({type: 'warn', text: 'Infrastructure risk'});
+    if (s.pillarScores.P3 < 2.5) badges.push({type: 'warn', text: 'Governance gap'});
+    if (s.careAvg.A < 2.5) badges.push({type: 'warn', text: 'Authority concern'});
+    
+    const scoreText = `Indigenous Data Sovereignty assessment submitted. IDSov Score: ${s.rawScore.toFixed(0)} raw → ${s.displayScore} displayed (confidence ×${s.modifier.toFixed(2)}). License: ${license}. Strongest pillar: P${Object.entries(s.pillarScores).sort((a,b)=>b[1]-a[1])[0][0].slice(1)}.`;
+    
+    // Pillar bars for result
+    const pillarLabels = {P1: 'Infrastructure Control', P2: 'Security & Resilience', P3: 'Governance & Rights', P4: 'Usability & Capacity'};
+    const pillarBarHTML = ['P1','P2','P3','P4'].map(p => {
+      const v = s.pillarScores[p] ?? 0;
+      const pct = (v/5)*100;
+      const cls = v >= 4 ? 'hi' : v >= 2.5 ? 'mid' : 'lo';
+      return `<div class="result-bar-row"><div class="result-bar-label">${pillarLabels[p]}</div><div class="result-bar-track"><div class="result-bar-fill ${cls}" style="width:${pct}%;background:#0369a1"></div></div><div class="result-bar-val" style="color:#0369a1">${v.toFixed(1)}</div></div>`;
+    }).join('');
+    
+    // CARE alignment badges HTML
+    const careHTML = ['C','A','R','E'].map(c => {
+      const labels = {C: 'Collective Benefit', A: 'Authority to Control', R: 'Responsibility', E: 'Ethics'};
+      const v = s.careAvg[c] ?? 0;
+      const cls = v >= 3.5 ? 'pass' : v >= 2 ? 'partial' : 'gap';
+      return `<div class="care-result-item ${cls}"><span class="care-letter">${c}</span><span class="care-name">${labels[c]}</span><span class="care-score">${v.toFixed(1)}</span></div>`;
+    }).join('');
+    
+    const allGCQs = [...GC_PILLAR1, ...GC_PILLAR2, ...GC_PILLAR3, ...GC_PILLAR4];
+    
+    document.getElementById('gc-result').innerHTML = `<div class="result-card">
+      <div class="result-header" style="background:linear-gradient(135deg,#0c4a6e 0%,#0369a1 60%,#0ea5e9 100%)">
+        <div class="result-score-block">
+          <div class="result-score-num">${s.displayScore}</div>
+          <div class="result-score-label">IDSov Score</div>
+          <div style="font-family:'DM Mono',monospace;font-size:8.5px;color:rgba(255,255,255,.4);margin-top:3px">${confInfo(s.role).label}</div>
+        </div>
+        <div class="result-title-block">
+          <div class="result-kicker">Indigenous Data Sovereignty Assessment · Guardian Connector × ETA v1.1</div>
+          <div class="result-tool-name">${name}</div>
+          <div class="result-tool-desc">${desc}${community ? ` <span style="opacity:0.7">· Context: ${community}</span>` : ''}</div>
+          <div class="result-badges">${resultBadgesHTML(badges)}</div>
+        </div>
+      </div>
+      <div class="result-body">
+        <div class="result-section">
+          <div class="result-section-label">Pillar Scores (0–5 scale)</div>
+          <div class="result-bars">${pillarBarHTML}</div>
+        </div>
+        <div class="result-section">
+          <div class="result-section-label">CARE Principles Alignment</div>
+          <div class="care-result-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px">${careHTML}</div>
+          <div style="font-size:10px;color:var(--faint);margin-top:8px;line-height:1.4">
+            CARE Principles for Indigenous Data Governance: 
+            <strong>C</strong>ollective Benefit · <strong>A</strong>uthority to Control · <strong>R</strong>esponsibility · <strong>E</strong>thics
+            <br><a href="https://www.gida-global.org/care" target="_blank" style="color:#0369a1">Global Indigenous Data Alliance →</a>
+          </div>
+        </div>
+        <div class="result-section">
+          <div class="result-section-label">Confidence &amp; Review Record</div>
+          ${confBlock(s)}
+        </div>
+        <div class="result-section">
+          <div class="result-section-label">Assessment Thread</div>
+          ${reviewThread(steward, s.role, today, scoreText).replace('Awaiting peer reviewer', 'Awaiting partner organization review').replace('certified peer reviewer', 'partner organization or IDSov auditor')}
+        </div>
+        ${evidenceSection(allGCQs, S.gc)}
+        <div style="padding:10px 0;font-family:'DM Mono',monospace;font-size:9px;color:var(--faint);border-top:1px solid var(--cream-dk);margin-top:6px">
+          Assessed by ${steward} · ${today} · Guardian Connector Data Sovereignty Criteria v1.0 × ETA Framework v1.1<br>
+          Criteria Attribution: <a href="https://docs.guardianconnector.net/overview/design-principles/data-sovereignty/" target="_blank" style="color:#0369a1">Conservation Metrics / Guardian Connector</a> · Aligned with CARE Principles & UN Indigenous Data Rights
+        </div>
+      </div>
+    </div>`;
+    goStep('gc', 5);
+
+  } else if (mode==='sg') {
+    // Seeds/Germplasm Assessment
+    const s = calcSG();
+    const name = document.getElementById('sg-name').value || 'Unnamed Material';
+    const desc = document.getElementById('sg-desc').value || 'No description.';
+    const originator = document.getElementById('sg-originator').value || 'Unknown';
+    const materialType = document.getElementById('sg-type').value || 'Not specified';
+    const badges = [];
+    
+    // Pillar-based badges
+    if (s.pillarScores.P1 >= 4) badges.push({type: 'good', text: 'Rights documented'});
+    if (s.pillarScores.P2 >= 4) badges.push({type: 'good', text: 'Distribution controlled'});
+    if (s.pillarScores.P3 >= 4) badges.push({type: 'good', text: 'Benefit-sharing'});
+    if (s.pillarScores.P4 >= 4) badges.push({type: 'good', text: 'WWC compliant'});
+    
+    // CARE badges
+    if (s.careAvg.C >= 3.5) badges.push({type: 'good', text: 'Collective Benefit'});
+    if (s.careAvg.A >= 3.5) badges.push({type: 'good', text: 'Authority to Control'});
+    if (s.careAvg.R >= 3.5) badges.push({type: 'good', text: 'Responsibility'});
+    if (s.careAvg.E >= 3.5) badges.push({type: 'good', text: 'Ethics'});
+    
+    // Warning badges
+    if (s.pillarScores.P1 < 2.5) badges.push({type: 'warn', text: 'Provenance unclear'});
+    if (s.pillarScores.P2 < 2.5) badges.push({type: 'warn', text: 'Distribution risk'});
+    if (s.pillarScores.P3 < 2.5) badges.push({type: 'warn', text: 'Benefit-sharing gap'});
+    if (s.careAvg.A < 2.5) badges.push({type: 'warn', text: 'Authority concern'});
+    
+    // Eligibility badge
+    if (s.displayScore >= 70) badges.push({type: 'good', text: 'ETA Eligible'});
+    else if (s.displayScore >= 50) badges.push({type: 'warn', text: 'Conditional'});
+    else badges.push({type: 'warn', text: 'Ineligible'});
+    
+    const scoreText = `Seeds/Germplasm assessment submitted. Score: ${s.rawScore.toFixed(0)} raw → ${s.displayScore} displayed (confidence ×${s.modifier.toFixed(2)}). Material type: ${materialType}. Strongest pillar: P${Object.entries(s.pillarScores).sort((a,b)=>b[1]-a[1])[0][0].slice(1)}.`;
+    
+    // Pillar bars for result
+    const pillarLabels = {P1: 'Rights & Transparency', P2: 'Distribution Controls', P3: 'Benefit Sharing', P4: 'Special Use Conditions'};
+    const pillarBarHTML = ['P1','P2','P3','P4'].map(p => {
+      const v = s.pillarScores[p] ?? 0;
+      const pct = (v/5)*100;
+      const cls = v >= 4 ? 'hi' : v >= 2.5 ? 'mid' : 'lo';
+      return `<div class="result-bar-row"><div class="result-bar-label">${pillarLabels[p]}</div><div class="result-bar-track"><div class="result-bar-fill ${cls}" style="width:${pct}%;background:#a67c2a"></div></div><div class="result-bar-val" style="color:#a67c2a">${v.toFixed(1)}</div></div>`;
+    }).join('');
+    
+    // CARE alignment badges HTML
+    const careHTML = ['C','A','R','E'].map(c => {
+      const labels = {C: 'Collective Benefit', A: 'Authority to Control', R: 'Responsibility', E: 'Ethics'};
+      const v = s.careAvg[c] ?? 0;
+      const cls = v >= 3.5 ? 'pass' : v >= 2 ? 'partial' : 'gap';
+      return `<div class="care-result-item ${cls}" style="${cls==='pass'?'background:#fef3c7;border-color:#fde68a':''}">${cls==='pass'?'<span class="care-letter" style="color:#92400e">':'<span class="care-letter">'}${c}</span><span class="care-name">${labels[c]}</span><span class="care-score"${cls==='pass'?' style="color:#92400e"':''}>${v.toFixed(1)}</span></div>`;
+    }).join('');
+    
+    const allSGQs = [...SG_PILLAR1, ...SG_PILLAR2, ...SG_PILLAR3, ...SG_PILLAR4];
+    
+    document.getElementById('sg-result').innerHTML = `<div class="result-card">
+      <div class="result-header" style="background:linear-gradient(135deg,#7c5c1c 0%,#a67c2a 60%,#c9a046 100%)">
+        <div class="result-score-block">
+          <div class="result-score-num">${s.displayScore}</div>
+          <div class="result-score-label">Seed Ethics Score</div>
+          <div style="font-family:'DM Mono',monospace;font-size:8.5px;color:rgba(255,255,255,.4);margin-top:3px">${confInfo(s.role).label}</div>
+        </div>
+        <div class="result-title-block">
+          <div class="result-kicker">Seeds & Germplasm Assessment · WWC + CARE × ETA v1.1</div>
+          <div class="result-tool-name">${name}</div>
+          <div class="result-tool-desc">${desc} <span style="opacity:0.7">· Type: ${materialType}</span></div>
+          <div class="result-badges">${resultBadgesHTML(badges)}</div>
+        </div>
+      </div>
+      <div class="result-body">
+        <div class="result-section">
+          <div class="result-section-label">Pillar Scores (0–5 scale)</div>
+          <div class="result-bars">${pillarBarHTML}</div>
+        </div>
+        <div class="result-section">
+          <div class="result-section-label">CARE Principles Alignment</div>
+          <div class="care-result-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px">${careHTML}</div>
+          <div style="font-size:10px;color:var(--faint);margin-top:8px;line-height:1.4">
+            CARE Principles for Indigenous Data Governance applied to germplasm: 
+            <strong>C</strong>ollective Benefit · <strong>A</strong>uthority to Control · <strong>R</strong>esponsibility · <strong>E</strong>thics
+            <br><a href="https://www.gida-global.org/care" target="_blank" style="color:#a67c2a">Global Indigenous Data Alliance →</a>
+          </div>
+        </div>
+        <div class="result-section">
+          <div class="result-section-label">Framework References</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">
+            <a href="https://www.ars.usda.gov/ARSUserFiles/30421000/wheatcode.html" target="_blank" class="ref-link" style="background:#fef3c7;border-color:#fde68a;color:#92400e">Wheat Workers' Code (1994)</a>
+            <a href="https://www.gida-global.org/care" target="_blank" class="ref-link" style="background:#fef3c7;border-color:#fde68a;color:#92400e">CARE Principles</a>
+            <a href="https://osseeds.org/ossi-pledge/" target="_blank" class="ref-link" style="background:#fef3c7;border-color:#fde68a;color:#92400e">OSSI Pledge</a>
+            <a href="https://www.fao.org/plant-treaty" target="_blank" class="ref-link" style="background:#fef3c7;border-color:#fde68a;color:#92400e">ITPGRFA</a>
+          </div>
+        </div>
+        <div class="result-section">
+          <div class="result-section-label">Confidence &amp; Review Record</div>
+          ${confBlock(s)}
+        </div>
+        <div class="result-section">
+          <div class="result-section-label">Assessment Thread</div>
+          ${reviewThread(originator, s.role, today, scoreText).replace('Awaiting peer reviewer', 'Awaiting peer breeder review').replace('certified peer reviewer', 'peer breeder or external reviewer')}
+        </div>
+        ${evidenceSection(allSGQs, S.sg)}
+        <div style="padding:10px 0;font-family:'DM Mono',monospace;font-size:9px;color:var(--faint);border-top:1px solid var(--cream-dk);margin-top:6px">
+          Assessed by ${originator} · ${today} · Seeds/Germplasm ETA v1.1<br>
+          Framework: Wheat Workers' Code of Ethics (NWIC 1994) × CARE Principles × ETA<br>
+          <a href="license-engine.html?type=seeds" style="color:#a67c2a">→ Build License Agreement for this material</a>
+        </div>
+      </div>
+    </div>`;
+    goStep('sg', 5);
+
   } else { // ds
     const s=calcDS();
     const name=document.getElementById('ds-name').value||'Unnamed Dataset';
@@ -1628,12 +2535,12 @@ function toggleStack(containerId) {
 // MODE SWITCHER
 // ═══════════════════════════════════════════════════════════════
 function switchMode(mode) {
-  ['hw','sw','ds'].forEach(m => {
+  ['hw','sw','ds','gc','sg'].forEach(m => {
     document.getElementById(`page-${m}`).classList.toggle('active', m===mode);
     document.getElementById(`nav-${m}`).classList.toggle('active', m===mode);
   });
   const topbar = document.getElementById('topbar');
-  topbar.className = 'topbar' + (mode==='sw'?' mode-sw':mode==='ds'?' mode-ds':'');
+  topbar.className = 'topbar' + (mode==='sw'?' mode-sw':mode==='ds'?' mode-ds':mode==='gc'?' mode-gc':mode==='sg'?' mode-sg':'');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1683,6 +2590,50 @@ function loadDSDemo() {
   updateLive('ds');
 }
 
+function loadGCDemo() {
+  document.getElementById('gc-name').value='CoMapeo';
+  document.getElementById('gc-type').value='Mapping / GIS';
+  document.getElementById('gc-steward').value='Awana Digital / Digital Democracy';
+  document.getElementById('gc-community').value='Territorial monitoring, Indigenous land defense';
+  document.getElementById('gc-desc').value='Peer-to-peer mapping tool designed for Indigenous and frontline communities. Offline-first, encrypted sync, full local data ownership. Used for territorial monitoring, environmental defense, and cultural heritage documentation.';
+  document.getElementById('gc-license').value='MIT';
+  S.gc.scored={
+    gcp1q1:5, gcp1q2:5, gcp1q3:5, gcp1q4:4.5, gcp1q5:5,
+    gcp2q1:4.5, gcp2q2:4, gcp2q3:5, gcp2q4:4,
+    gcp3q1:5, gcp3q2:4.5, gcp3q3:5, gcp3q4:4, gcp3q5:5,
+    gcp4q1:4.5, gcp4q2:5, gcp4q3:4, gcp4q4:4.5, gcp4q5:4.5, gcp4q6:5
+  };
+  S.gc.evidence={
+    gcp1q2:'MIT licensed, full source at github.com/digidem/comapeo-mobile and github.com/digidem/comapeo-desktop',
+    gcp1q5:'All data stored locally on device; full export to GeoJSON/CSV anytime',
+    gcp2q3:'Encrypted peer-to-peer sync; community controls all backup locations',
+    gcp3q5:'Built with CARE Principles guidance; designed with Indigenous partners from inception',
+    gcp4q6:'Fully offline-first; sync only when community chooses to connect'
+  };
+  updateLive('gc');
+}
+
+function loadSGDemo() {
+  document.getElementById('sg-name').value='Kernza IWG-3902';
+  document.getElementById('sg-type').value='Breeding Line';
+  document.getElementById('sg-originator').value='The Land Institute';
+  document.getElementById('sg-desc').value='Intermediate wheatgrass (Thinopyrum intermedium) breeding line developed for perennial grain production. Part of the Kernza domestication program. Shows improved seed size and reduced shattering compared to wild-type.';
+  document.getElementById('sg-role').value='steward';
+  S.sg.scored={
+    sgp1q1:4.5, sgp1q2:4, sgp1q3:4, sgp1q4:3.5,
+    sgp2q1:4.5, sgp2q2:4.5, sgp2q3:4, sgp2q4:4,
+    sgp3q1:3.5, sgp3q2:4.5, sgp3q3:5, sgp3q4:4, sgp3q5:3.5,
+    sgp4q1:4.5, sgp4q2:4.5, sgp4q3:4, sgp4q4:4, sgp4q5:3.5, sgp4q6:3.5, sgp4q7:3
+  };
+  S.sg.evidence={
+    sgp1q1:'The Land Institute breeding program; contact tconway@landinstitute.org',
+    sgp2q1:'Standard MTA requires no redistribution without written approval per WWC §2',
+    sgp3q3:'Research exemption maintained; breeding use permitted with acknowledgment',
+    sgp3q4:'Not OSSI pledged but follows open research principles; PVP with research exemption'
+  };
+  updateLive('sg');
+}
+
 // ═══════════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════════
@@ -1714,15 +2665,31 @@ document.addEventListener('DOMContentLoaded', () => {
     'ds-d5': q=>q.dim==='D5', 'ds-d6': q=>q.dim==='D6',
   });
 
+  // Build GC (Guardian Connector) question panels
+  initMode('gc', null, GC_PILLAR1, { 'gc-p1': q=>q.pillar==='P1' });
+  initMode('gc', null, GC_PILLAR2, { 'gc-p2': q=>q.pillar==='P2' });
+  initMode('gc', null, GC_PILLAR3, { 'gc-p3': q=>q.pillar==='P3' });
+  initMode('gc', null, GC_PILLAR4, { 'gc-p4': q=>q.pillar==='P4' });
+
+  // Build SG (Seeds/Germplasm) question panels
+  initMode('sg', null, SG_PILLAR1, { 'sg-p1': q=>q.pillar==='P1' });
+  initMode('sg', null, SG_PILLAR2, { 'sg-p2': q=>q.pillar==='P2' });
+  initMode('sg', null, SG_PILLAR3, { 'sg-p3': q=>q.pillar==='P3' });
+  initMode('sg', null, SG_PILLAR4, { 'sg-p4': q=>q.pillar==='P4' });
+
   // Build collapsible stack sections on all three pages
   buildStackSection('hw-stack');
   buildStackSection('sw-stack');
   buildStackSection('ds-stack');
+  buildStackSection('gc-stack');
+  buildStackSection('sg-stack');
 
   // Load demo data
   loadHWDemo();
   loadSWDemo();
   loadDSDemo();
+  loadGCDemo();
+  loadSGDemo();
 
   // Init slider backgrounds
   document.querySelectorAll('input[type=range]').forEach(slider => {
@@ -1730,7 +2697,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pct = (val/5)*100;
     // Determine mode from id prefix
     const id = slider.id || '';
-    const color = id.startsWith('sl_sw') ? 'var(--sw-dark)' : id.startsWith('sl_ds') ? 'var(--ds-dark)' : 'var(--forest)';
+    const color = id.startsWith('sl_sw') ? 'var(--sw-dark)' : id.startsWith('sl_ds') ? 'var(--ds-dark)' : id.startsWith('sl_gc') ? '#0369a1' : id.startsWith('sl_sg') ? '#a67c2a' : 'var(--forest)';
     slider.style.background = `linear-gradient(to right, ${color} ${pct}%, var(--line) ${pct}%)`;
   });
 });

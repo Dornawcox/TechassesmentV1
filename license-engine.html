@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETA License Engine — Build Ethical Agreements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --forest: #1e4d2b; --forest-md: #2a6338; --forest-lt: #4a7c59;
+  --forest-bg: #eaf3ec; --forest-rim: #d0e8d6;
+  --sw-dark: #1a3a5c; --sw-md: #1e4f80; --sw-lt: #2e6da8;
+  --sw-bg: #e8f0f8; --sw-rim: #b8d0e8;
+  --ds-dark: #5c2c0e; --ds-md: #8a4520; --ds-lt: #b06030;
+  --ds-bg: #f8ede0; --ds-rim: #e8c8a8;
+  --seed-dark: #7c5c1c; --seed-md: #a67c2a; --seed-lt: #c9a046;
+  --seed-bg: #fdf8e8; --seed-rim: #e8d8a8;
+  --ink: #1a1a14; --cream: #f7f3ec; --cream-dk: #ede8df;
+  --line: #ddd8ce; --line-dk: #b8b2a6; --dim: #6b6760; --faint: #9e9a93;
+  --good: #1e6b3a; --good-bg: #d4edda; --good-bdr: #a3d4af;
+  --warn: #8a5d00; --warn-bg: #fef3c7; --warn-bdr: #f5d97e;
+  --bad: #8b1a1a; --bad-bg: #fee2e2; --bad-bdr: #fca5a5;
+  --white: #fff; --r: 8px; --r-lg: 14px;
+  --shadow: 0 4px 24px rgba(30,77,43,.10), 0 1px 4px rgba(30,77,43,.06);
+  --shadow-lg: 0 8px 48px rgba(30,77,43,.13), 0 2px 8px rgba(30,77,43,.07);
+  --mode-dark: var(--forest); --mode-lt: var(--forest-lt); --mode-bg: var(--forest-bg); --mode-rim: var(--forest-rim);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;background:var(--cream);color:var(--ink);min-height:100vh}
+
+.topbar{position:sticky;top:0;z-index:100;background:var(--forest);border-bottom:2px solid #16381f;box-shadow:0 2px 16px rgba(0,0,0,.22)}
+.topbar-inner{max-width:900px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;padding:14px 0;text-decoration:none}
+.brand-icon{width:32px;height:32px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.brand-icon svg{width:20px;height:20px;stroke:var(--forest);fill:none;stroke-width:2}
+.brand-text{font-family:'DM Serif Display',serif;font-size:18px;color:#fff}
+.brand-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-left:8px}
+.topnav{display:flex;gap:4px}
+.topnav a{font-family:'DM Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.7);padding:8px 14px;border-radius:6px;text-decoration:none;transition:all .15s}
+.topnav a:hover{background:rgba(255,255,255,.12);color:#fff}
+.topnav a.active{background:rgba(255,255,255,.18);color:#fff}
+
+.main-wrap{max-width:720px;margin:0 auto;padding:40px 24px 80px;position:relative}
+.mono{font-family:'DM Mono',monospace}
+.serif{font-family:'DM Serif Display',serif}
+
+.welcome-header{text-align:center;margin-bottom:48px}
+.welcome-kicker{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--faint);margin-bottom:16px;text-transform:uppercase}
+.welcome-title{font-family:'DM Serif Display',serif;font-size:42px;font-weight:400;color:var(--ink);margin:0 0 12px;line-height:1.15}
+.welcome-desc{font-size:16px;color:var(--dim);max-width:480px;margin:0 auto;line-height:1.7}
+
+.section-label{font-family:'DM Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+
+.type-selector{display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
+.type-btn{display:flex;align-items:center;gap:16px;padding:18px 20px;background:var(--white);border:1.5px solid var(--line);border-radius:12px;cursor:pointer;text-align:left;transition:all .25s;color:var(--ink)}
+.type-btn:hover{border-color:var(--forest-md)}
+.type-btn.selected{border-color:var(--mode-dark);background:var(--mode-bg)}
+.type-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.type-btn[data-type="software"] .type-icon{background:var(--sw-dark)}
+.type-btn[data-type="data"] .type-icon{background:var(--ds-dark)}
+.type-btn[data-type="hardware"] .type-icon{background:var(--forest)}
+.type-btn[data-type="seeds"] .type-icon{background:var(--seed-dark)}
+.type-icon svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.8}
+.type-info{flex:1}
+.type-name{font-size:16px;font-weight:500;margin-bottom:2px}
+.type-desc{font-size:12px;color:var(--faint)}
+.type-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.type-btn.selected .type-check{background:var(--mode-dark);border-color:var(--mode-dark)}
+.type-btn.selected .type-check svg{stroke:#fff}
+
+.project-input{margin-bottom:20px}
+.project-input label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--faint);display:block;margin-bottom:8px;text-transform:uppercase}
+.project-input input{width:100%;padding:12px 14px;background:var(--white);border:1px solid var(--line);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border-color .15s}
+.project-input input:focus{border-color:var(--mode-dark)}
+
+.proceed-options{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.proceed-btn{padding:12px 24px;border-radius:8px;font-family:'DM Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:all .15s;border:2px solid}
+.proceed-btn.primary{background:var(--mode-dark);color:#fff;border-color:var(--mode-dark)}
+.proceed-btn.primary:hover{opacity:.9}
+.proceed-btn.secondary{background:transparent;color:var(--mode-dark);border-color:var(--mode-rim)}
+.proceed-btn.secondary:hover{border-color:var(--mode-dark);background:var(--mode-bg)}
+.proceed-btn.dashed{border-style:dashed}
+
+.progress-wrap{margin-bottom:32px}
+.progress-meta{display:flex;justify-content:space-between;margin-bottom:8px;font-family:'DM Mono',monospace;font-size:12px;color:var(--faint);letter-spacing:1px}
+.progress-track{width:100%;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--mode-dark),var(--mode-lt));border-radius:2px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+.question-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;margin-bottom:20px;box-shadow:var(--shadow)}
+.question-text{font-family:'DM Serif Display',serif;font-size:20px;font-weight:400;color:var(--ink);margin:0 0 8px;line-height:1.35}
+.question-help{font-size:13px;color:var(--dim);margin:0 0 20px;line-height:1.6}
+.question-options{display:flex;flex-direction:column;gap:10px}
+.option-btn{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--cream);border:1.5px solid var(--line);border-radius:10px;cursor:pointer;transition:all .25s;text-align:left}
+.option-btn:hover{border-color:var(--mode-dark);background:var(--mode-bg)}
+.option-btn.selected{border-color:var(--mode-dark);background:var(--mode-bg)}
+.option-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0}
+.option-label{flex:1;font-size:14.5px;color:var(--ink)}
+.option-btn.selected .option-label{font-weight:500}
+.option-check{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.option-btn.selected .option-check{background:var(--mode-dark);border-color:var(--mode-dark)}
+.option-btn.selected .option-check::after{content:'✓';color:#fff;font-size:10px;font-weight:bold}
+
+.nav-buttons{display:flex;justify-content:space-between;margin-top:32px}
+.back-btn{background:none;border:none;color:var(--dim);cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.5px;padding:8px 0}
+.back-btn:hover{color:var(--ink)}
+
+.results-panel{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;margin-bottom:24px;box-shadow:var(--shadow)}
+.results-header{padding:20px 24px;background:linear-gradient(135deg,var(--mode-dark),var(--mode-lt));color:#fff}
+.results-kicker{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px}
+.results-title{font-family:'DM Serif Display',serif;font-size:24px}
+.results-match{font-family:'DM Mono',monospace;font-size:12px;color:rgba(255,255,255,.7);margin-top:6px}
+.results-body{padding:20px 24px}
+.results-desc{font-size:13px;color:var(--dim);margin-bottom:14px;line-height:1.5}
+.results-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.results-tag{font-family:'DM Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:12px;background:var(--cream);color:var(--dim);border:1px solid var(--line)}
+
+.license-list{margin-bottom:24px}
+.license-list-header{font-family:'DM Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+.license-item{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--white);border:1px solid var(--line);border-radius:var(--r);margin-bottom:8px;cursor:pointer;transition:all .15s}
+.license-item:hover{border-color:var(--mode-dark);background:var(--mode-bg)}
+.license-item.active{border-color:var(--mode-dark);background:var(--mode-bg);border-left:3px solid var(--mode-dark)}
+.license-score{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.license-score.high{background:var(--good)}
+.license-score.mid{background:var(--warn)}
+.license-score.low{background:var(--bad)}
+.license-info{flex:1}
+.license-name{font-size:14px;font-weight:600;color:var(--ink)}
+.license-type{font-family:'DM Mono',monospace;font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.5px}
+
+.cub-section{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;margin-bottom:24px;box-shadow:var(--shadow)}
+.cub-header{padding:16px 20px;background:var(--cream);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.cub-header svg{width:20px;height:20px;stroke:var(--mode-dark);fill:none;stroke-width:2}
+.cub-title{font-family:'DM Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.cub-body{padding:20px}
+.cub-intro{font-size:13px;color:var(--dim);margin-bottom:16px;line-height:1.5}
+.cub-category{margin-bottom:20px}
+.cub-cat-label{font-family:'DM Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:10px}
+.cub-block{border:1px solid var(--line);border-radius:var(--r);margin-bottom:8px;overflow:hidden;transition:all .3s}
+.cub-block.selected{border-color:var(--mode-dark);background:rgba(30,77,43,.03)}
+.cub-block-header{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer}
+.cub-checkbox{width:20px;height:20px;border-radius:4px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.cub-block.selected .cub-checkbox{background:var(--mode-dark);border-color:var(--mode-dark)}
+.cub-block.selected .cub-checkbox::after{content:'✓';color:#fff;font-size:11px;font-weight:bold}
+.cub-block-info{flex:1}
+.cub-block-name{font-size:14px;font-weight:500;color:var(--ink)}
+.cub-block-desc{font-size:12px;color:var(--dim);margin-top:2px}
+.cub-expand{color:var(--faint);font-size:12px;transition:transform .2s}
+.cub-block.selected .cub-expand{transform:rotate(180deg)}
+
+.cub-form{padding:0 16px 16px;border-top:1px solid var(--cream-dk);display:none}
+.cub-block.selected .cub-form{display:block}
+.cub-form-inner{padding-top:12px;display:flex;flex-direction:column;gap:12px}
+.cub-field label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.5px;color:var(--dim);display:block;margin-bottom:6px}
+.cub-field input,.cub-field select,.cub-field textarea{width:100%;padding:10px 12px;background:var(--cream);border:1px solid var(--line);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none}
+.cub-field input:focus,.cub-field select:focus,.cub-field textarea:focus{border-color:var(--mode-dark);background:var(--white)}
+.cub-field textarea{resize:vertical;min-height:80px}
+.cub-multi-options{display:flex;flex-direction:column;gap:6px}
+.cub-multi-opt{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);cursor:pointer}
+.cub-multi-opt input{accent-color:var(--mode-dark)}
+.cub-preview{margin-top:8px;padding:10px 12px;background:rgba(0,0,0,.03);border-radius:6px;border:1px solid var(--cream-dk)}
+.cub-preview-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--faint);margin-bottom:4px;text-transform:uppercase}
+.cub-preview-text{font-size:12px;color:var(--dim);font-style:italic;line-height:1.6}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal{background:var(--white);border-radius:var(--r-lg);max-width:800px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);position:relative}
+.modal-header{padding:24px;background:linear-gradient(135deg,var(--mode-dark),var(--mode-lt));color:#fff}
+.modal-kicker{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px}
+.modal-title{font-family:'DM Serif Display',serif;font-size:26px}
+.modal-body{padding:24px}
+.modal-section-label{font-family:'DM Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--faint);margin-bottom:10px}
+.modal-textarea{background:var(--cream);border:1px solid var(--line);border-radius:var(--r);padding:16px;font-family:'DM Mono',monospace;font-size:12px;line-height:1.7;color:var(--ink);white-space:pre-wrap;max-height:400px;overflow-y:auto;margin-bottom:20px}
+.close-modal{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
+.close-modal:hover{background:rgba(255,255,255,.3)}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:var(--r);font-family:'DM Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border:2px solid;transition:all .15s}
+.btn-primary{background:var(--mode-dark);color:#fff;border-color:var(--mode-dark)}
+.btn-primary:hover{opacity:.9}
+.btn-secondary{background:#fff;color:var(--mode-dark);border-color:var(--mode-rim)}
+.btn-secondary:hover{border-color:var(--mode-dark);background:var(--mode-bg)}
+.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+
+.attribution{text-align:center;padding:20px;font-size:12px;color:var(--faint)}
+.attribution a{color:var(--forest);text-decoration:underline}
+
+.hidden{display:none!important}
+.phase{display:none}
+.phase.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>
+      </div>
+      <span class="brand-text">ETA</span>
+      <span class="brand-sub">OpenTEAM • Farm Hack • GIAA</span>
+    </a>
+    <div class="topnav">
+      <a href="index.html">Home</a>
+      <a href="eta_unified.html">Assessment</a>
+      <a href="license-engine.html" class="active">Licenses</a>
+      <a href="eta-comparison.html">Compare</a>
+    </div>
+  </div>
+</nav>
+
+<div class="main-wrap">
+
+  <!-- PHASE: WELCOME -->
+  <div class="phase active" id="phase-welcome">
+    <div class="welcome-header">
+      <div class="welcome-kicker">OpenTEAM · Polycentric Governance</div>
+      <h1 class="welcome-title">License<br>Engine</h1>
+      <p class="welcome-desc">Find the right license for your project — or build a custom polycentric agreement with interoperable conditional use blocks.</p>
+    </div>
+
+    <div class="section-label">What are you licensing?</div>
+    <div class="type-selector" id="type-selector">
+      <button class="type-btn" data-type="software" onclick="selectType('software')">
+        <div class="type-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg></div>
+        <div class="type-info"><div class="type-name">Software</div><div class="type-desc">Applications, libraries, tools, APIs</div></div>
+        <div class="type-check"><svg viewBox="0 0 24 24" width="12" height="12" style="display:none"><path d="M20 6L9 17l-5-5" stroke-width="3"/></svg></div>
+      </button>
+      <button class="type-btn" data-type="data" onclick="selectType('data')">
+        <div class="type-icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+        <div class="type-info"><div class="type-name">Data & Datasets</div><div class="type-desc">Research data, agricultural data, databases</div></div>
+        <div class="type-check"><svg viewBox="0 0 24 24" width="12" height="12" style="display:none"><path d="M20 6L9 17l-5-5" stroke-width="3"/></svg></div>
+      </button>
+      <button class="type-btn" data-type="hardware" onclick="selectType('hardware')">
+        <div class="type-icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+        <div class="type-info"><div class="type-name">Hardware Designs</div><div class="type-desc">Schematics, CAD files, fabrication plans</div></div>
+        <div class="type-check"><svg viewBox="0 0 24 24" width="12" height="12" style="display:none"><path d="M20 6L9 17l-5-5" stroke-width="3"/></svg></div>
+      </button>
+      <button class="type-btn" data-type="seeds" onclick="selectType('seeds')">
+        <div class="type-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10"/><path d="M12 7c-2.5 0-5 2-5 5s2.5 5 5 5"/><path d="M17 14c0 1.5-1.5 3-3.5 3"/><path d="M20 9c0 2-2 4-4.5 4"/><circle cx="12" cy="12" r="2"/></svg></div>
+        <div class="type-info"><div class="type-name">Seeds & Germplasm</div><div class="type-desc">Plant genetic resources, breeding material</div></div>
+        <div class="type-check"><svg viewBox="0 0 24 24" width="12" height="12" style="display:none"><path d="M20 6L9 17l-5-5" stroke-width="3"/></svg></div>
+      </button>
+    </div>
+
+    <div id="welcome-options" class="hidden">
+      <div class="project-input">
+        <label>Project Name (Optional)</label>
+        <input type="text" id="project-name" placeholder="e.g., FarmHack Soil Sensor v2">
+      </div>
+
+      <div class="section-label">How do you want to proceed?</div>
+      <div class="proceed-options">
+        <button class="proceed-btn primary" onclick="startInterview()">Guided Interview →</button>
+        <button class="proceed-btn secondary" onclick="startAllQuestions()">All Questions at Once</button>
+        <button class="proceed-btn secondary dashed" onclick="startBuilder()">Skip to Custom Builder ⚙</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE: INTERVIEW -->
+  <div class="phase" id="phase-interview">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <button class="back-btn" onclick="goWelcome()">← Back</button>
+      <span class="mono" style="font-size:11px;letter-spacing:1px;color:var(--faint)" id="interview-mode-label">SOFTWARE LICENSE</span>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-meta"><span id="progress-label">Question 1 of 5</span><span id="progress-pct">0%</span></div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div id="interview-question"></div>
+    <div class="nav-buttons">
+      <button class="back-btn" id="prev-btn" onclick="prevQuestion()">← Previous</button>
+      <button class="btn btn-primary hidden" id="see-results-btn" onclick="showResults()">See Results →</button>
+    </div>
+  </div>
+
+  <!-- PHASE: ALL QUESTIONS -->
+  <div class="phase" id="phase-all">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <button class="back-btn" onclick="goWelcome()">← Back</button>
+      <span class="mono" style="font-size:11px;letter-spacing:1px;color:var(--faint)" id="all-mode-label">SOFTWARE LICENSE</span>
+    </div>
+    <div id="all-questions"></div>
+    <div style="margin-top:32px"><button class="btn btn-primary" onclick="showResults()"><svg viewBox="0 0 24 24"><path d="M12 2v6M12 8l-3 3M12 8l3 3"/><path d="M5 12h14"/><path d="M5 18h14"/></svg>See Recommendations</button></div>
+  </div>
+
+  <!-- PHASE: RESULTS -->
+  <div class="phase" id="phase-results">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <button class="back-btn" onclick="goWelcome()">← Start Over</button>
+      <span class="mono" style="font-size:11px;letter-spacing:1px;color:var(--faint)" id="results-mode-label">SOFTWARE LICENSE</span>
+    </div>
+    <div class="results-panel" id="top-result"></div>
+    <div class="license-list"><div class="license-list-header">All Matching Licenses</div><div id="license-list-items"></div></div>
+    <div class="cub-section" id="cub-section">
+      <div class="cub-header"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg><span class="cub-title">Conditional Use Blocks (Optional)</span></div>
+      <div class="cub-body"><p class="cub-intro">Add modular clauses to create a polycentric agreement. Each block is interoperable and can be mixed with standard licenses.</p><div id="cub-blocks"></div></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
+      <button class="btn btn-primary" onclick="generateAgreement()"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Generate Agreement</button>
+      <button class="btn btn-secondary" onclick="goWelcome()"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Start Over</button>
+    </div>
+  </div>
+
+  <!-- PHASE: BUILDER -->
+  <div class="phase" id="phase-builder">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <button class="back-btn" onclick="goWelcome()">← Back</button>
+      <span class="mono" style="font-size:11px;letter-spacing:1px;color:var(--faint)" id="builder-mode-label">CUSTOM BUILDER</span>
+    </div>
+    <div class="section-label">Select Base License</div>
+    <div id="builder-licenses" class="license-list" style="margin-bottom:24px"></div>
+    <div class="cub-section">
+      <div class="cub-header"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg><span class="cub-title">Add Conditional Use Blocks</span></div>
+      <div class="cub-body"><p class="cub-intro">Build a polycentric agreement by adding modular clauses.</p><div id="builder-cub-blocks"></div></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px"><button class="btn btn-primary" onclick="generateAgreement()"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Generate Agreement</button></div>
+  </div>
+
+  <div class="attribution">Based on the <a href="https://github.com/OpenTEAM/Licence-engine-V1" target="_blank">OpenTEAM Polycentric License Engine</a>. Seeds/Germplasm conditional use blocks derived from the <a href="https://www.ars.usda.gov/ARSUserFiles/30421000/wheatcode.html" target="_blank">Wheat Workers' Code of Ethics</a> (1994).</div>
+</div>
+
+<!-- OUTPUT MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <button class="close-modal" onclick="closeModal()">×</button>
+    <div class="modal-header" id="modal-header"><div class="modal-kicker">ETA-Compatible Agreement</div><div class="modal-title" id="modal-title">Custom License Agreement</div></div>
+    <div class="modal-body">
+      <div class="modal-section-label">Generated Agreement Text</div>
+      <div class="modal-textarea" id="modal-text"></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" onclick="copyAgreement()"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy to Clipboard</button>
+        <button class="btn btn-secondary" onclick="downloadAgreement()"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Download</button>
+        <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const LICENSE_DATABASE = {
+  software: [
+    { id: "mit", name: "MIT License", openness: 5, copyleft: 0, commercial: true, patent: false, desc: "Maximally permissive. Do almost anything with attribution.", tags: ["permissive", "simple"] },
+    { id: "apache2", name: "Apache 2.0", openness: 5, copyleft: 0, commercial: true, patent: true, desc: "Permissive with explicit patent grant and contributor protections.", tags: ["permissive", "patent"] },
+    { id: "gpl3", name: "GPL 3.0", openness: 4, copyleft: 3, commercial: true, patent: true, desc: "Strong copyleft — derivatives must also be GPL.", tags: ["copyleft", "strong"] },
+    { id: "agpl3", name: "AGPL 3.0", openness: 4, copyleft: 4, commercial: true, patent: true, desc: "Strongest copyleft — network use triggers sharing.", tags: ["copyleft", "network"] },
+    { id: "lgpl3", name: "LGPL 3.0", openness: 4, copyleft: 2, commercial: true, patent: true, desc: "Weak copyleft — linking allowed without copyleft trigger.", tags: ["copyleft", "weak"] },
+    { id: "mpl2", name: "Mozilla Public License 2.0", openness: 4, copyleft: 1, commercial: true, patent: true, desc: "File-level copyleft.", tags: ["copyleft", "file-level"] },
+    { id: "cc0", name: "CC0 1.0", openness: 5, copyleft: 0, commercial: true, patent: false, desc: "Public domain dedication.", tags: ["public-domain"] },
+    { id: "custom", name: "Custom Agreement", openness: null, copyleft: null, commercial: null, patent: null, desc: "Build a bespoke license using conditional use blocks.", tags: ["custom"] },
+  ],
+  data: [
+    { id: "ccby4", name: "CC BY 4.0", openness: 5, copyleft: 0, commercial: true, desc: "Share and adapt with attribution.", tags: ["permissive"] },
+    { id: "ccbysa4", name: "CC BY-SA 4.0", openness: 4, copyleft: 2, commercial: true, desc: "Share-alike — adaptations must use same license.", tags: ["copyleft"] },
+    { id: "ccbync4", name: "CC BY-NC 4.0", openness: 3, copyleft: 0, commercial: false, desc: "Non-commercial use only with attribution.", tags: ["non-commercial"] },
+    { id: "odbl", name: "ODbL 1.0", openness: 4, copyleft: 2, commercial: true, desc: "Open Database License. Share-alike for databases.", tags: ["database"] },
+    { id: "cdla", name: "CDLA Permissive 2.0", openness: 5, copyleft: 0, commercial: true, desc: "Community Data License — permissive data sharing.", tags: ["permissive"] },
+    { id: "pddl", name: "PDDL 1.0", openness: 5, copyleft: 0, commercial: true, desc: "Public Domain Dedication for databases.", tags: ["public-domain"] },
+    { id: "custom_data", name: "Custom Data Agreement", openness: null, copyleft: null, commercial: null, desc: "Build conditional use terms for your dataset.", tags: ["custom"] },
+  ],
+  hardware: [
+    { id: "cern_ohl_s", name: "CERN OHL-S 2.0", openness: 4, copyleft: 3, commercial: true, desc: "Strong reciprocal — modifications must be shared.", tags: ["copyleft"] },
+    { id: "cern_ohl_w", name: "CERN OHL-W 2.0", openness: 4, copyleft: 2, commercial: true, desc: "Weak reciprocal — only modifications to original shared.", tags: ["copyleft"] },
+    { id: "cern_ohl_p", name: "CERN OHL-P 2.0", openness: 5, copyleft: 0, commercial: true, desc: "Permissive — do anything with attribution.", tags: ["permissive"] },
+    { id: "tapr_ohl", name: "TAPR OHL 1.0", openness: 4, copyleft: 2, commercial: true, desc: "Share-alike for hardware designs.", tags: ["copyleft"] },
+    { id: "solderpad", name: "Solderpad 2.1", openness: 5, copyleft: 0, commercial: true, desc: "Apache-based permissive hardware license.", tags: ["permissive"] },
+    { id: "custom_hw", name: "Custom Hardware Agreement", openness: null, copyleft: null, commercial: null, desc: "Build conditional use terms for hardware.", tags: ["custom"] },
+  ],
+  seeds: [
+    { id: "ossi", name: "OSSI Pledge", openness: 5, copyleft: 2, commercial: true, desc: "Open Source Seed Initiative — freed seeds that remain free.", tags: ["open-source"] },
+    { id: "pvp", name: "PVP with Research Exemption", openness: 3, copyleft: 0, commercial: true, desc: "Plant Variety Protection maintaining research exemption.", tags: ["pvp"] },
+    { id: "mta", name: "Standard MTA", openness: 4, copyleft: 1, commercial: true, desc: "Material Transfer Agreement for research germplasm.", tags: ["mta"] },
+    { id: "itpgrfa", name: "ITPGRFA SMTA", openness: 4, copyleft: 1, commercial: true, desc: "International Treaty standard for plant genetic resources.", tags: ["treaty"] },
+    { id: "wwc", name: "Wheat Workers' Code", openness: 3, copyleft: 1, commercial: true, desc: "Conditional use based on Wheat Workers' Code of Ethics.", tags: ["conditional"] },
+    { id: "custom_seeds", name: "Custom Germplasm Agreement", openness: null, copyleft: null, commercial: null, desc: "Build conditional use terms based on Wheat Workers' Code.", tags: ["custom"] },
+  ]
+};
+
+const QUESTION_SETS = {
+  software: [
+    { id: "purpose", question: "What is the primary purpose of sharing this software?", help: "This determines the fundamental philosophy of your license.", options: [
+      { value: "maximize_adoption", label: "Maximize adoption and use", icon: "⊕", weight: { openness: 2, copyleft: -2 } },
+      { value: "community_commons", label: "Build a community commons", icon: "⊜", weight: { openness: 1, copyleft: 2 } },
+      { value: "protect_investment", label: "Protect development investment", icon: "⊛", weight: { openness: -1, copyleft: 1 } },
+      { value: "public_good", label: "Release as public good", icon: "◎", weight: { openness: 3, copyleft: -1 } },
+    ]},
+    { id: "commercial", question: "How should commercial use be handled?", help: "Consider whether commercial entities should be able to profit from your work.", options: [
+      { value: "unrestricted", label: "Fully unrestricted commercial use", icon: "✓", weight: { commercial: 2, openness: 1 } },
+      { value: "with_contribution", label: "Commercial use requires contribution back", icon: "↻", weight: { commercial: 1, copyleft: 2 } },
+      { value: "non_commercial", label: "Non-commercial use only", icon: "✗", weight: { commercial: -3, openness: -1 } },
+      { value: "conditional", label: "Conditional — I want to define specific terms", icon: "⚙", weight: { commercial: 0, custom: 2 } },
+    ]},
+    { id: "derivatives", question: "When someone modifies your software, what should happen?", help: "Copyleft strength: Strong = all derivatives must share.", options: [
+      { value: "no_requirement", label: "No requirements on derivatives", icon: "○", weight: { copyleft: -3, openness: 2 } },
+      { value: "file_level", label: "Modified files must remain open", icon: "◐", weight: { copyleft: 1 } },
+      { value: "project_level", label: "Entire derivative project must be open", icon: "◉", weight: { copyleft: 3 } },
+      { value: "network_level", label: "Even network/SaaS use triggers sharing", icon: "●", weight: { copyleft: 4 } },
+    ]},
+    { id: "patents", question: "Do you need patent protections?", help: "Patent grants protect users from patent litigation.", options: [
+      { value: "yes", label: "Yes — include explicit patent grant", icon: "✓", weight: { patent: 2 } },
+      { value: "no", label: "No — keep it simple", icon: "✗", weight: { patent: -1 } },
+      { value: "defensive", label: "Defensive — revoke if patent claims made", icon: "⚔", weight: { patent: 3 } },
+    ]},
+    { id: "ecosystem", question: "What ecosystem interoperability matters most?", help: "Polycentric approach values interoperability.", options: [
+      { value: "maximum", label: "Maximum compatibility with other licenses", icon: "⟷", weight: { openness: 2, copyleft: -1 } },
+      { value: "gpl_family", label: "GPL ecosystem compatibility", icon: "⊂", weight: { copyleft: 2 } },
+      { value: "enterprise", label: "Enterprise-friendly", icon: "▣", weight: { openness: 1, patent: 1 } },
+      { value: "custom_ecosystem", label: "Building our own ecosystem", icon: "◇", weight: { custom: 1 } },
+    ]},
+  ],
+  data: [
+    { id: "data_type", question: "What type of data are you licensing?", help: "Different data types have different considerations.", options: [
+      { value: "research", label: "Research / scientific data", icon: "◈", weight: { openness: 2 } },
+      { value: "agricultural", label: "Agricultural / environmental data", icon: "◇", weight: { openness: 1 } },
+      { value: "geospatial", label: "Geospatial / mapping data", icon: "◫", weight: { openness: 1 } },
+      { value: "personal", label: "Anonymized personal data", icon: "◯", weight: { openness: -1 } },
+    ]},
+    { id: "data_use", question: "Who should be able to use this data?", help: "Consider data sovereignty — who controls data about communities?", options: [
+      { value: "anyone", label: "Anyone, for any purpose", icon: "⊕", weight: { openness: 3, commercial: 2 } },
+      { value: "research_only", label: "Researchers and non-profits only", icon: "◎", weight: { openness: 1, commercial: -2 } },
+      { value: "community", label: "Community members and approved partners", icon: "⊜", weight: { openness: -1 } },
+      { value: "conditional", label: "Conditional — define specific use terms", icon: "⚙", weight: { custom: 2 } },
+    ]},
+    { id: "attribution", question: "What attribution requirements do you need?", help: "Attribution ensures credit flows back to creators.", options: [
+      { value: "none", label: "No attribution required", icon: "○", weight: { openness: 2 } },
+      { value: "simple", label: "Simple credit / citation", icon: "◐", weight: { } },
+      { value: "detailed", label: "Detailed provenance chain required", icon: "◉", weight: { } },
+      { value: "community", label: "Community acknowledgment protocol", icon: "●", weight: { } },
+    ]},
+    { id: "derivatives_data", question: "Can others create derivative datasets?", help: "Share-alike ensures improvements flow back.", options: [
+      { value: "freely", label: "Yes, with no conditions", icon: "✓", weight: { copyleft: -2, openness: 2 } },
+      { value: "share_alike", label: "Yes, if shared under same terms", icon: "↻", weight: { copyleft: 2 } },
+      { value: "no_derivatives", label: "No — data must stay unchanged", icon: "✗", weight: { openness: -2 } },
+      { value: "conditional", label: "Conditional — specific rules", icon: "⚙", weight: { custom: 2 } },
+    ]},
+  ],
+  hardware: [
+    { id: "hw_type", question: "What type of hardware are you licensing?", help: "Physical nature creates unique considerations.", options: [
+      { value: "electronics", label: "Electronic designs / PCBs", icon: "◈", weight: {} },
+      { value: "mechanical", label: "Mechanical designs / CAD", icon: "◇", weight: {} },
+      { value: "agricultural_tools", label: "Agricultural tools / equipment", icon: "◫", weight: {} },
+      { value: "mixed", label: "Mixed / integrated systems", icon: "◉", weight: {} },
+    ]},
+    { id: "hw_sharing", question: "What must be shared when someone manufactures your design?", help: "Consider the full documentation stack.", options: [
+      { value: "nothing", label: "Nothing — fully permissive", icon: "○", weight: { copyleft: -3, openness: 2 } },
+      { value: "modifications_only", label: "Only changes they make", icon: "◐", weight: { copyleft: 1 } },
+      { value: "full_stack", label: "Complete design package", icon: "●", weight: { copyleft: 3 } },
+      { value: "conditional", label: "Conditional — define what", icon: "⚙", weight: { custom: 2 } },
+    ]},
+    { id: "hw_commercial", question: "Can manufacturers sell products based on your design?", help: "Open hardware often allows commercial manufacturing.", options: [
+      { value: "yes", label: "Yes, unrestricted", icon: "✓", weight: { commercial: 2, openness: 1 } },
+      { value: "with_attribution", label: "Yes, with clear attribution", icon: "◎", weight: { commercial: 1 } },
+      { value: "non_commercial", label: "Non-commercial only", icon: "✗", weight: { commercial: -3 } },
+      { value: "conditional", label: "Conditional — specific terms", icon: "⚙", weight: { custom: 2 } },
+    ]},
+    { id: "repair", question: "What are your right-to-repair requirements?", help: "Repairability is key to resilient infrastructure.", options: [
+      { value: "full", label: "Full repair documentation required", icon: "●", weight: { openness: 2 } },
+      { value: "basic", label: "Basic repair information", icon: "◐", weight: { openness: 1 } },
+      { value: "none", label: "No repair requirements", icon: "○", weight: {} },
+      { value: "community", label: "Community repair network access", icon: "⊜", weight: { custom: 1 } },
+    ]},
+  ],
+  seeds: [
+    { id: "germplasm_type", question: "What type of germplasm are you distributing?", help: "Based on Wheat Workers' Code categories.", options: [
+      { value: "unreleased", label: "Unreleased / experimental variety", icon: "◈", weight: { openness: -1, copyleft: 1 } },
+      { value: "released", label: "Released cultivar", icon: "◇", weight: { openness: 2 } },
+      { value: "landrace", label: "Landrace / traditional variety", icon: "◫", weight: { openness: 1 } },
+      { value: "wild_relative", label: "Wild relative / genetic resource", icon: "◯", weight: { openness: 0 } },
+    ]},
+    { id: "permitted_uses", question: "What uses are permitted without additional approval?", help: "WWC §3: Testing and crosses are typically permitted.", options: [
+      { value: "testing_only", label: "Testing under recipient's control only", icon: "◐", weight: { openness: -1 } },
+      { value: "testing_crosses", label: "Testing and use as parent for crosses", icon: "◉", weight: { openness: 1 } },
+      { value: "broad_research", label: "Broad research use including breeding", icon: "●", weight: { openness: 2 } },
+      { value: "unrestricted", label: "Unrestricted (released variety)", icon: "○", weight: { openness: 3 } },
+    ]},
+    { id: "restricted_uses", question: "Which uses require written approval?", help: "Based on WWC §3(a-h).", options: [
+      { value: "all_restricted", label: "All advanced uses require approval", icon: "●", weight: { copyleft: 2 } },
+      { value: "commercial_only", label: "Only commercial release requires approval", icon: "◉", weight: { copyleft: 1 } },
+      { value: "molecular_only", label: "Only molecular/gene transfer techniques", icon: "◐", weight: { copyleft: 1 } },
+      { value: "none_restricted", label: "No restrictions (open source)", icon: "○", weight: { copyleft: -2, openness: 2 } },
+    ]},
+    { id: "secondary_distribution", question: "Can recipients redistribute to others?", help: "WWC §2: No secondary distribution without permission.", options: [
+      { value: "prohibited", label: "No redistribution without approval", icon: "✗", weight: { openness: -2 } },
+      { value: "research_network", label: "Within approved research networks only", icon: "◐", weight: { openness: 0 } },
+      { value: "with_notification", label: "Permitted with notification to originator", icon: "◉", weight: { openness: 1 } },
+      { value: "freely", label: "Free redistribution (open source)", icon: "⊕", weight: { openness: 3 } },
+    ]},
+    { id: "benefit_sharing", question: "How should benefits from commercialization be shared?", help: "CARE Principle: Collective Benefit.", options: [
+      { value: "formal_agreement", label: "Formal benefit-sharing with source communities", icon: "⊜", weight: { } },
+      { value: "royalty_free_research", label: "Royalty-free for research; commercial licenses contribute", icon: "↻", weight: { commercial: 1 } },
+      { value: "to_originator", label: "Benefits to institutional originator only", icon: "◎", weight: { } },
+      { value: "public_domain", label: "No benefit-sharing — public domain approach", icon: "⊕", weight: { openness: 2 } },
+    ]},
+  ]
+};
+
+const CONDITIONAL_USE_BLOCKS = [
+  { id: "ethical_use", category: "Ethics", name: "Ethical Use Restriction", description: "Prohibit use that causes harm", template: "This {resource_type} may not be used in any manner that causes harm, including: {harm_categories}.", fields: [{ id: "harm_categories", label: "Prohibited harm categories", type: "multi", options: ["Surveillance without consent", "Weapons development", "Environmental destruction", "Forced labor", "Discrimination", "Undermining democratic processes"] }], modes: ["software", "data", "hardware", "seeds"] },
+  { id: "data_sovereignty", category: "Sovereignty", name: "Data Sovereignty Clause", description: "Communities maintain control over data", template: "Data pertaining to {community_scope} remains under governance of {governance_body}. Use requires {approval_process}.", fields: [{ id: "community_scope", label: "Community or geographic scope", type: "text" }, { id: "governance_body", label: "Governing body", type: "text" }, { id: "approval_process", label: "Required approval", type: "select", options: ["Written consent from governance body", "Community review board approval", "Public comment period of 30 days", "Bilateral agreement"] }], modes: ["data", "seeds"] },
+  { id: "revenue_sharing", category: "Economics", name: "Revenue Sharing", description: "Commercial users share revenue", template: "Commercial use generating more than ${threshold} annually requires {percentage}% contribution to {beneficiary}.", fields: [{ id: "threshold", label: "Revenue threshold (USD)", type: "number" }, { id: "percentage", label: "Revenue share %", type: "number" }, { id: "beneficiary", label: "Beneficiary", type: "text" }], modes: ["software", "data", "hardware", "seeds"] },
+  { id: "environmental", category: "Environment", name: "Environmental Impact", description: "Require environmental responsibility", template: "Users must {environmental_requirement}. Compliance via {verification_method}.", fields: [{ id: "environmental_requirement", label: "Requirement", type: "select", options: ["Conduct environmental impact assessment", "Offset carbon emissions", "Use renewable energy where feasible", "Comply with local environmental regulations"] }, { id: "verification_method", label: "Verification", type: "select", options: ["Self-certification", "Third-party audit", "Community review", "Public reporting"] }], modes: ["hardware", "seeds"] },
+  { id: "indigenous_rights", category: "Sovereignty", name: "Indigenous Knowledge Protection", description: "Protect traditional knowledge", template: "This {resource_type} incorporates knowledge of {community}. Use requires {consent_type} under {protocol}.", fields: [{ id: "community", label: "Community or peoples", type: "text" }, { id: "protocol", label: "Protocol", type: "select", options: ["CARE Principles for Indigenous Data Governance", "Nagoya Protocol on Access and Benefit Sharing", "UN Declaration on the Rights of Indigenous Peoples", "Custom community protocol"] }, { id: "consent_type", label: "Required consent", type: "select", options: ["Free, prior and informed consent (FPIC)", "Community council approval", "Elder/knowledge keeper authorization", "Bilateral agreement"] }], modes: ["data", "seeds"] },
+  { id: "no_secondary_dist", category: "Seeds", name: "Secondary Distribution Restriction", description: "No redistribution without permission (WWC §2)", template: "The recipient shall make no secondary distributions without written permission of the owner/breeder.", fields: [], modes: ["seeds"] },
+  { id: "regional_trials", category: "Seeds", name: "Regional/International Trials", description: "Approval for regional trials (WWC §3a)", template: "Testing in regional or international nurseries requires written approval.", fields: [], modes: ["seeds"] },
+  { id: "cultivar_release", category: "Seeds", name: "Cultivar Release Restriction", description: "Approval for release (WWC §3b)", template: "Increase and release as a cultivar requires written approval.", fields: [], modes: ["seeds"] },
+  { id: "backcross", category: "Seeds", name: "Backcrossing Restriction", description: "Approval for recurrent parent use (WWC §3e)", template: "Use as a recurrent parent in backcrossing requires written approval.", fields: [], modes: ["seeds"] },
+  { id: "gene_transfer", category: "Seeds", name: "Molecular Gene Transfer", description: "Approval for gene transfer (WWC §3h)", template: "Use as recipient for molecular genetic techniques requires written approval.", fields: [], modes: ["seeds"] },
+  { id: "farmer_rights", category: "Seeds", name: "Farmer Seed Saving Rights", description: "Protect farmer seed saving", template: "Farmers may save seed for personal use. Commercial seed sales require separate license.", fields: [], modes: ["seeds"] },
+  { id: "custom_block", category: "Custom", name: "Write Your Own Clause", description: "Create a custom clause", template: "{custom_text}", fields: [{ id: "custom_text", label: "Your custom clause", type: "textarea" }], modes: ["software", "data", "hardware", "seeds"] }
+];
+
+let currentType = null, answers = {}, currentQ = 0, selectedLicense = null, selectedBlocks = [], blockData = {};
+
+function setModeColors(type) {
+  const root = document.documentElement;
+  const colors = { software: { dark: 'var(--sw-dark)', lt: 'var(--sw-lt)', bg: 'var(--sw-bg)', rim: 'var(--sw-rim)' }, data: { dark: 'var(--ds-dark)', lt: 'var(--ds-lt)', bg: 'var(--ds-bg)', rim: 'var(--ds-rim)' }, hardware: { dark: 'var(--forest)', lt: 'var(--forest-lt)', bg: 'var(--forest-bg)', rim: 'var(--forest-rim)' }, seeds: { dark: 'var(--seed-dark)', lt: 'var(--seed-lt)', bg: 'var(--seed-bg)', rim: 'var(--seed-rim)' } };
+  const c = colors[type] || colors.hardware;
+  root.style.setProperty('--mode-dark', c.dark);
+  root.style.setProperty('--mode-lt', c.lt);
+  root.style.setProperty('--mode-bg', c.bg);
+  root.style.setProperty('--mode-rim', c.rim);
+}
+
+function selectType(type) {
+  currentType = type; setModeColors(type); answers = {}; selectedBlocks = []; blockData = {};
+  document.querySelectorAll('.type-btn').forEach(btn => btn.classList.toggle('selected', btn.dataset.type === type));
+  document.getElementById('welcome-options').classList.remove('hidden');
+}
+
+function goPhase(phaseId) {
+  document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+  document.getElementById(phaseId).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goWelcome() { goPhase('phase-welcome'); }
+
+function startInterview() {
+  if (!currentType) return alert('Please select what you are licensing');
+  currentQ = 0; answers = {}; renderInterviewQuestion();
+  document.getElementById('interview-mode-label').textContent = currentType.toUpperCase() + ' LICENSE';
+  goPhase('phase-interview');
+}
+
+function startAllQuestions() {
+  if (!currentType) return alert('Please select what you are licensing');
+  answers = {}; renderAllQuestions();
+  document.getElementById('all-mode-label').textContent = currentType.toUpperCase() + ' LICENSE';
+  goPhase('phase-all');
+}
+
+function startBuilder() {
+  if (!currentType) return alert('Please select what you are licensing');
+  answers = {}; selectedBlocks = []; blockData = {};
+  document.getElementById('builder-mode-label').textContent = currentType.toUpperCase() + ' · CUSTOM BUILDER';
+  renderBuilderLicenses(); renderCUBBlocks('builder-cub-blocks');
+  goPhase('phase-builder');
+}
+
+function renderInterviewQuestion() {
+  const questions = QUESTION_SETS[currentType] || [];
+  if (currentQ >= questions.length) return;
+  const q = questions[currentQ];
+  const pct = Math.round(((currentQ + 1) / questions.length) * 100);
+  document.getElementById('progress-label').textContent = `Question ${currentQ + 1} of ${questions.length}`;
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('prev-btn').style.visibility = currentQ === 0 ? 'hidden' : 'visible';
+  document.getElementById('see-results-btn').classList.toggle('hidden', !answers[q.id] || currentQ < questions.length - 1);
+  document.getElementById('interview-question').innerHTML = `<div class="question-card"><h3 class="question-text">${q.question}</h3><p class="question-help">${q.help}</p><div class="question-options">${q.options.map(opt => `<button class="option-btn ${answers[q.id] === opt.value ? 'selected' : ''}" onclick="selectAnswer('${q.id}', '${opt.value}')"><span class="option-icon">${opt.icon}</span><span class="option-label">${opt.label}</span><span class="option-check"></span></button>`).join('')}</div></div>`;
+}
+
+function selectAnswer(qId, value) {
+  answers[qId] = value; renderInterviewQuestion();
+  const questions = QUESTION_SETS[currentType] || [];
+  setTimeout(() => { if (currentQ < questions.length - 1) { currentQ++; renderInterviewQuestion(); } else { document.getElementById('see-results-btn').classList.remove('hidden'); } }, 300);
+}
+
+function prevQuestion() { if (currentQ > 0) { currentQ--; renderInterviewQuestion(); } }
+
+function renderAllQuestions() {
+  const questions = QUESTION_SETS[currentType] || [];
+  document.getElementById('all-questions').innerHTML = questions.map((q, i) => `<div class="question-card" style="margin-bottom:20px"><h3 class="question-text">${i + 1}. ${q.question}</h3><p class="question-help">${q.help}</p><div class="question-options">${q.options.map(opt => `<button class="option-btn ${answers[q.id] === opt.value ? 'selected' : ''}" onclick="selectAnswerAll('${q.id}', '${opt.value}')"><span class="option-icon">${opt.icon}</span><span class="option-label">${opt.label}</span><span class="option-check"></span></button>`).join('')}</div></div>`).join('');
+}
+
+function selectAnswerAll(qId, value) { answers[qId] = value; renderAllQuestions(); }
+
+function scoreLicenses() {
+  const licenses = LICENSE_DATABASE[currentType] || [];
+  const questions = QUESTION_SETS[currentType] || [];
+  const scores = {}; licenses.forEach(l => { scores[l.id] = { match: 0, total: 0 }; });
+  Object.entries(answers).forEach(([qId, answer]) => {
+    const question = questions.find(q => q.id === qId); if (!question) return;
+    const option = question.options.find(o => o.value === answer); if (!option || !option.weight) return;
+    const weights = option.weight;
+    licenses.forEach(l => {
+      if (l.id.startsWith('custom')) return;
+      let qScore = 0;
+      if (weights.openness !== undefined && l.openness !== null) { qScore += weights.openness > 0 ? (l.openness / 5) * weights.openness : ((5 - l.openness) / 5) * Math.abs(weights.openness); }
+      if (weights.copyleft !== undefined && l.copyleft !== undefined) { qScore += weights.copyleft > 0 ? ((l.copyleft || 0) / 4) * weights.copyleft : ((4 - (l.copyleft || 0)) / 4) * Math.abs(weights.copyleft); }
+      if (weights.commercial !== undefined && l.commercial !== undefined) { if (weights.commercial > 0 && l.commercial) qScore += weights.commercial; if (weights.commercial < 0 && !l.commercial) qScore += Math.abs(weights.commercial); }
+      if (weights.patent !== undefined && l.patent !== undefined) { if (weights.patent > 0 && l.patent) qScore += weights.patent; }
+      scores[l.id].match += qScore;
+      scores[l.id].total += Object.values(weights).reduce((a, b) => a + Math.abs(b || 0), 0);
+    });
+  });
+  const hasCustom = Object.values(answers).some(a => a === 'conditional') || selectedBlocks.length > 0;
+  return licenses.map(l => {
+    if (l.id.startsWith('custom')) return { ...l, score: hasCustom ? 85 : 20 };
+    const s = scores[l.id];
+    const norm = s.total > 0 ? Math.round((s.match / s.total) * 100) : 50;
+    return { ...l, score: Math.min(100, Math.max(0, norm)) };
+  }).sort((a, b) => b.score - a.score);
+}
+
+function showResults() {
+  const ranked = scoreLicenses(); selectedLicense = ranked[0];
+  document.getElementById('results-mode-label').textContent = currentType.toUpperCase() + ' LICENSE';
+  renderTopResult(ranked[0]); renderLicenseList(ranked); renderCUBBlocks('cub-blocks');
+  goPhase('phase-results');
+}
+
+function renderTopResult(license) {
+  document.getElementById('top-result').innerHTML = `<div class="results-header"><div class="results-kicker">Recommended License</div><div class="results-title">${license.name}</div><div class="results-match">${license.score}% match</div></div><div class="results-body"><p class="results-desc">${license.desc}</p><div class="results-tags">${license.tags ? license.tags.map(t => `<span class="results-tag">${t}</span>`).join('') : ''}</div></div>`;
+}
+
+function renderLicenseList(licenses) {
+  document.getElementById('license-list-items').innerHTML = licenses.map((l, i) => {
+    const sc = l.score >= 70 ? 'high' : l.score >= 40 ? 'mid' : 'low';
+    return `<div class="license-item ${i === 0 ? 'active' : ''}" onclick="selectLicenseItem('${l.id}')"><div class="license-score ${sc}">${l.score || '—'}</div><div class="license-info"><div class="license-name">${l.name}</div><div class="license-type">${l.tags ? l.tags[0] : ''}</div></div></div>`;
+  }).join('');
+}
+
+function selectLicenseItem(id) {
+  const ranked = scoreLicenses();
+  const license = ranked.find(l => l.id === id);
+  if (license) { selectedLicense = license; renderTopResult(license); document.querySelectorAll('.license-item').forEach(item => { item.classList.toggle('active', item.querySelector('.license-name').textContent === license.name); }); }
+}
+
+function renderBuilderLicenses() {
+  const licenses = LICENSE_DATABASE[currentType] || [];
+  document.getElementById('builder-licenses').innerHTML = licenses.map((l, i) => `<div class="license-item ${i === 0 ? 'active' : ''}" onclick="selectBuilderLicense('${l.id}')"><div class="license-info"><div class="license-name">${l.name}</div><div class="license-type">${l.desc}</div></div></div>`).join('');
+  selectedLicense = licenses[0];
+}
+
+function selectBuilderLicense(id) {
+  const licenses = LICENSE_DATABASE[currentType] || [];
+  selectedLicense = licenses.find(l => l.id === id);
+  document.querySelectorAll('#builder-licenses .license-item').forEach(item => { item.classList.toggle('active', item.querySelector('.license-name').textContent === selectedLicense.name); });
+}
+
+function renderCUBBlocks(containerId) {
+  const blocks = CONDITIONAL_USE_BLOCKS.filter(b => b.modes.includes(currentType));
+  const categories = [...new Set(blocks.map(b => b.category))];
+  document.getElementById(containerId).innerHTML = categories.map(cat => `<div class="cub-category"><div class="cub-cat-label">${cat}</div>${blocks.filter(b => b.category === cat).map(b => `<div class="cub-block ${selectedBlocks.includes(b.id) ? 'selected' : ''}" data-bid="${b.id}"><div class="cub-block-header" onclick="toggleCUB('${b.id}', '${containerId}')"><div class="cub-checkbox"></div><div class="cub-block-info"><div class="cub-block-name">${b.name}</div><div class="cub-block-desc">${b.description}</div></div><span class="cub-expand">▼</span></div>${b.fields.length > 0 ? `<div class="cub-form"><div class="cub-form-inner">${b.fields.map(f => renderCUBField(b.id, f)).join('')}<div class="cub-preview"><div class="cub-preview-label">Clause Preview</div><div class="cub-preview-text" id="preview-${b.id}">${generateClausePreview(b, blockData[b.id] || {})}</div></div></div></div>` : ''}</div>`).join('')}</div>`).join('');
+}
+
+function renderCUBField(blockId, field) {
+  const val = (blockData[blockId] || {})[field.id] || '';
+  if (field.type === 'text' || field.type === 'number') return `<div class="cub-field"><label>${field.label}</label><input type="${field.type}" value="${val}" onchange="updateCUBField('${blockId}', '${field.id}', this.value)" placeholder="Enter ${field.label.toLowerCase()}..."></div>`;
+  if (field.type === 'textarea') return `<div class="cub-field"><label>${field.label}</label><textarea onchange="updateCUBField('${blockId}', '${field.id}', this.value)" placeholder="Write your clause...">${val}</textarea></div>`;
+  if (field.type === 'select') return `<div class="cub-field"><label>${field.label}</label><select onchange="updateCUBField('${blockId}', '${field.id}', this.value)"><option value="">Select...</option>${field.options.map(o => `<option value="${o}" ${val === o ? 'selected' : ''}>${o}</option>`).join('')}</select></div>`;
+  if (field.type === 'multi') { const cur = Array.isArray(val) ? val : []; return `<div class="cub-field"><label>${field.label}</label><div class="cub-multi-options">${field.options.map(o => `<label class="cub-multi-opt"><input type="checkbox" ${cur.includes(o) ? 'checked' : ''} onchange="toggleCUBMulti('${blockId}', '${field.id}', '${o}')">${o}</label>`).join('')}</div></div>`; }
+  return '';
+}
+
+function toggleCUB(blockId, containerId) {
+  const idx = selectedBlocks.indexOf(blockId);
+  if (idx >= 0) selectedBlocks.splice(idx, 1); else selectedBlocks.push(blockId);
+  renderCUBBlocks(containerId);
+}
+
+function updateCUBField(blockId, fieldId, value) {
+  if (!blockData[blockId]) blockData[blockId] = {};
+  blockData[blockId][fieldId] = value;
+  updateClausePreview(blockId);
+}
+
+function toggleCUBMulti(blockId, fieldId, option) {
+  if (!blockData[blockId]) blockData[blockId] = {};
+  let cur = blockData[blockId][fieldId] || [];
+  if (!Array.isArray(cur)) cur = [];
+  const idx = cur.indexOf(option);
+  if (idx >= 0) cur.splice(idx, 1); else cur.push(option);
+  blockData[blockId][fieldId] = cur;
+  updateClausePreview(blockId);
+}
+
+function updateClausePreview(blockId) {
+  const block = CONDITIONAL_USE_BLOCKS.find(b => b.id === blockId);
+  if (!block) return;
+  const preview = document.getElementById('preview-' + blockId);
+  if (preview) preview.textContent = generateClausePreview(block, blockData[blockId] || {});
+}
+
+function generateClausePreview(block, data) {
+  let text = block.template;
+  block.fields.forEach(field => {
+    const val = data[field.id];
+    let display = Array.isArray(val) ? val.join('; ') : (val || '[' + field.label + ']');
+    text = text.replace('{' + field.id + '}', display);
+  });
+  return text.replace(/\{resource_type\}/g, currentType || 'resource');
+}
+
+function generateAgreement() {
+  const projectName = document.getElementById('project-name')?.value || 'Untitled Project';
+  const blocks = CONDITIONAL_USE_BLOCKS.filter(b => selectedBlocks.includes(b.id));
+  const today = new Date().toISOString().split('T')[0];
+  let text = `POLYCENTRIC AGREEMENT\n${projectName}\nGenerated: ${today} | OpenTEAM / ETA Compatible\n============================================================\n\n§1 — BASE LICENSE\nThis ${currentType || 'resource'} is released under the ${selectedLicense ? selectedLicense.name : 'custom terms'}.\n${selectedLicense && selectedLicense.desc ? selectedLicense.desc : ''}\n\n`;
+  if (blocks.length > 0) {
+    text += `§2 — CONDITIONAL USE PROVISIONS\nIn addition to the base license, the following provisions apply.\n\n`;
+    blocks.forEach((block, i) => { text += `§2.${i + 1} — ${block.name.toUpperCase()}\n${generateClausePreview(block, blockData[block.id] || {})}\n\n`; });
+  }
+  text += `§${blocks.length > 0 ? '3' : '2'} — INTEROPERABILITY\nThis agreement is designed for polycentric interoperability.\n\n============================================================\nFramework Attribution:\n• OpenTEAM Polycentric License Engine\n• Wheat Workers' Code of Ethics (NWIC, 1994)\n• CARE Principles for Indigenous Data Governance\n• Ethical Technology Assessment (ETA) Framework\n`;
+  document.getElementById('modal-title').textContent = `${selectedLicense ? selectedLicense.name : 'Custom'} + ${blocks.length} Conditional Blocks`;
+  document.getElementById('modal-text').textContent = text;
+  document.getElementById('modal-overlay').classList.add('show');
+}
+
+function copyAgreement() { navigator.clipboard.writeText(document.getElementById('modal-text').textContent).then(() => alert('Copied to clipboard!')); }
+
+function downloadAgreement() {
+  const text = document.getElementById('modal-text').textContent;
+  const projectName = document.getElementById('project-name')?.value || 'agreement';
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = projectName.replace(/\s+/g, '-').toLowerCase() + '-license.txt';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+function closeModal() { document.getElementById('modal-overlay').classList.remove('show'); }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const type = params.get('type');
+  if (type && ['software', 'data', 'hardware', 'seeds'].includes(type)) selectType(type);
+});
+</script>
+</body>
+</html>
